@@ -1,0 +1,6 @@
+@PromoreApi_HostAddress = http://localhost:5285
+
+GET {{PromoreApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
