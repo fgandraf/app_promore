@@ -12,8 +12,8 @@ public class User
     public int Role { get; set; }
     public bool Active { get; set; }
     
-    [MaxLength(25)]   
-    public string UserName{ get; set; }
+    [MaxLength(50)]   
+    public string Email{ get; set; }
     
     [MaxLength(255)]
     public string PasswordHash { get; set; }

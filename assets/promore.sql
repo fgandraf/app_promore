@@ -14,7 +14,7 @@ CREATE TABLE [User] (
     [Id] INT NOT NULL IDENTITY(1, 1),
     [Role] INT,
     [Active] BIT,
-    [UserName] NVARCHAR(25) NOT NULL,
+    [Email] NVARCHAR(50) NOT NULL,
     [PasswordHash] VARCHAR(255) NOT NULL
 
     CONSTRAINT [PK_User] PRIMARY KEY([Id])
