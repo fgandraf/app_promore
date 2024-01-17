@@ -6,10 +6,13 @@ namespace PromoreApi.Models;
 [Table("Lot")]
 public class Lot
 {
-    [Key]
-    public int Id { get; set; }
+    //[Key]
+    [MaxLength(5)]
+    public string Id { get; set; }
     
-    public int Block { get; set; }
+    [MaxLength(2)]
+    public string Block { get; set; }
+    
     public int Number { get; set; }
     public DateTime SurveyDate { get; set; }
     public DateTime LastModifiedDate { get; set; }

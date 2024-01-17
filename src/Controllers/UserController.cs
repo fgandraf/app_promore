@@ -13,21 +13,6 @@ public class UserController : ControllerBase
 {
     private const string ConnectionString = "Server=localhost,1433;Database=Promore;User ID=sa;Password=1q2w3e4r@#$;Encrypt=false";
     
-    // public UserController()
-    // {
-    //     using (var context = new PromoreDataContext(ConnectionString))
-    //     {
-    //         var user = new User { Role = 1, Active = true, Email = "fgandraf@gmail.com", PasswordHash = "12345senha" };
-    //         var user2 = new User { Role = 1, Active = false, Email = "fernanda@email.com", PasswordHash = "12345senha" };
-    //         var user3 = new User { Role = 1, Active = true, Email = "promore@seesp.com.br", PasswordHash = "12345senha" };
-    //         context.Users.Add(user);
-    //         context.Users.Add(user2);
-    //         context.Users.Add(user3);
-    //         context.SaveChanges();
-    //     }
-    // }
-    
-    
     [HttpGet]
     public IActionResult GetAll()
     {
@@ -74,9 +59,9 @@ public class UserController : ControllerBase
     {
         using var context = new PromoreDataContext(ConnectionString);
         context.Users.Add(model);
-        var id = context.SaveChanges();
+        context.SaveChanges();
         
-        return Ok(id);
+        return Ok();
     }
     
     
@@ -87,7 +72,7 @@ public class UserController : ControllerBase
         var user = context.Users.FirstOrDefault(x => x.Id == model.Id);
         
         if (user is null)
-            return NotFound();
+            return NotFound("Usuário não encontrado!");
 
         user.Role = model.Role;
         user.Active = model.Active;
@@ -107,7 +92,7 @@ public class UserController : ControllerBase
         using var context = new PromoreDataContext(ConnectionString);
         var user = context.Users.FirstOrDefault(x => x.Id == id);
         if (user is null)
-            return NotFound();
+            return NotFound("Usuário não encontrado!");
         
         context.Remove(user);
         context.SaveChanges();

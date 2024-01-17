@@ -1,14 +1,14 @@
-CREATE DATABASE [Promore]
-GO
+--CREATE DATABASE [Promore]
+--GO
 
 USE [Promore]
 GO
 
--- DROP TABLE [Client]
--- DROP TABLE [Region]
--- DROP TABLE [Lot]
--- DROP TABLE [Professional]
--- DROP TABLE [User]
+DROP TABLE [Client]
+DROP TABLE [Region]
+DROP TABLE [Lot]
+DROP TABLE [Professional]
+DROP TABLE [User]
 
 CREATE TABLE [User] (
     [Id] INT NOT NULL IDENTITY(1, 1),
@@ -34,27 +34,28 @@ CREATE TABLE [Professional] (
 CREATE TABLE [Region] (
     [Id] INT NOT NULL IDENTITY(1, 1),
     [Name] NVARCHAR(100) NOT NULL,
-    [EstablishedDate] DATETIME,
-    [StartDate] DATETIME,
-    [EndDate] DATETIME
+    [EstablishedDate] DATETIME2 NULL,
+    [StartDate] DATETIME2 NULL,
+    [EndDate] DATETIME2 NULL
 
     CONSTRAINT [PK_Region] PRIMARY KEY([Id])
 )
 
 CREATE TABLE [Lot] (
-    [Id] INT NOT NULL IDENTITY(1, 1),
-    [Block] INT NOT NULL,
+    [Id] NVARCHAR(5) NOT NULL,
+    [Block] NVARCHAR(2) NOT NULL,
     [Number] INT NOT NULL,
-    [SurveyDate] DATETIME,
-    [LastModifiedDate] DATETIME,
-    [Status] BIT,
+    [SurveyDate] DATETIME2,
+    [LastModifiedDate] DATETIME2,
+    [Status] INT,
     [Comments] TEXT NOT NULL,
     [ProfessionalId] INT NOT NULL,
     [RegionId] INT NOT NULL
 
     CONSTRAINT [PK_Lot] PRIMARY KEY([Id]),
     CONSTRAINT [FK_Lot_Professional] FOREIGN KEY([ProfessionalId]) REFERENCES [Professional]([Id]),
-    CONSTRAINT [FK_Lot_Region] FOREIGN KEY([RegionId]) REFERENCES [Region]([Id])
+    CONSTRAINT [FK_Lot_Region] FOREIGN KEY([RegionId]) REFERENCES [Region]([Id]),
+    CONSTRAINT [UQ_Id] UNIQUE([Id]),
 )
 
 CREATE TABLE [Client] (
@@ -64,7 +65,7 @@ CREATE TABLE [Client] (
     [Phone] NVARCHAR(11),
     [MothersName] NVARCHAR(100),
     [BirthdayDate] DATETIME,
-    [LotId] INT NOT NULL
+    [LotId] NVARCHAR(5) NOT NULL
 
     CONSTRAINT [PK_Client] PRIMARY KEY([Id]),
     CONSTRAINT [FK_Client_Lot] FOREIGN KEY([LotId]) REFERENCES [Lot]([Id])

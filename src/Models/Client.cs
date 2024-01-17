@@ -22,5 +22,7 @@ public class Client
     public string MothersName { get; set; }
     
     public DateTime BirthdayDate { get; set; }
-    public int LotId { get; set; }
+    
+    [MaxLength(5)]
+    public string LotId { get; set; }
 }
