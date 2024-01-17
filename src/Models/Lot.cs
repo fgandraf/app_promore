@@ -1,10 +1,14 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PromoreApi.Models;
 
+[Table("Lot")]
 public class Lot
 {
+    [Key]
     public int Id { get; set; }
+    
     public int Block { get; set; }
     public int Number { get; set; }
     public DateTime SurveyDate { get; set; }

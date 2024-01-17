@@ -1,9 +1,12 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PromoreApi.Models;
 
+[Table("Professional")]
 public class Professional
 {
+    [Key]
     public int Id { get; set; }
     
     [MaxLength(100)]
