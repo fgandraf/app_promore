@@ -12,11 +12,10 @@ public class PromoreDataContext : DbContext
     public DbSet<Region> Regions { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }
+
+
+    public PromoreDataContext(DbContextOptions<PromoreDataContext> options) : base(options) { }
     
-
-    protected override void OnConfiguring(DbContextOptionsBuilder options)
-        => options.UseSqlServer("Server=localhost,1433;Database=Promore;User ID=sa;Password=1q2w3e4r@#$;Encrypt=false");
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new ClientMap());
