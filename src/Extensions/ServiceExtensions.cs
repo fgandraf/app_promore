@@ -19,6 +19,8 @@ public static class ServiceExtensions
         services.AddScoped<IUserRepository,UserRepository>();
         services.AddScoped<IProfessionalRepository, ProfessionalRepository>();
         services.AddScoped<IRegionRepository, RegionRepository>();
+        services.AddScoped<IClientRepository, ClientRepository>();
+        services.AddScoped<ILotRepository, LotRepository>();
         
         services.AddScoped<DbInserts>();
         services.AddScoped<PromoreDataContext>();
