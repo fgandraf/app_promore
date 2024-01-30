@@ -30,8 +30,8 @@ public class ProfessionalRepository : IProfessionalRepository
                     Id = professional.User.Id,
                     Active = professional.User.Active,
                     Email = professional.User.Email,
-                    Roles = professional.User.Roles.ToList(),
-                    Regions = professional.User.Regions.Select(x=> new RegionVO{Id = x.Id, Name = x.Name}).ToList()
+                    Roles = professional.User.Roles.Select(x => x.Id).ToList(),
+                    Regions = professional.User.Regions.Select(x=> x.Id).ToList()
                 }
             })
             .ToListAsync();
@@ -57,8 +57,8 @@ public class ProfessionalRepository : IProfessionalRepository
                     Id = professional.User.Id,
                     Active = professional.User.Active,
                     Email = professional.User.Email,
-                    Roles = professional.User.Roles.ToList(),
-                    Regions = professional.User.Regions.Select(x=> new RegionVO{Id = x.Id, Name = x.Name}).ToList()
+                    Roles = professional.User.Roles.Select(x => x.Id).ToList(),
+                    Regions = professional.User.Regions.Select(x=> x.Id).ToList()
                 }
             })
             .FirstOrDefaultAsync(x => x.Id == id);

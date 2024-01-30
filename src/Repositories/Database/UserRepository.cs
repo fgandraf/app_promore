@@ -25,8 +25,8 @@ public class UserRepository : IUserRepository
                 Id = user.Id,
                 Active = user.Active,
                 Email = user.Email,
-                Roles = user.Roles.ToList(),
-                Regions = user.Regions.Select(x=> new RegionVO{Id = x.Id, Name = x.Name}).ToList()
+                Roles = user.Roles.Select(x => x.Id).ToList(),
+                Regions = user.Regions.Select(x=> x.Id).ToList()
             })
             .ToListAsync();
         
@@ -45,8 +45,8 @@ public class UserRepository : IUserRepository
                 Id = user.Id,
                 Active = user.Active,
                 Email = user.Email,
-                Roles = user.Roles.ToList(),
-                Regions = user.Regions.Select(x=> new RegionVO{Id = x.Id, Name = x.Name}).ToList()
+                Roles = user.Roles.Select(x => x.Id).ToList(),
+                Regions = user.Regions.Select(x=> x.Id).ToList()
             })
             .FirstOrDefaultAsync(x => x.Id == id);
         
@@ -65,8 +65,8 @@ public class UserRepository : IUserRepository
                 Id = user.Id,
                 Active = user.Active,
                 Email = user.Email,
-                Roles = user.Roles.ToList(),
-                Regions = user.Regions.Select(x=> new RegionVO{Id = x.Id, Name = x.Name}).ToList()
+                Roles = user.Roles.Select(x => x.Id).ToList(),
+                Regions = user.Regions.Select(x=> x.Id).ToList()
             })
             .FirstOrDefaultAsync(x => x.Email == address);
         
