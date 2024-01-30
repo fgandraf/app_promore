@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PromoreApi.Data;
+using PromoreApi.Repositories.Contracts;
+using PromoreApi.Repositories.Database;
 
 namespace PromoreApi.Extensions;
 
@@ -14,6 +16,10 @@ public static class ServiceExtensions
     
     public static IServiceCollection AddRepositoryServices(this IServiceCollection services)
     {
+        services.AddScoped<IUserRepository,UserRepository>();
+        services.AddScoped<IProfessionalRepository, ProfessionalRepository>();
+        services.AddScoped<IRegionRepository, RegionRepository>();
+        
         services.AddScoped<DbInserts>();
         services.AddScoped<PromoreDataContext>();
         return services;

@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace PromoreApi.Models;
 
 public class Region
@@ -8,7 +10,9 @@ public class Region
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
 
-    
+    [JsonIgnore]
     public IList<User> Users { get; set; }
+    
+    [JsonIgnore]
     public IList<Lot> Lots { get; set; }
 }
