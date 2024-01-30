@@ -21,6 +21,7 @@ public static class ServiceExtensions
         services.AddScoped<IRegionRepository, RegionRepository>();
         services.AddScoped<IClientRepository, ClientRepository>();
         services.AddScoped<ILotRepository, LotRepository>();
+        services.AddScoped<IAccountRepository, AccountRepository>();
         
         services.AddScoped<DbInserts>();
         services.AddScoped<PromoreDataContext>();
