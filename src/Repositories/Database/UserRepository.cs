@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using PromoreApi.Data;
-using PromoreApi.Models;
+using PromoreApi.Entities;
+using PromoreApi.Models.InputModels;
+using PromoreApi.Models.ViewModels;
 using PromoreApi.Repositories.Contracts;
-using PromoreApi.ViewModels;
 
 namespace PromoreApi.Repositories.Database;
 
@@ -14,14 +15,14 @@ public class UserRepository : IUserRepository
         => _context = context;
     
 
-    public async Task<List<UserGetVO>> GetAll()
+    public async Task<List<UserView>> GetAll()
     {
         var users = await _context
             .Users
             .AsNoTracking()
             .Include(roles => roles.Roles)
             .Include(regions => regions.Regions)
-            .Select(user => new UserGetVO
+            .Select(user => new UserView
             {
                 Id = user.Id,
                 Active = user.Active,
@@ -34,14 +35,14 @@ public class UserRepository : IUserRepository
         return users;
     }
     
-    public async Task<UserGetVO> GetByIdAsync(int id)
+    public async Task<UserView> GetByIdAsync(int id)
     {
         var user = await _context
             .Users
             .AsNoTracking()
             .Include(roles => roles.Roles)
             .Include(regions => regions.Regions)
-            .Select(user => new UserGetVO
+            .Select(user => new UserView
             {
                 Id = user.Id,
                 Active = user.Active,
@@ -54,14 +55,14 @@ public class UserRepository : IUserRepository
         return user;
     }
 
-    public async Task<UserGetVO> GetByEmailAddress(string address)
+    public async Task<UserView> GetByEmailAddress(string address)
     {
         var user = await _context
             .Users
             .AsNoTracking()
             .Include(roles => roles.Roles)
             .Include(regions => regions.Regions)
-            .Select(user => new UserGetVO
+            .Select(user => new UserView
             {
                 Id = user.Id,
                 Active = user.Active,
@@ -74,16 +75,16 @@ public class UserRepository : IUserRepository
         return user;
     }
 
-    public async Task<long> InsertAsync(UserCreateVO model)
+    public async Task<long> InsertAsync(CreateUserInput model)
     {
         var roles = model.Roles.Select(role => _context.Roles.FirstOrDefault(x => x.Id == role)).ToList();
         var regions = model.Regions.Select(region => _context.Regions.FirstOrDefault(x => x.Id == region)).ToList();
-       
+        
         var user = new User
         {
             Active = model.Active,
             Email = model.Email,
-            PasswordHash = model.PasswordHash,
+            PasswordHash = model.Password,
             Roles = roles,
             Regions = regions
         };
@@ -93,13 +94,14 @@ public class UserRepository : IUserRepository
         return user.Id;
     }
 
-    public async Task<bool> UpdateAsync(UserUpdateVO model)
+    public async Task<bool> UpdateAsync(UpdateUserInput model)
     {
         var user = await _context
             .Users
             .Include(x => x.Regions)
             .Include(x => x.Roles)
             .FirstOrDefaultAsync(x => x.Id == model.Id);
+        
         if (user is null)
             return false;
         
@@ -108,7 +110,7 @@ public class UserRepository : IUserRepository
         
         user.Active = model.Active;
         user.Email = model.Email;
-            user.PasswordHash = model.PasswordHash;
+        user.PasswordHash = model.Password;
         user.Roles = roles;
         user.Regions = regions;
         

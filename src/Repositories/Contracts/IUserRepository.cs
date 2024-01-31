@@ -1,13 +1,14 @@
-using PromoreApi.ViewModels;
+using PromoreApi.Models.InputModels;
+using PromoreApi.Models.ViewModels;
 
 namespace PromoreApi.Repositories.Contracts;
 
 public interface IUserRepository
 {
-    Task<List<UserGetVO>> GetAll();
-    Task<UserGetVO> GetByIdAsync(int id);
-    Task<UserGetVO> GetByEmailAddress(string address);
-    Task<long> InsertAsync(UserCreateVO model);
-    Task<bool> UpdateAsync(UserUpdateVO model);
+    Task<List<UserView>> GetAll();
+    Task<UserView> GetByIdAsync(int id);
+    Task<UserView> GetByEmailAddress(string address);
+    Task<long> InsertAsync(CreateUserInput model);
+    Task<bool> UpdateAsync(UpdateUserInput model);
     Task<bool> DeleteAsync(int id);
 }

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PromoreApi.Data;
+using PromoreApi.Models.InputModels;
 using PromoreApi.Repositories.Contracts;
-using PromoreApi.ViewModels;
 
 namespace PromoreApi.Repositories.Database;
 
@@ -13,7 +13,7 @@ public class AccountRepository : IAccountRepository
         => _context = context;
     
 
-    public async Task<bool> LoginAsync(LoginVO model)
+    public async Task<bool> LoginAsync(LoginInput model)
     {
         var user = await _context
             .Users

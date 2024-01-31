@@ -1,7 +1,7 @@
 
 using Microsoft.AspNetCore.Mvc;
+using PromoreApi.Models.InputModels;
 using PromoreApi.Repositories.Contracts;
-using PromoreApi.ViewModels;
 
 namespace PromoreApi.Controllers;
 
@@ -16,7 +16,7 @@ public class AccountController : ControllerBase
     
     
     [HttpPost("login")]
-    public IActionResult Login([FromBody]LoginVO model)
+    public IActionResult Login([FromBody]LoginInput model)
     {
         var logged = _repository.LoginAsync(model).Result;
         return logged ? Ok("Usuário logado!") : NotFound($"Usuário '{model.Email}' não encontrado ou não está ativo!");

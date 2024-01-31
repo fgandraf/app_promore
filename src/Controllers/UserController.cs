@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using PromoreApi.Models.InputModels;
 using PromoreApi.Repositories.Contracts;
-using PromoreApi.ViewModels;
 
 namespace PromoreApi.Controllers;
 
@@ -36,14 +36,14 @@ public class UserController : ControllerBase
     }
     
     [HttpPost]
-    public IActionResult Post([FromBody]UserCreateVO model)
+    public IActionResult Post([FromBody]CreateUserInput model)
     {
         var id = _repository.InsertAsync(model).Result;
         return Ok(id);
     }
     
     [HttpPut]
-    public IActionResult Update([FromBody]UserUpdateVO model)
+    public IActionResult Update([FromBody]UpdateUserInput model)
     {
         var updated = _repository.UpdateAsync(model).Result;
         

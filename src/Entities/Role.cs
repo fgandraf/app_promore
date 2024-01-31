@@ -1,7 +1,6 @@
 using System.Text.Json.Serialization;
 
-
-namespace PromoreApi.Models;
+namespace PromoreApi.Entities;
 
 public class Role
 {

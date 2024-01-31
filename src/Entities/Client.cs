@@ -1,4 +1,4 @@
-namespace PromoreApi.Models;
+namespace PromoreApi.Entities;
 
 public class Client
 {

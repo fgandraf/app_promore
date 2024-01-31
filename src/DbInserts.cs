@@ -1,5 +1,5 @@
 using PromoreApi.Data;
-using PromoreApi.Models;
+using PromoreApi.Entities;
 
 namespace PromoreApi;
 

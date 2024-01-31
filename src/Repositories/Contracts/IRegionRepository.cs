@@ -1,4 +1,4 @@
-using PromoreApi.Models;
+using PromoreApi.Entities;
 
 namespace PromoreApi.Repositories.Contracts;
 

@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PromoreApi.Data;
-using PromoreApi.Models;
+using PromoreApi.Entities;
 using PromoreApi.Repositories.Contracts;
 
 namespace PromoreApi.Repositories.Database;

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using PromoreApi.Models.InputModels;
 using PromoreApi.Repositories.Contracts;
 
 namespace PromoreApi.Controllers;
@@ -26,5 +27,35 @@ public class ProfessionalController : ControllerBase
     {
         var professional = _repository.GetByIdAsync(id).Result;
         return professional is null ? NotFound($"Profissional '{id}' não encontrado!") : Ok(professional);
+    }
+    
+    [HttpPost]
+    public IActionResult Post([FromBody]CreateProfessionalInput model)
+    {
+        var id = _repository.InsertAsync(model).Result;
+        return Ok(id);
+    }
+
+
+    [HttpPut]
+    public IActionResult Update([FromBody]UpdateProfessionalInput model)
+    {
+        var updated = _repository.UpdateAsync(model).Result;
+        
+        if (!updated)
+            return NotFound("Profissional não alterado ou não encontrado!");
+        
+        return Ok();
+    }
+    
+    [HttpDelete("{id:int}")]
+    public IActionResult Delete(int id)
+    {
+        var deleted = _repository.DeleteAsync(id).Result;
+        
+        if (!deleted)
+            return NotFound("Profissional não encontrado!");
+        
+        return Ok($"Profisisonal '{id}' removido!");
     }
 }
