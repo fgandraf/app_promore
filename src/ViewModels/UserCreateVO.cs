@@ -1,8 +1,7 @@
 namespace PromoreApi.ViewModels;
 
-public class UserUpdateVO
+public class UserCreateVO
 {
-    public int Id { get; set; }
     public bool Active { get; set; }
     public string Email{ get; set; }
     public string PasswordHash { get; set; }

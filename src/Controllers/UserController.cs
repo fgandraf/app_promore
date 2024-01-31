@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using PromoreApi.Repositories.Contracts;
+using PromoreApi.ViewModels;
 
 namespace PromoreApi.Controllers;
 
@@ -32,5 +33,34 @@ public class UserController : ControllerBase
     {
         var user = _repository.GetByEmailAddress(email).Result;
         return user is null ? NotFound($"Usuário '{email}' não encontrado!") : Ok(user);
+    }
+    
+    [HttpPost]
+    public IActionResult Post([FromBody]UserCreateVO model)
+    {
+        var id = _repository.InsertAsync(model).Result;
+        return Ok(id);
+    }
+    
+    [HttpPut]
+    public IActionResult Update([FromBody]UserUpdateVO model)
+    {
+        var updated = _repository.UpdateAsync(model).Result;
+        
+        if (!updated)
+            return NotFound("Usuário não alterado ou não encontrado!");
+        
+        return Ok();
+    }
+    
+    [HttpDelete("{id:int}")]
+    public IActionResult Delete(int id)
+    {
+        var deleted = _repository.DeleteAsync(id).Result;
+        
+        if (!deleted)
+            return NotFound("Usuário não encontrado!");
+        
+        return Ok($"Usuário '{id}' removido!");
     }
 }
