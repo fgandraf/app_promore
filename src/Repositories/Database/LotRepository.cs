@@ -16,7 +16,7 @@ public class LotRepository : ILotRepository
         var lots = await _context
             .Lots
             .AsNoTracking()
-            .Include(professional => professional.Professional)
+            .Include(professional => professional.User)
             .Include(region => region.Region)
             .Include(clients => clients.Clients)
             .Select(client => new
@@ -28,7 +28,7 @@ public class LotRepository : ILotRepository
                 LastModifiedDate = client.LastModifiedDate,
                 Status = client.Status,
                 Comments = client.Comments,
-                ProfessionalId = client.Professional.Id,
+                ProfessionalId = client.User.Id,
                 RegionId = client.Region.Id,
                 Clients = client.Clients.Select(x=> x.Id).ToList()
             })
@@ -42,7 +42,7 @@ public class LotRepository : ILotRepository
         var lot = await _context
             .Lots
             .AsNoTracking()
-            .Include(professional => professional.Professional)
+            .Include(professional => professional.User)
             .Include(region => region.Region)
             .Include(clients => clients.Clients)
             .Select(client => new
@@ -54,7 +54,7 @@ public class LotRepository : ILotRepository
                 LastModifiedDate = client.LastModifiedDate,
                 Status = client.Status,
                 Comments = client.Comments,
-                ProfessionalId = client.Professional.Id,
+                ProfessionalId = client.User.Id,
                 RegionId = client.Region.Id,
                 Clients = client.Clients.Select(x=> x.Id).ToList()
             })

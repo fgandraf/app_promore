@@ -11,7 +11,7 @@ public class Lot
     public string Comments { get; set; }
     
     
-    public Professional Professional { get; set; }
+    public User User { get; set; }
     public Region Region { get; set; }
     public List<Client> Clients { get; set; }
 }

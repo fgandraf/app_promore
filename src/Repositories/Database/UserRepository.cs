@@ -27,6 +27,9 @@ public class UserRepository : IUserRepository
                 Id = user.Id,
                 Active = user.Active,
                 Email = user.Email,
+                Name = user.Name,
+                Cpf = user.Cpf,
+                Profession = user.Profession, 
                 Roles = user.Roles.Select(x => x.Id).ToList(),
                 Regions = user.Regions.Select(x=> x.Id).ToList()
             })
@@ -47,6 +50,9 @@ public class UserRepository : IUserRepository
                 Id = user.Id,
                 Active = user.Active,
                 Email = user.Email,
+                Name = user.Name,
+                Cpf = user.Cpf,
+                Profession = user.Profession, 
                 Roles = user.Roles.Select(x => x.Id).ToList(),
                 Regions = user.Regions.Select(x=> x.Id).ToList()
             })
@@ -67,6 +73,9 @@ public class UserRepository : IUserRepository
                 Id = user.Id,
                 Active = user.Active,
                 Email = user.Email,
+                Name = user.Name,
+                Cpf = user.Cpf,
+                Profession = user.Profession, 
                 Roles = user.Roles.Select(x => x.Id).ToList(),
                 Regions = user.Regions.Select(x=> x.Id).ToList()
             })
@@ -85,6 +94,9 @@ public class UserRepository : IUserRepository
             Active = model.Active,
             Email = model.Email,
             PasswordHash = model.Password,
+            Name = model.Name,
+            Cpf = model.Cpf,
+            Profession = model.Profession, 
             Roles = roles,
             Regions = regions
         };
@@ -111,6 +123,9 @@ public class UserRepository : IUserRepository
         user.Active = model.Active;
         user.Email = model.Email;
         user.PasswordHash = model.Password;
+        user.Name = model.Name;
+        user.Cpf = model.Cpf;
+        user.Profession = model.Profession;
         user.Roles = roles;
         user.Regions = regions;
         

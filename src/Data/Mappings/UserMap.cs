@@ -38,6 +38,23 @@ public class UserMap : IEntityTypeConfiguration<User>
             .HasColumnType("NVARCHAR")
             .HasMaxLength(255);
         
+        builder.Property(x => x.Name)
+            .IsRequired()
+            .HasColumnName("Name")
+            .HasColumnType("NVARCHAR")
+            .HasMaxLength(100);
+        
+        builder.Property(x => x.Cpf)
+            .IsRequired()
+            .HasColumnName("Cpf")
+            .HasColumnType("VARCHAR")
+            .HasMaxLength(11);
+        
+        builder.Property(x => x.Profession)
+            .HasColumnName("Profession")
+            .HasColumnType("NVARCHAR")
+            .HasMaxLength(50);
+        
         
         //// Index
         builder.HasIndex(x => x.Email, "IX_User_Email")

@@ -47,10 +47,10 @@ public class LotMap : IEntityTypeConfiguration<Lot>
 
 
         //// Relation
-        // Lot -> Professional
-        builder.HasOne(x => x.Professional)
+        // Lot -> User
+        builder.HasOne(x => x.User)
             .WithMany(x => x.Lots)
-            .HasConstraintName("FK_Lot_Professional");
+            .HasConstraintName("FK_Lot_User");
 
         // Lot -> Region
         builder.HasOne(x => x.Region)
