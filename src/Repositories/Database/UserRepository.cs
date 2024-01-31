@@ -86,9 +86,6 @@ public class UserRepository : IUserRepository
 
     public async Task<long> InsertAsync(CreateUserInput model)
     {
-        var roles = model.Roles.Select(role => _context.Roles.FirstOrDefault(x => x.Id == role)).ToList();
-        var regions = model.Regions.Select(region => _context.Regions.FirstOrDefault(x => x.Id == region)).ToList();
-        
         var user = new User
         {
             Active = model.Active,
@@ -97,8 +94,8 @@ public class UserRepository : IUserRepository
             Name = model.Name,
             Cpf = model.Cpf,
             Profession = model.Profession, 
-            Roles = roles,
-            Regions = regions
+            Roles = model.Roles.Select(role => _context.Roles.FirstOrDefault(x => x.Id == role)).ToList(),
+            Regions = model.Regions.Select(region => _context.Regions.FirstOrDefault(x => x.Id == region)).ToList()
         };
         
         _context.Users.Add(user);
@@ -117,17 +114,14 @@ public class UserRepository : IUserRepository
         if (user is null)
             return false;
         
-        var roles = model.Roles.Select(role => _context.Roles.FirstOrDefault(x => x.Id == role)).ToList();
-        var regions = model.Regions.Select(region => _context.Regions.FirstOrDefault(x => x.Id == region)).ToList();
-        
         user.Active = model.Active;
         user.Email = model.Email;
         user.PasswordHash = model.Password;
         user.Name = model.Name;
         user.Cpf = model.Cpf;
         user.Profession = model.Profession;
-        user.Roles = roles;
-        user.Regions = regions;
+        user.Roles = model.Roles.Select(role => _context.Roles.FirstOrDefault(x => x.Id == role)).ToList();
+        user.Regions = model.Regions.Select(region => _context.Regions.FirstOrDefault(x => x.Id == region)).ToList();
         
         _context.Update(user);
         await _context.SaveChangesAsync();

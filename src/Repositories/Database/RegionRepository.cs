@@ -26,7 +26,6 @@ public class RegionRepository :IRegionRepository
                 EstablishedDate = region.EstablishedDate,
                 StartDate = region.StartDate,
                 EndDate = region.EndDate,
-                Lots = region.Lots.Select(x => x.Id).ToList()
             })
             .ToListAsync();
 
@@ -45,7 +44,6 @@ public class RegionRepository :IRegionRepository
                 EstablishedDate = region.EstablishedDate,
                 StartDate = region.StartDate,
                 EndDate = region.EndDate,
-                Lots = region.Lots.Select(x => x.Id).ToList()
             })
             .FirstOrDefaultAsync(x => x.Id == id);
 
@@ -54,15 +52,13 @@ public class RegionRepository :IRegionRepository
 
     public async Task<long> InsertAsync(CreateRegionInput model)
     {
-        var users = model.Users.Select(user => _context.Users.FirstOrDefault(x => x.Id == user)).ToList();
-
         var region = new Region
         {
             Name = model.Name,
             EstablishedDate = model.EstablishedDate,
             StartDate = model.StartDate,
             EndDate = model.EndDate,
-            Users = users
+            Users = model.Users.Select(user => _context.Users.FirstOrDefault(x => x.Id == user)).ToList()
         };
         
         _context.Regions.Add(region);
