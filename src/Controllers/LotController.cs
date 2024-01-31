@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using PromoreApi.Models.InputModels;
 using PromoreApi.Repositories.Contracts;
 
 namespace PromoreApi.Controllers;
@@ -26,6 +27,35 @@ public class LotController : ControllerBase
     {
         var lot = _repository.GetByIdAsync(id).Result;
         return lot is null ? NotFound($"Lote '{id}' não encontrado!") : Ok(lot);
+    }
+    
+    [HttpPost]
+    public IActionResult Post([FromBody]CreateLotInput model)
+    {
+        var id = _repository.InsertAsync(model).Result;
+        return Ok(id);
+    }   
+   
+    [HttpPut]
+    public IActionResult Update([FromBody]UpdateLotInput model)
+    {
+        var updated = _repository.UpdateAsync(model).Result;
+        
+        if (!updated)
+            return NotFound("Lote não alterado ou não encontrado!");
+        
+        return Ok();
+    }
+    
+    [HttpDelete("{id}")]
+    public IActionResult Delete(string id)
+    {
+        var deleted = _repository.DeleteAsync(id).Result;
+        
+        if (!deleted)
+            return NotFound("Lote não encontrado!");
+        
+        return Ok();
     }
     
 }

@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using PromoreApi.Data;
+using PromoreApi.Entities;
+using PromoreApi.Models.InputModels;
+using PromoreApi.Models.ViewModels;
 using PromoreApi.Repositories.Contracts;
 
 namespace PromoreApi.Repositories.Database;
@@ -11,7 +14,7 @@ public class LotRepository : ILotRepository
     public LotRepository(PromoreDataContext context)
         => _context = context;
     
-    public async Task<IEnumerable<dynamic>> GetAll()
+    public async Task<List<LotView>> GetAll()
     {
         var lots = await _context
             .Lots
@@ -19,7 +22,7 @@ public class LotRepository : ILotRepository
             .Include(professional => professional.User)
             .Include(region => region.Region)
             .Include(clients => clients.Clients)
-            .Select(client => new
+            .Select(client => new LotView
             {
                 Id = client.Id,
                 Block = client.Block,
@@ -28,7 +31,7 @@ public class LotRepository : ILotRepository
                 LastModifiedDate = client.LastModifiedDate,
                 Status = client.Status,
                 Comments = client.Comments,
-                ProfessionalId = client.User.Id,
+                UserId = client.User.Id,
                 RegionId = client.Region.Id,
                 Clients = client.Clients.Select(x=> x.Id).ToList()
             })
@@ -37,7 +40,7 @@ public class LotRepository : ILotRepository
         return lots;
     }
 
-    public async Task<dynamic> GetByIdAsync(string id)
+    public async Task<LotView> GetByIdAsync(string id)
     {
         var lot = await _context
             .Lots
@@ -45,7 +48,7 @@ public class LotRepository : ILotRepository
             .Include(professional => professional.User)
             .Include(region => region.Region)
             .Include(clients => clients.Clients)
-            .Select(client => new
+            .Select(client => new LotView
             {
                 Id = client.Id,
                 Block = client.Block,
@@ -54,12 +57,71 @@ public class LotRepository : ILotRepository
                 LastModifiedDate = client.LastModifiedDate,
                 Status = client.Status,
                 Comments = client.Comments,
-                ProfessionalId = client.User.Id,
+                UserId = client.User.Id,
                 RegionId = client.Region.Id,
                 Clients = client.Clients.Select(x=> x.Id).ToList()
             })
             .FirstOrDefaultAsync(x => x.Id == id);
         
         return lot;
+    }
+
+    public async Task<string> InsertAsync(CreateLotInput model)
+    {
+        var lot = new Lot
+        {
+            Id = model.Id,
+            Block = model.Block,
+            Number = model.Number,
+            SurveyDate = model.SurveyDate,
+            LastModifiedDate = model.LastModifiedDate,
+            Status = model.Status,
+            Comments = model.Comments,
+            User = _context.Users.FirstOrDefault(x => x.Id == model.UserId),
+            Region = _context.Regions.FirstOrDefault(x => x.Id == model.RegionId),
+            Clients = model.Clients.Select(client => _context.Clients.FirstOrDefault(x => x.Id == client)).ToList()
+        };
+        
+        _context.Lots.Add(lot);
+        await _context.SaveChangesAsync();
+        
+        return lot.Id;
+    }
+
+    public async Task<bool> UpdateAsync(UpdateLotInput model)
+    {
+        var lot = await _context
+            .Lots
+            .FirstOrDefaultAsync(x => x.Id == model.Id);
+        
+        if (lot is null)
+            return false;
+
+        lot.Block = model.Block;
+        lot.Number = model.Number;
+        lot.SurveyDate = model.SurveyDate;
+        lot.LastModifiedDate = model.LastModifiedDate;
+        lot.Status = model.Status;
+        lot.Comments = model.Comments;
+        lot.User = _context.Users.FirstOrDefault(x => x.Id == model.UserId);
+        lot.Region = _context.Regions.FirstOrDefault(x => x.Id == model.RegionId);
+        lot.Clients = model.Clients.Select(client => _context.Clients.FirstOrDefault(x => x.Id == client)).ToList();
+        
+        _context.Update(lot);
+        await _context.SaveChangesAsync();
+        
+        return true;
+    }
+
+    public async Task<bool> DeleteAsync(string id)
+    {
+        var lot = await _context.Lots.FirstOrDefaultAsync(x => x.Id == id);
+        if (lot is null)
+            return false;
+
+        _context.Remove(lot);
+        await _context.SaveChangesAsync();
+
+        return true;
     }
 }
