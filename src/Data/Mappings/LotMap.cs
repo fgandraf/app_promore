@@ -52,11 +52,13 @@ public class LotMap : IEntityTypeConfiguration<Lot>
         // Lot -> User
         builder.HasOne(x => x.User)
             .WithMany(x => x.Lots)
+            .IsRequired()
             .HasConstraintName("FK_Lot_User");
 
         // Lot -> Region
         builder.HasOne(x => x.Region)
             .WithMany(x => x.Lots)
+            .IsRequired()
             .HasConstraintName("FK_Lot_Region");
         
         // Lot <- Clients
