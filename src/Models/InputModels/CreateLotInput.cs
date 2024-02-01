@@ -8,6 +8,7 @@ public class CreateLotInput
     public string Id { get; set; }
     
     [Required]
+    [MaxLength(2)]
     public string Block { get; set; }
     
     [Required]

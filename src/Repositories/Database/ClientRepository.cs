@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using PromoreApi.Data;
+using PromoreApi.Entities;
+using PromoreApi.Models.InputModels;
+using PromoreApi.Models.ViewModels;
 using PromoreApi.Repositories.Contracts;
 
 namespace PromoreApi.Repositories.Database;
@@ -11,13 +14,13 @@ public class ClientRepository : IClientRepository
     public ClientRepository(PromoreDataContext context)
         => _context = context;
     
-    public async Task<IEnumerable<dynamic>> GetAll()
+    public async Task<List<ClientView>> GetAll()
     {
         var clients = await _context
             .Clients
             .AsNoTracking()
             .Include(lots => lots.Lot)
-            .Select(client => new
+            .Select(client => new ClientView
             {
                 Id = client.Id,
                 Name = client.Name,
@@ -32,13 +35,13 @@ public class ClientRepository : IClientRepository
         return clients;
     }
 
-    public async Task<dynamic> GetByIdAsync(int id)
+    public async Task<ClientView> GetByIdAsync(int id)
     {
         var client = await _context
             .Clients
             .AsNoTracking()
             .Include(lots => lots.Lot)
-            .Select(client => new
+            .Select(client => new ClientView
             {
                 Id = client.Id,
                 Name = client.Name,
@@ -51,5 +54,57 @@ public class ClientRepository : IClientRepository
             .FirstOrDefaultAsync(x => x.Id == id);
         
         return client;
+    }
+
+    public async Task<long> InsertAsync(CreateClientInput model)
+    {
+        var client = new Client
+        {
+            Name = model.Name,
+            Cpf = model.Cpf,
+            Phone = model.Phone,
+            MothersName = model.MothersName,
+            BirthdayDate = model.BirthdayDate,
+            Lot = _context.Lots.FirstOrDefault(x => x.Id == model.LotId)
+        };
+        
+        _context.Clients.Add(client);
+        await _context.SaveChangesAsync();
+        
+        return client.Id;
+    }
+
+    public async Task<bool> UpdateAsync(UpdateClientInput model)
+    {
+        var client = await _context
+            .Clients
+            .FirstOrDefaultAsync(x => x.Id == model.Id);
+        
+        if (client is null)
+            return false;
+
+        client.Name = model.Name;
+        client.Cpf = model.Cpf;
+        client.Phone = model.Phone;
+        client.MothersName = model.MothersName;
+        client.BirthdayDate = model.BirthdayDate;
+        client.Lot = _context.Lots.FirstOrDefault(x => x.Id == model.LotId);
+        
+        _context.Update(client);
+        await _context.SaveChangesAsync();
+        
+        return true;
+    }
+
+    public async Task<bool> DeleteAsync(int id)
+    {
+        var client = await _context.Clients.FirstOrDefaultAsync(x => x.Id == id);
+        if (client is null)
+            return false;
+
+        _context.Remove(client);
+        await _context.SaveChangesAsync();
+
+        return true;
     }
 }

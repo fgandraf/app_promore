@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using PromoreApi.Models.InputModels;
 using PromoreApi.Repositories.Contracts;
 
 namespace PromoreApi.Controllers;
@@ -27,6 +28,35 @@ public class ClientController : ControllerBase
     {
         var client = _repository.GetByIdAsync(id).Result;
         return client is null ? NotFound($"Cliente '{id}' não encontrado!") : Ok(client);
+    }
+    
+    [HttpPost]
+    public IActionResult Post([FromBody]CreateClientInput model)
+    {
+        var id = _repository.InsertAsync(model).Result;
+        return Ok(id);
+    }   
+   
+    [HttpPut]
+    public IActionResult Update([FromBody]UpdateClientInput model)
+    {
+        var updated = _repository.UpdateAsync(model).Result;
+        
+        if (!updated)
+            return NotFound("Cliente não alterado ou não encontrado!");
+        
+        return Ok();
+    }
+    
+    [HttpDelete("{id:int}")]
+    public IActionResult Delete(int id)
+    {
+        var deleted = _repository.DeleteAsync(id).Result;
+        
+        if (!deleted)
+            return NotFound("Cliente não encontrado!");
+        
+        return Ok();
     }
     
 

@@ -12,8 +12,10 @@ public class LotMap : IEntityTypeConfiguration<Lot>
         builder.ToTable("Lot");
         
         
-        //// Primary Key - Identity
+        //// Primary Key
         builder.HasKey(x => x.Id);
+        builder.Property(x => x.Id)
+            .HasMaxLength(5);
         
         
         //// Properties

@@ -142,7 +142,7 @@ public class DbInserts
          _context.Clients.Add(new Client { Name = "Maria Tereza dos Santos", Cpf = "11122233344", Phone = "14988887777", MothersName = "Maria das Dores Carvalho", BirthdayDate = new DateTime(1978, 03, 9), Lot = _context.Lots.FirstOrDefault(x => x.Id == "A18") });
          _context.Clients.Add(new Client { Name = "Benedito Pereira Lima", Cpf = "10121231388", Phone = "14977776666", MothersName = "Silvana Rosa das Neves", BirthdayDate = new DateTime(1988, 07, 16), Lot = _context.Lots.FirstOrDefault(x => x.Id == "F25") });
          _context.Clients.Add(new Client { Name = "Mariano Palas Conceição", Cpf = "93382271166", Phone = "1498775555", MothersName = "Dolores Almeida da Silva", BirthdayDate = new DateTime(1990, 11, 19), Lot = _context.Lots.FirstOrDefault(x => x.Id == "K5") });
-         _context.Clients.Add(new Client { Name = "Sonia Contijo Tavares", Cpf = "91929394955", Phone = "1498664444", MothersName = "Rita Amália de Jesus", BirthdayDate = new DateTime(1973, 09, 25), Lot = _context.Lots.FirstOrDefault(x => x.Id == "J32") });
+         _context.Clients.Add(new Client { Name = "Sonia Contijo Tavares", Cpf = "91929394955", Phone = "1498664444", MothersName = "Rita Amália de Jesus", BirthdayDate = new DateTime(1973, 09, 25), Lot = _context.Lots.FirstOrDefault(x => x.Id == "A10") });
          
          _context.SaveChanges();
     }
