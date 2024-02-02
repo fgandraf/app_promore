@@ -22,22 +22,41 @@ public class LotRepository : ILotRepository
             .Include(professional => professional.User)
             .Include(region => region.Region)
             .Include(clients => clients.Clients)
-            .Select(client => new LotView
+            .Select(lot => new LotView
             {
-                Id = client.Id,
-                Block = client.Block,
-                Number = client.Number,
-                SurveyDate = client.SurveyDate,
-                LastModifiedDate = client.LastModifiedDate,
-                Status = client.Status,
-                Comments = client.Comments,
-                UserId = client.User.Id,
-                RegionId = client.Region.Id,
-                Clients = client.Clients.Select(x=> x.Id).ToList()
+                Id = lot.Id,
+                Block = lot.Block,
+                Number = lot.Number,
+                SurveyDate = lot.SurveyDate,
+                LastModifiedDate = lot.LastModifiedDate,
+                Status = lot.Status,
+                Comments = lot.Comments,
+                UserId = lot.User.Id,
+                RegionId = lot.Region.Id,
+                Clients = lot.Clients.Select(x=> x.Id).ToList()
             })
             .ToListAsync();
         
         return lots;
+    }
+
+    public async Task<List<LotStatusView>> GetStatusByRegion(int regionId)
+    {
+         var lots = await _context
+             .Lots
+             .Include(x => x.Region)
+             .Where(x => x.Region.Id == regionId)
+             .Include(x => x.User)
+             .AsNoTracking()
+             .Select(lot => new LotStatusView
+             {
+                 Id = lot.Id,
+                 Status = lot.Status,
+                 UserId = lot.User.Id
+             })
+             .ToListAsync();
+        
+         return lots;
     }
 
     public async Task<LotView> GetByIdAsync(string id)

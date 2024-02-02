@@ -21,6 +21,12 @@ public class LotController : ControllerBase
         return lots.IsNullOrEmpty() ? NotFound() : Ok(lots);
     }
     
+    [HttpGet("status/{regionId:int}")]
+    public IActionResult GetStatusByRegion(int regionId)
+    {
+        var lots = _repository.GetStatusByRegion(regionId).Result;
+        return lots.IsNullOrEmpty() ? NotFound() : Ok(lots);
+    }
     
     [HttpGet("{id}")]
     public IActionResult GetById(string id)
