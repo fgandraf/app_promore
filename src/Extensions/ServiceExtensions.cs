@@ -12,12 +12,9 @@ namespace PromoreApi.Extensions;
 
 public static class ServiceExtensions
 {
-    public static IServiceCollection AddDatabaseServices(this IServiceCollection services)
-    {
-        services.AddDbContext<PromoreDataContext>(options =>
-            options.UseSqlServer("Server=localhost,1433;Database=Promore;User ID=sa;Password=1q2w3e4r@#$;Encrypt=false"));
-        return services;
-    }
+    public static IServiceCollection AddDatabaseServices(this IServiceCollection services, IConfiguration configuration)
+        => services.AddDbContext<PromoreDataContext>(options =>
+            options.UseSqlServer(configuration.GetConnectionString("Default")));
     
     public static IServiceCollection AddRepositoryServices(this IServiceCollection services)
     {

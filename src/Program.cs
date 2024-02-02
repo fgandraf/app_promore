@@ -12,7 +12,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 builder.Services.AddBearerAuthentication(builder.Configuration);
 
 // Extends Services to add Dependency Injection services configuration
-builder.Services.AddDatabaseServices();
+builder.Services.AddDatabaseServices(builder.Configuration);
 builder.Services.AddRepositoryServices();
 
 builder.Services.AddSwaggerConfiguration();
