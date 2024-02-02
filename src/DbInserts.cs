@@ -1,5 +1,6 @@
 using PromoreApi.Data;
 using PromoreApi.Entities;
+using SecureIdentity.Password;
 
 namespace PromoreApi;
 
@@ -53,7 +54,7 @@ public class DbInserts
         {
             Active = true,
             Email = "fgandraf@gmail.com",
-            PasswordHash = "12345senha",
+            PasswordHash =  PasswordHasher.Hash("12345senha"),
             Name = "Felipe Ferreira Gandra",
             Cpf = "12345678900",
             Profession = "Arquiteto",
@@ -73,7 +74,7 @@ public class DbInserts
         { 
             Active = true,  
             Email = "fernanda@email.com", 
-            PasswordHash = "12345senha",
+            PasswordHash = PasswordHasher.Hash("12345senha"),
             Name = "Fernanda Costa Garcia", 
             Cpf = "98765432111", 
             Profession = "Arquiteta", 
@@ -91,7 +92,7 @@ public class DbInserts
         {
             Active = true,
             Email = "edson@seesp.com.br",
-            PasswordHash = "12345senha",
+            PasswordHash = PasswordHasher.Hash("12345senha"),
             Name = "Edson Gamba Ribeiro", 
             Cpf = "13579024688", 
             Profession = "Engenheiro Civil", 

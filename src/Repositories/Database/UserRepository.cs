@@ -4,6 +4,7 @@ using PromoreApi.Entities;
 using PromoreApi.Models.InputModels;
 using PromoreApi.Models.ViewModels;
 using PromoreApi.Repositories.Contracts;
+using SecureIdentity.Password;
 
 namespace PromoreApi.Repositories.Database;
 
@@ -90,7 +91,7 @@ public class UserRepository : IUserRepository
         {
             Active = model.Active,
             Email = model.Email,
-            PasswordHash = model.Password,
+            PasswordHash = PasswordHasher.Hash(model.Password),
             Name = model.Name,
             Cpf = model.Cpf,
             Profession = model.Profession, 
@@ -116,7 +117,7 @@ public class UserRepository : IUserRepository
         
         user.Active = model.Active;
         user.Email = model.Email;
-        user.PasswordHash = model.Password;
+        user.PasswordHash = PasswordHasher.Hash(model.Password);
         user.Name = model.Name;
         user.Cpf = model.Cpf;
         user.Profession = model.Profession;

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using PromoreApi.Models.InputModels;
@@ -5,6 +6,7 @@ using PromoreApi.Repositories.Contracts;
 
 namespace PromoreApi.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("v1/lots")]
 public class LotController : ControllerBase

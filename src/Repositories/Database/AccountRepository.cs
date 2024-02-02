@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using PromoreApi.Data;
+using PromoreApi.Entities;
 using PromoreApi.Models.InputModels;
 using PromoreApi.Repositories.Contracts;
+using SecureIdentity.Password;
 
 namespace PromoreApi.Repositories.Database;
 
@@ -13,17 +15,13 @@ public class AccountRepository : IAccountRepository
         => _context = context;
     
 
-    public async Task<bool> LoginAsync(LoginInput model)
+    public async Task<User> LoginAsync(LoginInput model)
     {
         var user = await _context
             .Users
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Email == model.Email);
 
-        if (user is null || !user.Active)
-            return false;
-       
-        //TO DO: Check password
-        return true;
+        return user;
     }
 }
