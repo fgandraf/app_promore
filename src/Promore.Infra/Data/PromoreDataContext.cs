@@ -1,18 +1,22 @@
 using Microsoft.EntityFrameworkCore;
-using Promore.Api.Data.Mappings;
 using Promore.Core.Entities;
+using Promore.Infra.Data.Mappings;
 
-namespace Promore.Api.Data;
+namespace Promore.Infra.Data;
 
 public class PromoreDataContext : DbContext
 {
-    public DbSet<Client> Clients { get; set; }
-    public DbSet<Lot> Lots { get; set; }
-    public DbSet<Region> Regions { get; set; }
-    public DbSet<User> Users { get; set; }
-    public DbSet<Role> Roles { get; set; }
+    public DbSet<Client> Clients { get; set; } = null!;
+    public DbSet<Lot> Lots { get; set; } = null!;
+    public DbSet<Region> Regions { get; set; } = null!;
+    public DbSet<User> Users { get; set; } = null!;
+    public DbSet<Role> Roles { get; set; } = null!;
 
-
+    public PromoreDataContext()
+    {
+        
+    }
+    
     public PromoreDataContext(DbContextOptions<PromoreDataContext> options) : base(options) { }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)

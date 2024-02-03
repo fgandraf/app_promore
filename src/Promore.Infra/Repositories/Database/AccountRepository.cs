@@ -1,10 +1,10 @@
 using Microsoft.EntityFrameworkCore;
-using Promore.Api.Data;
+using Promore.Infra.Data;
 using Promore.Core.Entities;
 using Promore.Core.Models.InputModels;
 using Promore.Core.Repositories.Contracts;
 
-namespace Promore.Api.Repositories.Database;
+namespace Promore.Infra.Repositories.Database;
 
 public class AccountRepository : IAccountRepository
 {

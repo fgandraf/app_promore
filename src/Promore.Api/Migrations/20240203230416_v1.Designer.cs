@@ -5,15 +5,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Promore.Api.Data;
+using Promore.Infra.Data;
 
 #nullable disable
 
 namespace Promore.Api.Migrations
 {
     [DbContext(typeof(PromoreDataContext))]
-    [Migration("20240203202241_InitialCreation")]
-    partial class InitialCreation
+    [Migration("20240203230416_v1")]
+    partial class v1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -89,7 +89,7 @@ namespace Promore.Api.Migrations
                     b.Property<DateTime>("LastModifiedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("DATETIME2")
-                        .HasDefaultValue(new DateTime(2024, 2, 3, 20, 22, 41, 218, DateTimeKind.Utc).AddTicks(8280))
+                        .HasDefaultValue(new DateTime(2024, 2, 3, 23, 4, 16, 688, DateTimeKind.Utc).AddTicks(4040))
                         .HasColumnName("LastModifiedDate");
 
                     b.Property<int>("Number")

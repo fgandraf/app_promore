@@ -1,12 +1,12 @@
 using Microsoft.EntityFrameworkCore;
-using Promore.Api.Data;
+using Promore.Infra.Data;
 using Promore.Core.Entities;
 using Promore.Core.Models.InputModels;
 using Promore.Core.Models.ViewModels;
 using Promore.Core.Repositories.Contracts;
 using SecureIdentity.Password;
 
-namespace Promore.Api.Repositories.Database;
+namespace Promore.Infra.Repositories.Database;
 
 public class UserRepository : IUserRepository
 {

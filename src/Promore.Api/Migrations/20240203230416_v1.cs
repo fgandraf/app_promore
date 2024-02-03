@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Promore.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreation : Migration
+    public partial class v1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -66,7 +66,7 @@ namespace Promore.Api.Migrations
                     Block = table.Column<string>(type: "VARCHAR(2)", maxLength: 2, nullable: false),
                     Number = table.Column<int>(type: "INT", nullable: false),
                     SurveyDate = table.Column<DateTime>(type: "DATE", nullable: false),
-                    LastModifiedDate = table.Column<DateTime>(type: "DATETIME2", nullable: false, defaultValue: new DateTime(2024, 2, 3, 20, 22, 41, 218, DateTimeKind.Utc).AddTicks(8280)),
+                    LastModifiedDate = table.Column<DateTime>(type: "DATETIME2", nullable: false, defaultValue: new DateTime(2024, 2, 3, 23, 4, 16, 688, DateTimeKind.Utc).AddTicks(4040)),
                     Status = table.Column<int>(type: "INT", nullable: false),
                     Comments = table.Column<string>(type: "TEXT", nullable: true),
                     UserId = table.Column<int>(type: "int", nullable: false),

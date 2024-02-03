@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Promore.Api.Data;
+using Promore.Infra.Data;
 
 #nullable disable
 
@@ -86,7 +86,7 @@ namespace Promore.Api.Migrations
                     b.Property<DateTime>("LastModifiedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("DATETIME2")
-                        .HasDefaultValue(new DateTime(2024, 2, 3, 20, 22, 41, 218, DateTimeKind.Utc).AddTicks(8280))
+                        .HasDefaultValue(new DateTime(2024, 2, 3, 23, 4, 16, 688, DateTimeKind.Utc).AddTicks(4040))
                         .HasColumnName("LastModifiedDate");
 
                     b.Property<int>("Number")

@@ -1,8 +1,20 @@
-using Promore.Api.Data;
 using Promore.Core.Entities;
+using Promore.Infra.Data;
 using SecureIdentity.Password;
 
-namespace Promore.Api;
+namespace Promore.Api.Extensions;
+
+public static class WebApplicationExtensions
+{
+    private static PromoreDataContext _context;
+
+    public static void ConfigureFirstRun(this WebApplication app)
+    {
+        using var scope = app.Services.CreateScope();
+        var dbInserts = scope.ServiceProvider.GetRequiredService<DbInserts>();
+        dbInserts.InsertData();
+    }
+}
 
 public class DbInserts
 {
