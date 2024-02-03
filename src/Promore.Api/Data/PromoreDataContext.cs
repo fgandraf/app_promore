@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Promore.Api.Data.Mappings;
-using Promore.Api.Entities;
+using Promore.Core.Entities;
 
 namespace Promore.Api.Data;
 

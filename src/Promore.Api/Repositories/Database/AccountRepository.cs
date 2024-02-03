@@ -1,9 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Promore.Api.Data;
-using Promore.Api.Entities;
-using Promore.Api.Models.InputModels;
-using Promore.Api.Repositories.Contracts;
-using SecureIdentity.Password;
+using Promore.Core.Entities;
+using Promore.Core.Models.InputModels;
+using Promore.Core.Repositories.Contracts;
 
 namespace Promore.Api.Repositories.Database;
 

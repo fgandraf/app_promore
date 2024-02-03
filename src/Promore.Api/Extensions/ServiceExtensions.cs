@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Promore.Api.Data;
-using Promore.Api.Repositories.Contracts;
+using Promore.Core.Repositories.Contracts;
 using Promore.Api.Repositories.Database;
 using Promore.Api.Services;
 

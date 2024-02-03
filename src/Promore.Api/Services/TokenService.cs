@@ -2,7 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
-using Promore.Api.Entities;
+using Promore.Core.Entities;
 
 namespace Promore.Api.Services;
 

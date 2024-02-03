@@ -1,5 +1,5 @@
 using Promore.Api.Data;
-using Promore.Api.Entities;
+using Promore.Core.Entities;
 using SecureIdentity.Password;
 
 namespace Promore.Api;
