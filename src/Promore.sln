@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Promore.Api", "Promore.Api\Promore.Api.csproj", "{CFD261F3-4C58-4A82-A27B-67B60C5ADCCE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Promore.Core", "Promore.Core\Promore.Core.csproj", "{D3F7B03F-FDFA-4C2E-8BCB-F649835D3AB4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Promore.Infra", "Promore.Infra\Promore.Infra.csproj", "{B725D6BB-F78B-4D42-8F4F-E819A6A2D8A0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CFD261F3-4C58-4A82-A27B-67B60C5ADCCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFD261F3-4C58-4A82-A27B-67B60C5ADCCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFD261F3-4C58-4A82-A27B-67B60C5ADCCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFD261F3-4C58-4A82-A27B-67B60C5ADCCE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3F7B03F-FDFA-4C2E-8BCB-F649835D3AB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3F7B03F-FDFA-4C2E-8BCB-F649835D3AB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3F7B03F-FDFA-4C2E-8BCB-F649835D3AB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3F7B03F-FDFA-4C2E-8BCB-F649835D3AB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B725D6BB-F78B-4D42-8F4F-E819A6A2D8A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B725D6BB-F78B-4D42-8F4F-E819A6A2D8A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B725D6BB-F78B-4D42-8F4F-E819A6A2D8A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B725D6BB-F78B-4D42-8F4F-E819A6A2D8A0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
