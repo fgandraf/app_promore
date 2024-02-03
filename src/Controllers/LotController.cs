@@ -55,6 +55,8 @@ public class LotController : ControllerBase
         return Ok();
     }
     
+    
+    [Authorize(Roles = "admin")]
     [HttpDelete("{id}")]
     public IActionResult Delete(string id)
     {

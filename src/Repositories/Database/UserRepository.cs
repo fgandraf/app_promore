@@ -104,7 +104,28 @@ public class UserRepository : IUserRepository
         return user.Id;
     }
 
-    public async Task<bool> UpdateAsync(UpdateUserInput model)
+    public async Task<bool> UpdateInfoAsync(UpdateUserInfoInput model)
+    {
+        var user = await _context
+            .Users
+            .FirstOrDefaultAsync(x => x.Id == model.Id);
+        
+        if (user is null)
+            return false;
+        
+        user.Email = model.Email;
+        user.PasswordHash = PasswordHasher.Hash(model.Password);
+        user.Name = model.Name;
+        user.Cpf = model.Cpf;
+        user.Profession = model.Profession;
+        
+        _context.Update(user);
+        await _context.SaveChangesAsync();
+        
+        return true;
+    }
+
+    public async Task<bool> UpdateSettingsAsync(UpdateUserSettingsInput model)
     {
         var user = await _context
             .Users
@@ -116,11 +137,6 @@ public class UserRepository : IUserRepository
             return false;
         
         user.Active = model.Active;
-        user.Email = model.Email;
-        user.PasswordHash = PasswordHasher.Hash(model.Password);
-        user.Name = model.Name;
-        user.Cpf = model.Cpf;
-        user.Profession = model.Profession;
         user.Roles = model.Roles.Select(role => _context.Roles.FirstOrDefault(x => x.Id == role)).ToList();
         user.Regions = model.Regions.Select(region => _context.Regions.FirstOrDefault(x => x.Id == region)).ToList();
         

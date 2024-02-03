@@ -66,7 +66,7 @@ namespace PromoreApi.Migrations
                     Block = table.Column<string>(type: "VARCHAR(2)", maxLength: 2, nullable: false),
                     Number = table.Column<int>(type: "INT", nullable: false),
                     SurveyDate = table.Column<DateTime>(type: "DATE", nullable: false),
-                    LastModifiedDate = table.Column<DateTime>(type: "DATETIME2", nullable: false, defaultValue: new DateTime(2024, 2, 1, 3, 31, 23, 419, DateTimeKind.Utc).AddTicks(4750)),
+                    LastModifiedDate = table.Column<DateTime>(type: "DATETIME2", nullable: false, defaultValue: new DateTime(2024, 2, 3, 18, 12, 44, 259, DateTimeKind.Utc).AddTicks(9090)),
                     Status = table.Column<int>(type: "INT", nullable: false),
                     Comments = table.Column<string>(type: "TEXT", nullable: true),
                     UserId = table.Column<int>(type: "int", nullable: false),
@@ -101,14 +101,14 @@ namespace PromoreApi.Migrations
                     table.PrimaryKey("PK_UserRegion", x => new { x.RegionId, x.UserId });
                     table.ForeignKey(
                         name: "FK_UserRegion_RegionId",
-                        column: x => x.UserId,
-                        principalTable: "User",
+                        column: x => x.RegionId,
+                        principalTable: "Region",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_UserRegion_UserId",
-                        column: x => x.RegionId,
-                        principalTable: "Region",
+                        column: x => x.UserId,
+                        principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -125,14 +125,14 @@ namespace PromoreApi.Migrations
                     table.PrimaryKey("PK_UserRole", x => new { x.RoleId, x.UserId });
                     table.ForeignKey(
                         name: "FK_UserRole_RoleId",
-                        column: x => x.UserId,
-                        principalTable: "User",
+                        column: x => x.RoleId,
+                        principalTable: "Role",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_UserRole_UserId",
-                        column: x => x.RoleId,
-                        principalTable: "Role",
+                        column: x => x.UserId,
+                        principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });

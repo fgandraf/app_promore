@@ -2,13 +2,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PromoreApi.Models.InputModels;
 
-public class UpdateUserInput
+public class UpdateUserInfoInput
 {
     [Required]
     public int Id { get; set; }
-    
-    [Required]
-    public bool Active { get; set; }
     
     [Required]
     [EmailAddress]
@@ -25,12 +22,4 @@ public class UpdateUserInput
     
     [Required]
     public string Profession { get; set; }
-    
-    [Required]
-    [MinLength(1, ErrorMessage = "A lista deve conter pelo menos um elemento.")]
-    public List<int> Roles { get; set; }
-    
-    [Required]
-    [MinLength(1, ErrorMessage = "A lista deve conter pelo menos um elemento.")]
-    public List<int> Regions { get; set; }
 }

@@ -20,6 +20,7 @@ public class AccountRepository : IAccountRepository
         var user = await _context
             .Users
             .AsNoTracking()
+            .Include(x => x.Roles)
             .FirstOrDefaultAsync(x => x.Email == model.Email);
 
         return user;

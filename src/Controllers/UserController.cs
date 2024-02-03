@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -37,17 +38,10 @@ public class UserController : ControllerBase
         return user is null ? NotFound($"Usuário '{email}' não encontrado!") : Ok(user);
     }
     
-    [HttpPost]
-    public IActionResult Post([FromBody]CreateUserInput model)
-    {
-        var id = _repository.InsertAsync(model).Result;
-        return Ok(id);
-    }
-    
     [HttpPut]
-    public IActionResult Update([FromBody]UpdateUserInput model)
+    public IActionResult UpdateInfo([FromBody]UpdateUserInfoInput model)
     {
-        var updated = _repository.UpdateAsync(model).Result;
+        var updated = _repository.UpdateInfoAsync(model).Result;
         
         if (!updated)
             return NotFound("Usuário não alterado ou não encontrado!");
@@ -55,6 +49,27 @@ public class UserController : ControllerBase
         return Ok();
     }
     
+    [Authorize(Roles = "admin")]
+    [HttpPost]
+    public IActionResult Post([FromBody]CreateUserInput model)
+    {
+        var id = _repository.InsertAsync(model).Result;
+        return Ok(id);
+    }
+    
+    [Authorize(Roles = "admin")]
+    [HttpPut("settings")]
+    public IActionResult UpdateSettings([FromBody]UpdateUserSettingsInput model)
+    {
+        var updated = _repository.UpdateSettingsAsync(model).Result;
+        
+        if (!updated)
+            return NotFound("Usuário não alterado ou não encontrado!");
+        
+        return Ok();
+    }
+    
+    [Authorize(Roles = "admin")]
     [HttpDelete("{id:int}")]
     public IActionResult Delete(int id)
     {

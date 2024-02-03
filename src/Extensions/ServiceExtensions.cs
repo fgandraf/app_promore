@@ -30,9 +30,8 @@ public static class ServiceExtensions
         return services;
     }
     
-    public static IServiceCollection AddBearerAuthentication(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddBearerAuthentication(this IServiceCollection services)
     {
-        Configuration.JwtKey = configuration.GetValue<string>("JwtKey");
         var key = Encoding.ASCII.GetBytes(Configuration.JwtKey);
         
         services.AddAuthentication(x =>
@@ -49,13 +48,20 @@ public static class ServiceExtensions
                 ValidateAudience = false
             };
         });
+        
         return services;
     }
+
+    public static IServiceCollection AddAuthorizationPolicies(this IServiceCollection services)
+        => services.AddAuthorization(x =>
+        {
+            x.AddPolicy("admin", p => p.RequireRole("admin"));
+            x.AddPolicy("manager", p => p.RequireRole("manager"));
+        });
     
-    public static IServiceCollection AddSwaggerConfiguration(this IServiceCollection services)
+    
+    public static IServiceCollection AddSwaggerConfigurations(this IServiceCollection services)
     {
-        services.AddEndpointsApiExplorer();
-        
         services.AddSwaggerGen(setup =>
         {
             var jwtSecurityScheme = new OpenApiSecurityScheme

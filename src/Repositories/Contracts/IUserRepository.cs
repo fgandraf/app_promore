@@ -9,6 +9,7 @@ public interface IUserRepository
     Task<UserView> GetByIdAsync(int id);
     Task<UserView> GetByEmailAddress(string address);
     Task<long> InsertAsync(CreateUserInput model);
-    Task<bool> UpdateAsync(UpdateUserInput model);
+    Task<bool> UpdateInfoAsync(UpdateUserInfoInput model);
+    Task<bool> UpdateSettingsAsync(UpdateUserSettingsInput model);
     Task<bool> DeleteAsync(int id);
 }

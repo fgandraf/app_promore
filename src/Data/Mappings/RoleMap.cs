@@ -25,8 +25,5 @@ public class RoleMap : IEntityTypeConfiguration<Role>
             .HasColumnName("Name")
             .HasColumnType("VARCHAR")
             .HasMaxLength(80);
-        
-        //// Relation
-        // Roles <-> Users
     }
 }

@@ -32,6 +32,7 @@ public class RegionController : ControllerBase
         return region is null ? NotFound($"Região '{id}' não encontrado!") : Ok(region);
     }
     
+    [Authorize(Roles = "admin")]
     [HttpPost]
     public IActionResult Post([FromBody]CreateRegionInput model)
     {
@@ -39,6 +40,8 @@ public class RegionController : ControllerBase
         return Ok(id);
     }   
    
+    [Authorize(Roles = "admin")]
+    [Authorize(Roles = "manager")]
     [HttpPut]
     public IActionResult Update([FromBody]UpdateRegionInput model)
     {
@@ -50,6 +53,7 @@ public class RegionController : ControllerBase
         return Ok();
     }
     
+    [Authorize(Roles = "admin")]
     [HttpDelete("{id:int}")]
     public IActionResult Delete(int id)
     {

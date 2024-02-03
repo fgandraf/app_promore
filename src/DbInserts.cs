@@ -26,9 +26,9 @@ public class DbInserts
         if (_context.Roles.Any())
             return;
         
-        _context.Roles.Add(new Role { Name = "Admin" });
-        _context.Roles.Add(new Role { Name = "Professional" });
-        _context.Roles.Add(new Role { Name = "Manager" });
+        _context.Roles.Add(new Role { Name = "admin" });
+        _context.Roles.Add(new Role { Name = "professional" });
+        _context.Roles.Add(new Role { Name = "manager" });
             
         _context.SaveChanges();
     }
@@ -49,8 +49,20 @@ public class DbInserts
         if (_context.Users.Any())
             return;
         
-        
         var user1 = new User
+        {
+            Active = true,
+            Email = "admin@admin",
+            Name = "Administrador",
+            Cpf = "",
+            PasswordHash =  PasswordHasher.Hash("admin"),
+            Roles = 
+            [
+                _context.Roles.FirstOrDefault(x => x.Name == "Admin")
+            ]
+        };
+        
+        var user2 = new User
         {
             Active = true,
             Email = "fgandraf@gmail.com",
@@ -60,7 +72,6 @@ public class DbInserts
             Profession = "Arquiteto",
             Roles = 
             [
-                _context.Roles.FirstOrDefault(x => x.Name == "Admin"),
                 _context.Roles.FirstOrDefault(x => x.Name == "Professional")
             ],
             Regions =
@@ -70,7 +81,7 @@ public class DbInserts
             ]
         };
         
-        var user2 = new User 
+        var user3 = new User 
         { 
             Active = true,  
             Email = "fernanda@email.com", 
@@ -88,7 +99,7 @@ public class DbInserts
             ]
         };
         
-        var user3 = new User
+        var user4 = new User
         {
             Active = true,
             Email = "edson@seesp.com.br",
@@ -110,6 +121,7 @@ public class DbInserts
         _context.Users.Add(user1);
         _context.Users.Add(user2);
         _context.Users.Add(user3);
+        _context.Users.Add(user4);
         
         _context.SaveChanges();
     }
@@ -122,11 +134,11 @@ public class DbInserts
          if (!_context.Users.Any() || !_context.Regions.Any())
              return;
          
-         _context.Lots.Add(new Lot { Id = "A10", Block = "A", Number = 10, SurveyDate = new DateTime(2023, 10, 26), LastModifiedDate = DateTime.Now, Status  = 1, Comments = "Proprietário aguardando agendamento para atualizar o CADÚNICO", User = _context.Users.FirstOrDefault(), Region = _context.Regions.FirstOrDefault()});
-         _context.Lots.Add(new Lot { Id = "A18",  Block = "A", Number = 18, SurveyDate = new DateTime(2023, 09, 12), LastModifiedDate = DateTime.Now, Status  = 2, Comments = "", User = _context.Users.Skip(1).FirstOrDefault(), Region = _context.Regions.FirstOrDefault()});
-         _context.Lots.Add(new Lot { Id = "F25", Block = "F", Number = 25, SurveyDate = new DateTime(2023, 05, 4), LastModifiedDate = DateTime.Now, Status  = 1, Comments = "Imóvel alugado para Guilherme - (14) 99999-1500", User = _context.Users.FirstOrDefault(), Region = _context.Regions.FirstOrDefault()});
+         _context.Lots.Add(new Lot { Id = "A10", Block = "A", Number = 10, SurveyDate = new DateTime(2023, 10, 26), LastModifiedDate = DateTime.Now, Status  = 1, Comments = "Proprietário aguardando agendamento para atualizar o CADÚNICO", User = _context.Users.Skip(1).FirstOrDefault(), Region = _context.Regions.FirstOrDefault()});
+         _context.Lots.Add(new Lot { Id = "A18",  Block = "A", Number = 18, SurveyDate = new DateTime(2023, 09, 12), LastModifiedDate = DateTime.Now, Status  = 2, Comments = "", User = _context.Users.Skip(2).FirstOrDefault(), Region = _context.Regions.FirstOrDefault()});
+         _context.Lots.Add(new Lot { Id = "F25", Block = "F", Number = 25, SurveyDate = new DateTime(2023, 05, 4), LastModifiedDate = DateTime.Now, Status  = 1, Comments = "Imóvel alugado para Guilherme - (14) 99999-1500", User = _context.Users.Skip(3).FirstOrDefault(), Region = _context.Regions.FirstOrDefault()});
          _context.Lots.Add(new Lot { Id = "K5", Block = "K", Number = 5, SurveyDate = new DateTime(2023, 12, 22), LastModifiedDate = DateTime.Now, Status  = 3, Comments = "Proprietário não assina", User = _context.Users.Skip(2).FirstOrDefault(), Region = _context.Regions.FirstOrDefault()});
-         _context.Lots.Add(new Lot { Id = "J32", Block = "J", Number = 32, SurveyDate = new DateTime(2023, 11, 17), LastModifiedDate = DateTime.Now, Status  = 1, Comments = "Casa de madeira", User = _context.Users.Skip(1).FirstOrDefault(), Region = _context.Regions.Skip(1).FirstOrDefault()});
+         _context.Lots.Add(new Lot { Id = "J32", Block = "J", Number = 32, SurveyDate = new DateTime(2023, 11, 17), LastModifiedDate = DateTime.Now, Status  = 1, Comments = "Casa de madeira", User = _context.Users.Skip(3).FirstOrDefault(), Region = _context.Regions.Skip(1).FirstOrDefault()});
          
          _context.SaveChanges();
     }

@@ -71,11 +71,11 @@ public class UserMap : IEntityTypeConfiguration<User>
                 user => user.HasOne<Role>()
                     .WithMany()
                     .HasForeignKey("RoleId")
-                    .HasConstraintName("FK_UserRole_UserId"),
+                    .HasConstraintName("FK_UserRole_RoleId"),
                 role => role.HasOne<User>()
                     .WithMany()
                     .HasForeignKey("UserId")
-                    .HasConstraintName("FK_UserRole_RoleId")
+                    .HasConstraintName("FK_UserRole_UserId")
             );
         
         // User <-> Region
@@ -87,11 +87,11 @@ public class UserMap : IEntityTypeConfiguration<User>
                 user => user.HasOne<Region>()
                     .WithMany()
                     .HasForeignKey("RegionId")
-                    .HasConstraintName("FK_UserRegion_UserId"),
+                    .HasConstraintName("FK_UserRegion_RegionId"),
                 region => region.HasOne<User>()
                     .WithMany()
                     .HasForeignKey("UserId")
-                    .HasConstraintName("FK_UserRegion_RegionId")
+                    .HasConstraintName("FK_UserRegion_UserId")
             );
         
         // User <- Professional

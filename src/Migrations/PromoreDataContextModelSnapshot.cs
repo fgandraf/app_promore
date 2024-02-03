@@ -86,7 +86,7 @@ namespace PromoreApi.Migrations
                     b.Property<DateTime>("LastModifiedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("DATETIME2")
-                        .HasDefaultValue(new DateTime(2024, 2, 1, 3, 31, 23, 419, DateTimeKind.Utc).AddTicks(4750))
+                        .HasDefaultValue(new DateTime(2024, 2, 3, 18, 12, 44, 259, DateTimeKind.Utc).AddTicks(9090))
                         .HasColumnName("LastModifiedDate");
 
                     b.Property<int>("Number")
@@ -284,14 +284,14 @@ namespace PromoreApi.Migrations
                         .HasForeignKey("RegionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("FK_UserRegion_UserId");
+                        .HasConstraintName("FK_UserRegion_RegionId");
 
                     b.HasOne("PromoreApi.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("FK_UserRegion_RegionId");
+                        .HasConstraintName("FK_UserRegion_UserId");
                 });
 
             modelBuilder.Entity("UserRole", b =>
@@ -301,14 +301,14 @@ namespace PromoreApi.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("FK_UserRole_UserId");
+                        .HasConstraintName("FK_UserRole_RoleId");
 
                     b.HasOne("PromoreApi.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("FK_UserRole_RoleId");
+                        .HasConstraintName("FK_UserRole_UserId");
                 });
 
             modelBuilder.Entity("PromoreApi.Entities.Lot", b =>
