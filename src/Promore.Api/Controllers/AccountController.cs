@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Promore.Core.Models.InputModels;
-using Promore.Core.Repositories.Contracts;
 using Promore.Api.Services;
+using Promore.Core.Contracts;
 using SecureIdentity.Password;
 
 namespace Promore.Api.Controllers;

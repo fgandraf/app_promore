@@ -1,7 +1,7 @@
 using Promore.Core.Models.InputModels;
 using Promore.Core.Models.ViewModels;
 
-namespace Promore.Core.Repositories.Contracts;
+namespace Promore.Core.Contracts;
 
 public interface IClientRepository
 {

@@ -1,7 +1,7 @@
 using Promore.Core.Entities;
 using Promore.Core.Models.InputModels;
 
-namespace Promore.Core.Repositories.Contracts;
+namespace Promore.Core.Contracts;
 
 public interface IAccountRepository
 {
