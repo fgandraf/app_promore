@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Promore.Core.Contracts;
 using Promore.Core.Entities;
-using Promore.Infra.Data;
 using Promore.Core.Models.InputModels;
 using Promore.Core.Models.ViewModels;
+using Promore.Infra.Data;
 
-namespace Promore.Infra.Repositories.Database;
+namespace Promore.Infra.Repositories;
 
 public class LotRepository : ILotRepository
 {
@@ -31,8 +31,8 @@ public class LotRepository : ILotRepository
                 LastModifiedDate = lot.LastModifiedDate,
                 Status = lot.Status,
                 Comments = lot.Comments,
-                UserId = lot.User.Id,
-                RegionId = lot.Region.Id,
+                UserId = lot.UserId,
+                RegionId = lot.RegionId,
                 Clients = lot.Clients.Select(x=> x.Id).ToList()
             })
             .ToListAsync();
@@ -46,13 +46,12 @@ public class LotRepository : ILotRepository
              .Lots
              .Include(x => x.Region)
              .Where(x => x.Region.Id == regionId)
-             .Include(x => x.User)
              .AsNoTracking()
              .Select(lot => new LotStatusView
              {
                  Id = lot.Id,
                  Status = lot.Status,
-                 UserId = lot.User.Id
+                 UserId = lot.UserId,
              })
              .ToListAsync();
         
@@ -64,21 +63,19 @@ public class LotRepository : ILotRepository
         var lot = await _context
             .Lots
             .AsNoTracking()
-            .Include(professional => professional.User)
-            .Include(region => region.Region)
             .Include(clients => clients.Clients)
-            .Select(client => new LotView
+            .Select(lot => new LotView
             {
-                Id = client.Id,
-                Block = client.Block,
-                Number = client.Number,
-                SurveyDate = client.SurveyDate,
-                LastModifiedDate = client.LastModifiedDate,
-                Status = client.Status,
-                Comments = client.Comments,
-                UserId = client.User.Id,
-                RegionId = client.Region.Id,
-                Clients = client.Clients.Select(x=> x.Id).ToList()
+                Id = lot.Id,
+                Block = lot.Block,
+                Number = lot.Number,
+                SurveyDate = lot.SurveyDate,
+                LastModifiedDate = lot.LastModifiedDate,
+                Status = lot.Status,
+                Comments = lot.Comments,
+                UserId = lot.UserId,
+                RegionId = lot.RegionId,
+                Clients = lot.Clients.Select(x=> x.Id).ToList()
             })
             .FirstOrDefaultAsync(x => x.Id == id);
         

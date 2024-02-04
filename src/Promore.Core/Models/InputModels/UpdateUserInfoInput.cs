@@ -8,7 +8,7 @@ public class UpdateUserInfoInput
     public int Id { get; set; }
     
     [Required]
-    [EmailAddress]
+    [EmailAddress(ErrorMessage = "Email inválido.")]
     public string Email{ get; set; }
     
     [Required]

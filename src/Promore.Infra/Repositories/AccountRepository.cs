@@ -1,10 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Promore.Core.Contracts;
 using Promore.Core.Entities;
-using Promore.Infra.Data;
 using Promore.Core.Models.InputModels;
+using Promore.Infra.Data;
 
-namespace Promore.Infra.Repositories.Database;
+namespace Promore.Infra.Repositories;
 
 public class AccountRepository : IAccountRepository
 {
@@ -21,7 +21,7 @@ public class AccountRepository : IAccountRepository
             .AsNoTracking()
             .Include(x => x.Roles)
             .FirstOrDefaultAsync(x => x.Email == model.Email);
-
+        
         return user;
     }
 }

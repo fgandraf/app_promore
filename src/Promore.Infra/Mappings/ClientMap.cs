@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Promore.Core.Entities;
 
-namespace Promore.Infra.Data.Mappings;
+namespace Promore.Infra.Mappings;
 
 public class ClientMap : IEntityTypeConfiguration<Client>
 {
@@ -33,6 +33,7 @@ public class ClientMap : IEntityTypeConfiguration<Client>
             .HasMaxLength(11);
         
         builder.Property(x => x.Phone)
+            .IsRequired(false)
             .HasColumnName("Phone")
             .HasColumnType("VARCHAR")
             .HasMaxLength(11);

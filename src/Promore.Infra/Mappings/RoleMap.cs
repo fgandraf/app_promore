@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Promore.Core.Entities;
 
-namespace Promore.Infra.Data.Mappings;
+namespace Promore.Infra.Mappings;
 
 public class RoleMap : IEntityTypeConfiguration<Role>
 {

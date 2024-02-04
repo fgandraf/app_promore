@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Promore.Core.Entities;
 
-namespace Promore.Infra.Data.Mappings;
+namespace Promore.Infra.Mappings;
 
 public class LotMap : IEntityTypeConfiguration<Lot>
 {
@@ -40,10 +40,12 @@ public class LotMap : IEntityTypeConfiguration<Lot>
             .HasDefaultValue(DateTime.Now.ToUniversalTime());
         
         builder.Property(x => x.Status)
+            .IsRequired()
             .HasColumnName("Status")
             .HasColumnType("INT");
 
         builder.Property(x => x.Comments)
+            .IsRequired(false)
             .HasColumnName("Comments")
             .HasColumnType("TEXT");
 

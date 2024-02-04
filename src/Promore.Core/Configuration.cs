@@ -1,4 +1,4 @@
-namespace Promore.Api;
+namespace Promore.Core;
 
 public static class Configuration
 {

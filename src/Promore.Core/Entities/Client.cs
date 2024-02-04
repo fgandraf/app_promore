@@ -8,7 +8,7 @@ public class Client
     public string Phone { get; set; }
     public string MothersName { get; set; }
     public DateTime BirthdayDate { get; set; }
-    
+    public string LotId { get; set; }
     
     public Lot Lot { get; set; }
 }

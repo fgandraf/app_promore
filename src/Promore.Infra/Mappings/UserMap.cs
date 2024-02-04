@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Promore.Core.Entities;
 
-namespace Promore.Infra.Data.Mappings;
+namespace Promore.Infra.Mappings;
 
 public class UserMap : IEntityTypeConfiguration<User>
 {
@@ -22,6 +22,7 @@ public class UserMap : IEntityTypeConfiguration<User>
         
         //// Properties
         builder.Property(x => x.Active)
+            .IsRequired()
             .HasColumnName("Active")
             .HasColumnType("BIT");
 
@@ -51,6 +52,7 @@ public class UserMap : IEntityTypeConfiguration<User>
             .HasMaxLength(11);
         
         builder.Property(x => x.Profession)
+            .IsRequired(false)
             .HasColumnName("Profession")
             .HasColumnType("NVARCHAR")
             .HasMaxLength(50);
