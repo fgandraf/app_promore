@@ -1,6 +1,6 @@
 namespace Promore.Core.Contexts.Lot.Models.Responses;
 
-public class ReadStatusLot
+public record ReadStatusLot
 {
     public string Id { get; set; }
     public int Status { get; set; }

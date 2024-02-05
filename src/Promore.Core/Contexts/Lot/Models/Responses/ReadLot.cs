@@ -1,6 +1,6 @@
 namespace Promore.Core.Contexts.Lot.Models.Responses;
 
-public class ReadLot
+public record ReadLot
 {
     public string Id { get; set; }
     public string Block { get; set; }

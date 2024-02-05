@@ -1,6 +1,6 @@
 namespace Promore.Core.Contexts.Client.Models.Responses;
 
-public class ReadClient
+public record ReadClient
 {
     public int Id { get; set; }
     public string Name { get; set; }

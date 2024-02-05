@@ -1,7 +1,7 @@
 
 namespace Promore.Core.Contexts.User.Models.Responses;
 
-public class ReadUser
+public record ReadUser
 {
     public int Id { get; set; }
     public bool Active { get; set; }

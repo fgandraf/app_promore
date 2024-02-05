@@ -1,6 +1,6 @@
 namespace Promore.Core.Contexts.Region.Models.Responses;
 
-public class ReadRegion
+public record ReadRegion
 {
     public int Id { get; set; }
     public string Name { get; set; }
