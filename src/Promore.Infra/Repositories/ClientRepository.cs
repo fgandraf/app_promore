@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using Promore.Core.Contracts;
-using Promore.Core.Entities;
-using Promore.Core.Models.InputModels;
-using Promore.Core.Models.ViewModels;
+using Promore.Core.Contexts.Client.Contracts;
+using Promore.Core.Contexts.Client.Entity;
+using Promore.Core.Contexts.Client.Models.Requests;
+using Promore.Core.Contexts.Client.Models.Responses;
 using Promore.Infra.Data;
 
 namespace Promore.Infra.Repositories;
@@ -14,13 +14,13 @@ public class ClientRepository : IClientRepository
     public ClientRepository(PromoreDataContext context)
         => _context = context;
     
-    public async Task<List<ClientView>> GetAll()
+    public async Task<List<ReadClient>> GetAll()
     {
         var clients = await _context
             .Clients
             .AsNoTracking()
             .Include(lots => lots.Lot)
-            .Select(client => new ClientView
+            .Select(client => new ReadClient
             {
                 Id = client.Id,
                 Name = client.Name,
@@ -35,13 +35,13 @@ public class ClientRepository : IClientRepository
         return clients;
     }
 
-    public async Task<ClientView> GetByIdAsync(int id)
+    public async Task<ReadClient> GetByIdAsync(int id)
     {
         var client = await _context
             .Clients
             .AsNoTracking()
             .Include(lots => lots.Lot)
-            .Select(client => new ClientView
+            .Select(client => new ReadClient
             {
                 Id = client.Id,
                 Name = client.Name,
@@ -56,7 +56,7 @@ public class ClientRepository : IClientRepository
         return client;
     }
 
-    public async Task<long> InsertAsync(CreateClientInput model)
+    public async Task<long> InsertAsync(CreateClient model)
     {
         var client = new Client
         {
@@ -74,7 +74,7 @@ public class ClientRepository : IClientRepository
         return client.Id;
     }
 
-    public async Task<bool> UpdateAsync(UpdateClientInput model)
+    public async Task<bool> UpdateAsync(UpdateClient model)
     {
         var client = await _context
             .Clients

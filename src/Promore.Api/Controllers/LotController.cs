@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using Promore.Core.Contracts;
-using Promore.Core.Models.InputModels;
+using Promore.Core.Contexts.Lot.Contracts;
+using Requests = Promore.Core.Contexts.Lot.Models.Requests;
 
 namespace Promore.Api.Controllers;
 
@@ -38,14 +38,14 @@ public class LotController : ControllerBase
     }
     
     [HttpPost]
-    public IActionResult Post([FromBody]CreateLotInput model)
+    public IActionResult Post([FromBody]Requests.CreateLot model)
     {
         var id = _repository.InsertAsync(model).Result;
         return Ok(id);
     }   
    
     [HttpPut]
-    public IActionResult Update([FromBody]UpdateLotInput model)
+    public IActionResult Update([FromBody]Requests.UpdateLot model)
     {
         var updated = _repository.UpdateAsync(model).Result;
         

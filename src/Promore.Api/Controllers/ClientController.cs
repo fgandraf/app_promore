@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using Promore.Core.Contracts;
-using Promore.Core.Models.InputModels;
+using Promore.Core.Contexts.Client.Contracts;
+using Promore.Core.Contexts.Client.Models.Requests;
 
 namespace Promore.Api.Controllers;
 
@@ -33,14 +33,14 @@ public class ClientController : ControllerBase
     }
     
     [HttpPost]
-    public IActionResult Post([FromBody]CreateClientInput model)
+    public IActionResult Post([FromBody]CreateClient model)
     {
         var id = _repository.InsertAsync(model).Result;
         return Ok(id);
     }   
    
     [HttpPut]
-    public IActionResult Update([FromBody]UpdateClientInput model)
+    public IActionResult Update([FromBody]UpdateClient model)
     {
         var updated = _repository.UpdateAsync(model).Result;
         

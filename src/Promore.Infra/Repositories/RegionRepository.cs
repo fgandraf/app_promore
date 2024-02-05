@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using Promore.Core.Contracts;
-using Promore.Core.Entities;
-using Promore.Core.Models.InputModels;
-using Promore.Core.Models.ViewModels;
+using Promore.Core.Contexts.Region.Contracts;
+using Promore.Core.Contexts.Region.Entity;
+using Promore.Core.Contexts.Region.Models.Requests;
+using Promore.Core.Contexts.Region.Models.Responses;
 using Promore.Infra.Data;
 
 namespace Promore.Infra.Repositories;
@@ -14,12 +14,12 @@ public class RegionRepository :IRegionRepository
     public RegionRepository(PromoreDataContext context)
         => _context = context;
     
-    public async Task<List<RegionView>> GetAll()
+    public async Task<List<ReadRegion>> GetAll()
     {
         var regions = await _context
             .Regions
             .AsNoTracking()
-            .Select(region => new RegionView
+            .Select(region => new ReadRegion
             {
                 Id = region.Id,
                 Name = region.Name,
@@ -32,12 +32,23 @@ public class RegionRepository :IRegionRepository
         return regions;
     }
 
-    public async Task<RegionView> GetByIdAsync(int id)
+    public async Task<List<Region>> GetRegionsByIdListAsync(List<int> regionsId)
+    {
+        var regions = await _context
+            .Regions
+            .AsNoTracking()
+            .Where(region => regionsId.Contains(region.Id))
+            .ToListAsync();
+
+        return regions;
+    }
+
+    public async Task<ReadRegion> GetByIdAsync(int id)
     {
         var region = await _context
             .Regions
             .AsNoTracking()
-            .Select(region => new RegionView
+            .Select(region => new ReadRegion
             {
                 Id = region.Id,
                 Name = region.Name,
@@ -50,7 +61,7 @@ public class RegionRepository :IRegionRepository
         return region;
     }
 
-    public async Task<long> InsertAsync(CreateRegionInput model)
+    public async Task<long> InsertAsync(CreateRegion model)
     {
         var region = new Region
         {
@@ -67,7 +78,7 @@ public class RegionRepository :IRegionRepository
     }
     
 
-    public async Task<bool> UpdateAsync(UpdateRegionInput model)
+    public async Task<bool> UpdateAsync(UpdateRegion model)
     {
         var region = await _context
             .Regions

@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using Promore.Core.Contracts;
-using Promore.Core.Models.InputModels;
+using Promore.Core.Contexts.Region.Contracts;
+using Promore.Core.Contexts.Region.Models.Requests;
 
 namespace Promore.Api.Controllers;
 
@@ -34,7 +34,7 @@ public class RegionController : ControllerBase
     
     [Authorize(Roles = "admin")]
     [HttpPost]
-    public IActionResult Post([FromBody]CreateRegionInput model)
+    public IActionResult Post([FromBody]CreateRegion model)
     {
         var id = _repository.InsertAsync(model).Result;
         return Ok(id);
@@ -43,7 +43,7 @@ public class RegionController : ControllerBase
     [Authorize(Roles = "admin")]
     [Authorize(Roles = "manager")]
     [HttpPut]
-    public IActionResult Update([FromBody]UpdateRegionInput model)
+    public IActionResult Update([FromBody]UpdateRegion model)
     {
         var updated = _repository.UpdateAsync(model).Result;
         

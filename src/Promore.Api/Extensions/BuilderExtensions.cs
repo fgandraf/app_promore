@@ -4,11 +4,17 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Promore.Api.Services;
 using Promore.Core;
-using Promore.Core.Contracts;
+using Promore.Core.Contexts.Client.Contracts;
+using Promore.Core.Contexts.Lot.Contracts;
+using Promore.Core.Contexts.Region.Contracts;
+using Promore.Core.Contexts.Role.Contracts;
+using Promore.Core.Contexts.User;
+using Promore.Core.Contexts.User.Contracts;
+using Promore.Core.Services.Contracts;
 using Promore.Infra.Data;
 using Promore.Infra.Repositories;
+using Promore.Infra.Services;
 
 namespace Promore.Api.Extensions;
 
@@ -63,11 +69,12 @@ public static class BuilderExtensions
         builder.Services.AddScoped<IRegionRepository, RegionRepository>();
         builder.Services.AddScoped<IClientRepository, ClientRepository>();
         builder.Services.AddScoped<ILotRepository, LotRepository>();
-        builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+        builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+        builder.Services.AddScoped<ITokenService, TokenService>();
         
         builder.Services.AddScoped<DbInserts>();
         builder.Services.AddScoped<PromoreDataContext>();
-        builder.Services.AddTransient<TokenService>();
+        builder.Services.AddScoped<UserHandler>();
     }
     
     public static void AddSwaggerConfigurations(this WebApplicationBuilder builder)

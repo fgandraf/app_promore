@@ -1,10 +1,10 @@
 using Microsoft.EntityFrameworkCore;
-using Promore.Core.Contracts;
-using Promore.Core.Entities;
-using Promore.Core.Models.InputModels;
-using Promore.Core.Models.ViewModels;
+using Promore.Core.Contexts.User.Contracts;
+using Promore.Core.Contexts.User.Entity;
 using Promore.Infra.Data;
 using SecureIdentity.Password;
+using Responses = Promore.Core.Contexts.User.Models.Responses;
+using Requests = Promore.Core.Contexts.User.Models.Requests;
 
 namespace Promore.Infra.Repositories;
 
@@ -16,14 +16,14 @@ public class UserRepository : IUserRepository
         => _context = context;
     
 
-    public async Task<List<UserView>> GetAll()
+    public async Task<List<Responses.ReadUser>> GetAll()
     {
         var users = await _context
             .Users
             .AsNoTracking()
             .Include(roles => roles.Roles)
             .Include(regions => regions.Regions)
-            .Select(user => new UserView
+            .Select(user => new Responses.ReadUser
             {
                 Id = user.Id,
                 Active = user.Active,
@@ -39,14 +39,26 @@ public class UserRepository : IUserRepository
         return users;
     }
     
-    public async Task<UserView> GetByIdAsync(int id)
+    public async Task<User> GetUserByIdAsync(int id)
     {
         var user = await _context
             .Users
             .AsNoTracking()
             .Include(roles => roles.Roles)
             .Include(regions => regions.Regions)
-            .Select(user => new UserView
+            .FirstOrDefaultAsync(x => x.Id == id);
+        
+        return user;
+    }
+    
+    public async Task<Responses.ReadUser> GetByIdAsync(int id)
+    {
+        var user = await _context
+            .Users
+            .AsNoTracking()
+            .Include(roles => roles.Roles)
+            .Include(regions => regions.Regions)
+            .Select(user => new Responses.ReadUser
             {
                 Id = user.Id,
                 Active = user.Active,
@@ -62,14 +74,14 @@ public class UserRepository : IUserRepository
         return user;
     }
 
-    public async Task<UserView> GetByEmailAddress(string address)
+    public async Task<Responses.ReadUser> GetByEmailAddress(string address)
     {
         var user = await _context
             .Users
             .AsNoTracking()
             .Include(roles => roles.Roles)
             .Include(regions => regions.Regions)
-            .Select(user => new UserView
+            .Select(user => new Responses.ReadUser
             {
                 Id = user.Id,
                 Active = user.Active,
@@ -85,76 +97,45 @@ public class UserRepository : IUserRepository
         return user;
     }
 
-    public async Task<long> InsertAsync(CreateUserInput model)
+    public async Task<long> InsertAsync(User user)
     {
-        var user = new User
-        {
-            Active = model.Active,
-            Email = model.Email,
-            PasswordHash = PasswordHasher.Hash(model.Password),
-            Name = model.Name,
-            Cpf = model.Cpf,
-            Profession = model.Profession, 
-            Roles = model.Roles.Select(role => _context.Roles.FirstOrDefault(x => x.Id == role)).ToList(),
-            Regions = model.Regions.Select(region => _context.Regions.FirstOrDefault(x => x.Id == region)).ToList()
-        };
-        
         _context.Users.Add(user);
-        await _context.SaveChangesAsync();
-        return user.Id;
+        var rowsAffected = await _context.SaveChangesAsync();
+        return rowsAffected > 0 ? user.Id : 0;
     }
 
-    public async Task<bool> UpdateInfoAsync(UpdateUserInfoInput model)
+    public async Task<int> UpdateInfoAsync(User user)
     {
-        var user = await _context
-            .Users
-            .FirstOrDefaultAsync(x => x.Id == model.Id);
-        
-        if (user is null)
-            return false;
-        
-        user.Email = model.Email;
-        user.PasswordHash = PasswordHasher.Hash(model.Password);
-        user.Name = model.Name;
-        user.Cpf = model.Cpf;
-        user.Profession = model.Profession;
-        
         _context.Update(user);
-        await _context.SaveChangesAsync();
-        
-        return true;
+        return await _context.SaveChangesAsync();
     }
 
-    public async Task<bool> UpdateSettingsAsync(UpdateUserSettingsInput model)
+    public async Task<int> UpdateSettingsAsync(User user)
     {
-        var user = await _context
-            .Users
-            .Include(x => x.Regions)
-            .Include(x => x.Roles)
-            .FirstOrDefaultAsync(x => x.Id == model.Id);
-        
-        if (user is null)
-            return false;
-        
-        user.Active = model.Active;
-        user.Roles = model.Roles.Select(role => _context.Roles.FirstOrDefault(x => x.Id == role)).ToList();
-        user.Regions = model.Regions.Select(region => _context.Regions.FirstOrDefault(x => x.Id == region)).ToList();
-        
         _context.Update(user);
-        await _context.SaveChangesAsync();
-        
-        return true;
+        return await _context.SaveChangesAsync();
     }
 
-    public async Task<bool> DeleteAsync(int id)
+    public async Task<int> DeleteAsync(int id)
     {
         var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
         if (user is null)
-            return false;
+            return 0;
 
         _context.Remove(user);
-        await _context.SaveChangesAsync();
-
-        return true;
+        return await _context.SaveChangesAsync();
     }
+
+    public async Task<User> LoginAsync(Requests.Login model)
+    {
+        var user = await _context
+            .Users
+            .AsNoTracking()
+            .Include(x => x.Roles)
+            .FirstOrDefaultAsync(x => x.Email == model.Email);
+        
+        return user;
+    }
+    
+    
 }

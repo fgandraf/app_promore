@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using Promore.Core.Contracts;
-using Promore.Core.Entities;
-using Promore.Core.Models.InputModels;
-using Promore.Core.Models.ViewModels;
+using Promore.Core.Contexts.Lot.Contracts;
+using Promore.Core.Contexts.Lot.Entity;
+using Promore.Core.Contexts.Lot.Models.Requests;
+using Promore.Core.Contexts.Lot.Models.Responses;
 using Promore.Infra.Data;
 
 namespace Promore.Infra.Repositories;
@@ -14,7 +14,7 @@ public class LotRepository : ILotRepository
     public LotRepository(PromoreDataContext context)
         => _context = context;
     
-    public async Task<List<LotView>> GetAll()
+    public async Task<List<ReadLot>> GetAll()
     {
         var lots = await _context
             .Lots
@@ -22,7 +22,7 @@ public class LotRepository : ILotRepository
             .Include(professional => professional.User)
             .Include(region => region.Region)
             .Include(clients => clients.Clients)
-            .Select(lot => new LotView
+            .Select(lot => new ReadLot
             {
                 Id = lot.Id,
                 Block = lot.Block,
@@ -40,14 +40,14 @@ public class LotRepository : ILotRepository
         return lots;
     }
 
-    public async Task<List<LotStatusView>> GetStatusByRegion(int regionId)
+    public async Task<List<ReadStatusLot>> GetStatusByRegion(int regionId)
     {
          var lots = await _context
              .Lots
              .Include(x => x.Region)
              .Where(x => x.Region.Id == regionId)
              .AsNoTracking()
-             .Select(lot => new LotStatusView
+             .Select(lot => new ReadStatusLot
              {
                  Id = lot.Id,
                  Status = lot.Status,
@@ -58,13 +58,13 @@ public class LotRepository : ILotRepository
          return lots;
     }
 
-    public async Task<LotView> GetByIdAsync(string id)
+    public async Task<ReadLot> GetByIdAsync(string id)
     {
         var lot = await _context
             .Lots
             .AsNoTracking()
             .Include(clients => clients.Clients)
-            .Select(lot => new LotView
+            .Select(lot => new ReadLot
             {
                 Id = lot.Id,
                 Block = lot.Block,
@@ -82,7 +82,7 @@ public class LotRepository : ILotRepository
         return lot;
     }
 
-    public async Task<string> InsertAsync(CreateLotInput model)
+    public async Task<string> InsertAsync(CreateLot model)
     {
         var lot = new Lot
         {
@@ -104,7 +104,7 @@ public class LotRepository : ILotRepository
         return lot.Id;
     }
 
-    public async Task<bool> UpdateAsync(UpdateLotInput model)
+    public async Task<bool> UpdateAsync(UpdateLot model)
     {
         var lot = await _context
             .Lots
