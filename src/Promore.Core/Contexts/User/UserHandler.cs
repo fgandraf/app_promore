@@ -1,7 +1,6 @@
 using Promore.Core.Contexts.Region.Contracts;
 using Promore.Core.Contexts.Role.Contracts;
 using Promore.Core.Contexts.User.Contracts;
-using Promore.Core.Services.Contracts;
 using SecureIdentity.Password;
 using Responses = Promore.Core.Contexts.User.Models.Responses;
 using Requests = Promore.Core.Contexts.User.Models.Requests;
@@ -13,28 +12,24 @@ public class UserHandler
     private readonly IUserRepository _userRepository;
     private readonly IRegionRepository _regionRepository;
     private readonly IRoleRepository _roleRepository;
-    private readonly ITokenService _tokenService;
 
-    public UserHandler(IUserRepository userRepository, IRegionRepository regionRepository, IRoleRepository roleRepository, ITokenService tokenService)
+    public UserHandler(IUserRepository userRepository, IRegionRepository regionRepository, IRoleRepository roleRepository)
     {
         _userRepository = userRepository;
         _regionRepository = regionRepository;
         _roleRepository = roleRepository;
-        _tokenService = tokenService;
     }
     
-    public async Task<OperationResult<string>> LoginAsync(Requests.Login model)
+    public async Task<OperationResult<Entity.User>> GetUserByLoginAsync(Requests.Login model)
     { 
-        var user = await _userRepository.LoginAsync(model); 
+        var user = await _userRepository.GetUserByLogin(model); 
         
         if (user is null || !user.Active)
-            return OperationResult<string>.FailureResult($"Usuário '{model.Email}' não encontrado ou não está ativo!");
+            return OperationResult<Entity.User>.FailureResult($"Usuário '{model.Email}' não encontrado ou não está ativo!");
         if (!PasswordHasher.Verify(user!.PasswordHash, model.Password))
-             return OperationResult<string>.FailureResult("Usuário ou senha inválida!");
-
-        var token = _tokenService.GenerateToken(user);
+             return OperationResult<Entity.User>.FailureResult("Usuário ou senha inválida!");
         
-        return OperationResult<string>.SuccessResult(token);
+        return OperationResult<Entity.User>.SuccessResult(user);
     }
 
     public async Task<OperationResult<List<Responses.ReadUser>>> GetAllAsync()

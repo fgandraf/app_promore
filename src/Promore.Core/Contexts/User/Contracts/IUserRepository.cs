@@ -14,5 +14,5 @@ public interface IUserRepository
     Task<int> UpdateInfoAsync(Entity.User user);
     Task<int> UpdateSettingsAsync(Entity.User user);
     Task<int> DeleteAsync(int id);
-    Task<Entity.User> LoginAsync(Login model);
+    Task<Entity.User> GetUserByLogin(Login model);
 }

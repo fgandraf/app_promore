@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Promore.Api.Services;
 using Promore.Core.Contexts.User;
 using Requests = Promore.Core.Contexts.User.Models.Requests;
 
@@ -11,17 +12,21 @@ namespace Promore.Api.Controllers;
 public class UserController : ControllerBase
 {
     private readonly UserHandler _handler;
+    private readonly TokenService _tokenService;
     
-    public UserController(UserHandler handler)
-        => _handler = handler;
+    public UserController(UserHandler handler, TokenService tokenService)
+    {
+        _handler = handler;
+        _tokenService = tokenService;
+    }
 
 
     [AllowAnonymous]
     [HttpPost("login")]
     public IActionResult Login([FromBody]Requests.Login model)
     {
-        var result = _handler.LoginAsync(model).Result;
-        return result.Success ? Ok(result.Value) : BadRequest(result.Message);
+        var result = _handler.GetUserByLoginAsync(model).Result;
+        return result.Success ? Ok(_tokenService.GenerateToken(result.Value)) : BadRequest(result.Message);
     }
     
     

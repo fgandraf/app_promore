@@ -136,7 +136,7 @@ public class UserRepository : IUserRepository
         return await _context.SaveChangesAsync();
     }
 
-    public async Task<User> LoginAsync(Requests.Login model)
+    public async Task<User> GetUserByLogin(Requests.Login model)
     {
         var user = await _context
             .Users

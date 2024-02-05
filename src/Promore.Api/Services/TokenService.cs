@@ -4,11 +4,10 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Promore.Core;
 using Promore.Core.Contexts.User.Entity;
-using Promore.Core.Services.Contracts;
 
-namespace Promore.Infra.Services;
+namespace Promore.Api.Services;
 
-public class TokenService : ITokenService
+public class TokenService
 {
     public string GenerateToken(User user)
     {
