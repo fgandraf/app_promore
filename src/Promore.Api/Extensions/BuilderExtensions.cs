@@ -5,8 +5,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Promore.Core;
+using Promore.Core.Contexts.Client;
 using Promore.Core.Contexts.Client.Contracts;
+using Promore.Core.Contexts.Lot;
 using Promore.Core.Contexts.Lot.Contracts;
+using Promore.Core.Contexts.Region;
 using Promore.Core.Contexts.Region.Contracts;
 using Promore.Core.Contexts.Role.Contracts;
 using Promore.Core.Contexts.User;
@@ -65,16 +68,29 @@ public static class BuilderExtensions
         
     public static void AddRepositoryServices(this WebApplicationBuilder builder)
     {
+        #region Repositories
         builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<IRegionRepository, RegionRepository>();
         builder.Services.AddScoped<IClientRepository, ClientRepository>();
         builder.Services.AddScoped<ILotRepository, LotRepository>();
         builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+        #endregion
+
+        #region Services
         builder.Services.AddScoped<ITokenService, TokenService>();
+        #endregion
         
+        #region Handlers
+        builder.Services.AddScoped<UserHandler>();
+        builder.Services.AddScoped<ClientHandler>();
+        builder.Services.AddScoped<RegionHandler>();
+        builder.Services.AddScoped<LotHandler>();
+        #endregion
+        
+        #region Contexts
         builder.Services.AddScoped<DbInserts>();
         builder.Services.AddScoped<PromoreDataContext>();
-        builder.Services.AddScoped<UserHandler>();
+        #endregion
     }
     
     public static void AddSwaggerConfigurations(this WebApplicationBuilder builder)

@@ -13,4 +13,5 @@ public class UpdateRegion
     public DateTime EstablishedDate { get; set; }
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
+    
 }

@@ -11,5 +11,5 @@ public class CreateRegion
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
     
-    public IList<int> Users { get; set; }
+    public List<int> Users { get; set; }
 }

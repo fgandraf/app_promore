@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using Promore.Core.Contexts.Region.Contracts;
-using Promore.Core.Contexts.Region.Models.Requests;
+using Promore.Core.Contexts.Region;
+using Requests = Promore.Core.Contexts.Region.Models.Requests;
 
 namespace Promore.Api.Controllers;
 
@@ -11,57 +10,50 @@ namespace Promore.Api.Controllers;
 [Route("v1/regions")]
 public class RegionController : ControllerBase
 {
-    private IRegionRepository _repository;
-
-    public RegionController(IRegionRepository repository)
-        => _repository = repository;
+    
+    public readonly RegionHandler _handler;
+    
+    public RegionController(RegionHandler handler)
+        => _handler = handler;
     
     
     [HttpGet]
     public IActionResult GetAll()
     {
-        var regions = _repository.GetAll().Result;
-        return regions.IsNullOrEmpty() ? NotFound() : Ok(regions);
+        var result = _handler.GetAllAsync().Result;
+        return result.Success ? Ok(result.Value) : BadRequest(result.Message);
     }
     
     
     [HttpGet("{id:int}")]
     public IActionResult GetById(int id)
     {
-        var region = _repository.GetByIdAsync(id).Result;
-        return region is null ? NotFound($"Região '{id}' não encontrado!") : Ok(region);
+        var result = _handler.GetByIdAsync(id).Result;
+        return result.Success ? Ok(result.Value) : BadRequest(result.Message);
     }
     
     [Authorize(Roles = "admin")]
     [HttpPost]
-    public IActionResult Post([FromBody]CreateRegion model)
+    public IActionResult Post([FromBody]Requests.CreateRegion model)
     {
-        var id = _repository.InsertAsync(model).Result;
-        return Ok(id);
+        var result = _handler.InsertAsync(model).Result;
+        return result.Success ? Ok(result.Value) : BadRequest(result.Message);
     }   
    
     [Authorize(Roles = "admin")]
     [Authorize(Roles = "manager")]
     [HttpPut]
-    public IActionResult Update([FromBody]UpdateRegion model)
+    public IActionResult Update([FromBody]Requests.UpdateRegion model)
     {
-        var updated = _repository.UpdateAsync(model).Result;
-        
-        if (!updated)
-            return NotFound("Região não alterada ou não encontrada!");
-        
-        return Ok();
+        var result = _handler.UpdateAsync(model).Result;
+        return result.Success ? Ok() : BadRequest(result.Message);
     }
     
     [Authorize(Roles = "admin")]
     [HttpDelete("{id:int}")]
     public IActionResult Delete(int id)
     {
-        var deleted = _repository.DeleteAsync(id).Result;
-        
-        if (!deleted)
-            return NotFound("Região não encontrada!");
-        
-        return Ok();
+        var result = _handler.DeleteAsync(id).Result;
+        return result.Success ? Ok() : BadRequest(result.Message);
     }
 }

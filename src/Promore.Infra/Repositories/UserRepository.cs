@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using Promore.Core.Contexts.User.Contracts;
 using Promore.Core.Contexts.User.Entity;
 using Promore.Infra.Data;
-using SecureIdentity.Password;
 using Responses = Promore.Core.Contexts.User.Models.Responses;
 using Requests = Promore.Core.Contexts.User.Models.Requests;
 
@@ -36,6 +35,17 @@ public class UserRepository : IUserRepository
             })
             .ToListAsync();
         
+        return users;
+    }
+    
+    public async Task<List<User>> GetUsersByIdListAsync(List<int> usersId)
+    {
+        var users = await _context
+            .Users
+            .AsNoTracking()
+            .Where(user => usersId.Contains(user.Id))
+            .ToListAsync();
+
         return users;
     }
     

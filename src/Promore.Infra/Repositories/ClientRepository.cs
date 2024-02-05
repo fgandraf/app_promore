@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Promore.Core.Contexts.Client.Contracts;
 using Promore.Core.Contexts.Client.Entity;
-using Promore.Core.Contexts.Client.Models.Requests;
 using Promore.Core.Contexts.Client.Models.Responses;
 using Promore.Infra.Data;
 
@@ -55,56 +54,49 @@ public class ClientRepository : IClientRepository
         
         return client;
     }
-
-    public async Task<long> InsertAsync(CreateClient model)
+    
+    public async Task<List<Client>> GetClientsByIdListAsync(List<int> clientsIds)
     {
-        var client = new Client
-        {
-            Name = model.Name,
-            Cpf = model.Cpf,
-            Phone = model.Phone,
-            MothersName = model.MothersName,
-            BirthdayDate = model.BirthdayDate,
-            Lot = _context.Lots.FirstOrDefault(x => x.Id == model.LotId)
-        };
-        
-        _context.Clients.Add(client);
-        await _context.SaveChangesAsync();
-        
-        return client.Id;
-    }
+        var clients = await _context
+            .Clients
+            .AsNoTracking()
+            .Where(client => clientsIds.Contains(client.Id))
+            .ToListAsync();
 
-    public async Task<bool> UpdateAsync(UpdateClient model)
+        return clients;
+    }
+    
+    public async Task<Client> GetClientByIdAsync(int id)
     {
         var client = await _context
             .Clients
-            .FirstOrDefaultAsync(x => x.Id == model.Id);
+            .AsNoTracking()
+            .Include(lots => lots.Lot)
+            .FirstOrDefaultAsync(x => x.Id == id);
         
-        if (client is null)
-            return false;
-
-        client.Name = model.Name;
-        client.Cpf = model.Cpf;
-        client.Phone = model.Phone;
-        client.MothersName = model.MothersName;
-        client.BirthdayDate = model.BirthdayDate;
-        client.Lot = _context.Lots.FirstOrDefault(x => x.Id == model.LotId);
-        
-        _context.Update(client);
-        await _context.SaveChangesAsync();
-        
-        return true;
+        return client;
     }
 
-    public async Task<bool> DeleteAsync(int id)
+    public async Task<long> InsertAsync(Client client)
+    {
+        _context.Clients.Add(client);
+        var rowsAffected = await _context.SaveChangesAsync();
+        return rowsAffected > 0 ? client.Id : 0;
+    }
+
+    public async Task<int> UpdateAsync(Client client)
+    {
+        _context.Update(client);
+        return await _context.SaveChangesAsync();
+    }
+
+    public async Task<int> DeleteAsync(int id)
     {
         var client = await _context.Clients.FirstOrDefaultAsync(x => x.Id == id);
         if (client is null)
-            return false;
+            return 0;
 
         _context.Remove(client);
-        await _context.SaveChangesAsync();
-
-        return true;
+        return await _context.SaveChangesAsync();
     }
 }

@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using Promore.Core.Contexts.Client.Contracts;
-using Promore.Core.Contexts.Client.Models.Requests;
+using Promore.Core.Contexts.Client;
+using Requests = Promore.Core.Contexts.Client.Models.Requests;
 
 namespace Promore.Api.Controllers;
 
@@ -11,54 +10,46 @@ namespace Promore.Api.Controllers;
 [Route("v1/clients")]
 public class ClientController : ControllerBase
 {
-    private IClientRepository _repository;
+    private readonly ClientHandler _handler;
 
-    public ClientController(IClientRepository repository)
-        => _repository = repository;
+    public ClientController(ClientHandler handler)
+        => _handler = handler;
     
     
     [HttpGet]
     public IActionResult GetAll()
     {
-        var clients = _repository.GetAll().Result;
-        return clients.IsNullOrEmpty() ? NotFound() : Ok(clients);
+        var result = _handler.GetAllAsync().Result;
+        return result.Success ? Ok(result.Value) : BadRequest(result.Message);
     }
     
     
     [HttpGet("{id:int}")]
     public IActionResult GetById(int id)
     {
-        var client = _repository.GetByIdAsync(id).Result;
-        return client is null ? NotFound($"Cliente '{id}' não encontrado!") : Ok(client);
+        var result = _handler.GetByIdAsync(id).Result;
+        return result.Success ? Ok(result.Value) : BadRequest(result.Message);
     }
     
     [HttpPost]
-    public IActionResult Post([FromBody]CreateClient model)
+    public IActionResult Post([FromBody]Requests.CreateClient model)
     {
-        var id = _repository.InsertAsync(model).Result;
-        return Ok(id);
+        var result = _handler.InsertAsync(model).Result;
+        return result.Success ? Ok(result.Value) : BadRequest(result.Message);
     }   
    
     [HttpPut]
-    public IActionResult Update([FromBody]UpdateClient model)
+    public IActionResult Update([FromBody]Requests.UpdateClient model)
     {
-        var updated = _repository.UpdateAsync(model).Result;
-        
-        if (!updated)
-            return NotFound("Cliente não alterado ou não encontrado!");
-        
-        return Ok();
+        var result = _handler.UpdateAsync(model).Result;
+        return result.Success ? Ok() : BadRequest(result.Message);
     }
     
     [HttpDelete("{id:int}")]
     public IActionResult Delete(int id)
     {
-        var deleted = _repository.DeleteAsync(id).Result;
-        
-        if (!deleted)
-            return NotFound("Cliente não encontrado!");
-        
-        return Ok();
+        var result = _handler.DeleteAsync(id).Result;
+        return result.Success ? Ok() : BadRequest(result.Message);
     }
     
 

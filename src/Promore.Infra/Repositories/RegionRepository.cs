@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Promore.Core.Contexts.Region.Contracts;
 using Promore.Core.Contexts.Region.Entity;
-using Promore.Core.Contexts.Region.Models.Requests;
 using Promore.Core.Contexts.Region.Models.Responses;
 using Promore.Infra.Data;
 
@@ -42,6 +41,18 @@ public class RegionRepository :IRegionRepository
 
         return regions;
     }
+    
+    public async Task<Region> GetRegionByIdAsync(int id)
+    {
+        var region = await _context
+            .Regions
+            .AsNoTracking()
+            .Include(region => region.Users)
+            .Include(region => region.Lots)
+            .FirstOrDefaultAsync(x => x.Id == id);
+        
+        return region;
+    }
 
     public async Task<ReadRegion> GetByIdAsync(int id)
     {
@@ -61,52 +72,26 @@ public class RegionRepository :IRegionRepository
         return region;
     }
 
-    public async Task<long> InsertAsync(CreateRegion model)
+    public async Task<long> InsertAsync(Region region)
     {
-        var region = new Region
-        {
-            Name = model.Name,
-            EstablishedDate = model.EstablishedDate,
-            StartDate = model.StartDate,
-            EndDate = model.EndDate,
-            Users = model.Users.Select(user => _context.Users.FirstOrDefault(x => x.Id == user)).ToList()
-        };
-        
         _context.Regions.Add(region);
-        await _context.SaveChangesAsync();
-        return region.Id;
+        return await _context.SaveChangesAsync();
     }
     
 
-    public async Task<bool> UpdateAsync(UpdateRegion model)
+    public async Task<int> UpdateAsync(Region region)
     {
-        var region = await _context
-            .Regions
-            .FirstOrDefaultAsync(x => x.Id == model.Id);
-        
-        if (region is null)
-            return false;
-
-        region.Name = model.Name;
-        region.EstablishedDate = model.EstablishedDate;
-        region.StartDate = model.StartDate;
-        region.EndDate = model.EndDate;
-        
         _context.Update(region);
-        await _context.SaveChangesAsync();
-        
-        return true;
+        return await _context.SaveChangesAsync();
     }
 
-    public async Task<bool> DeleteAsync(int id)
+    public async Task<int> DeleteAsync(int id)
     {
         var region = await _context.Regions.FirstOrDefaultAsync(x => x.Id == id);
         if (region is null)
-            return false;
+            return 0;
 
         _context.Remove(region);
-        await _context.SaveChangesAsync();
-
-        return true;
+        return await _context.SaveChangesAsync();
     }
 }

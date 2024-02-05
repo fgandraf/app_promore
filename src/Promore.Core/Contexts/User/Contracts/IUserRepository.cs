@@ -7,6 +7,7 @@ public interface IUserRepository
 {
     Task<List<ReadUser>> GetAll();
     Task<Entity.User> GetUserByIdAsync(int id);
+    Task<List<Entity.User>> GetUsersByIdListAsync(List<int> usersId);
     Task<ReadUser> GetByIdAsync(int id);
     Task<ReadUser> GetByEmailAddress(string address);
     Task<long> InsertAsync(Entity.User user);

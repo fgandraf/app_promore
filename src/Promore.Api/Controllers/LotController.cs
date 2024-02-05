@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using Promore.Core.Contexts.Lot.Contracts;
+using Promore.Core.Contexts.Lot;
 using Requests = Promore.Core.Contexts.Lot.Models.Requests;
 
 namespace Promore.Api.Controllers;
@@ -11,48 +10,44 @@ namespace Promore.Api.Controllers;
 [Route("v1/lots")]
 public class LotController : ControllerBase
 {
-    private ILotRepository _repository;
+    private readonly LotHandler _handler;
 
-    public LotController(ILotRepository repository)
-        => _repository = repository;
+    public LotController(LotHandler handler)
+        => _handler = handler;
     
     [HttpGet]
     public IActionResult GetAll()
     {
-        var lots = _repository.GetAll().Result;
-        return lots.IsNullOrEmpty() ? NotFound() : Ok(lots);
+        var result = _handler.GetAllAsync().Result;
+        return result.Success ? Ok(result.Value) : BadRequest(result.Message);
     }
     
     [HttpGet("status/{regionId:int}")]
     public IActionResult GetStatusByRegion(int regionId)
     {
-        var lots = _repository.GetStatusByRegion(regionId).Result;
-        return lots.IsNullOrEmpty() ? NotFound() : Ok(lots);
+        var result = _handler.GetStatusByRegionAsync(regionId).Result;
+        return result.Success ? Ok(result.Value) : BadRequest(result.Message);
     }
     
     [HttpGet("{id}")]
     public IActionResult GetById(string id)
     {
-        var lot = _repository.GetByIdAsync(id).Result;
-        return lot is null ? NotFound($"Lote '{id}' não encontrado!") : Ok(lot);
+        var result = _handler.GetByIdAsync(id).Result;
+        return result.Success ? Ok(result.Value) : BadRequest(result.Message);
     }
     
     [HttpPost]
     public IActionResult Post([FromBody]Requests.CreateLot model)
     {
-        var id = _repository.InsertAsync(model).Result;
-        return Ok(id);
+        var result = _handler.InsertAsync(model).Result;
+        return result.Success ? Ok(result.Value) : BadRequest(result.Message);
     }   
    
     [HttpPut]
     public IActionResult Update([FromBody]Requests.UpdateLot model)
     {
-        var updated = _repository.UpdateAsync(model).Result;
-        
-        if (!updated)
-            return NotFound("Lote não alterado ou não encontrado!");
-        
-        return Ok();
+        var result = _handler.UpdateAsync(model).Result;
+        return result.Success ? Ok() : BadRequest(result.Message);
     }
     
     
@@ -60,12 +55,8 @@ public class LotController : ControllerBase
     [HttpDelete("{id}")]
     public IActionResult Delete(string id)
     {
-        var deleted = _repository.DeleteAsync(id).Result;
-        
-        if (!deleted)
-            return NotFound("Lote não encontrado!");
-        
-        return Ok();
+        var result = _handler.DeleteAsync(id).Result;
+        return result.Success ? Ok() : BadRequest(result.Message);
     }
     
 }
