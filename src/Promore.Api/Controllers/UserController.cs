@@ -59,6 +59,13 @@ public class UserController : ControllerBase
         return result.Success ? Ok(result.Value) : BadRequest(result.Message);
     }
     
+    [HttpGet("email/{address}")]
+    public IActionResult GetByEmail(string address)
+    {
+        var result = _handler.GetByEmailAsync(address).Result;
+        return result.Success ? Ok(result.Value) : BadRequest(result.Message);
+    }
+    
     [HttpPut]
     public IActionResult UpdateInfo([FromBody]Requests.UpdateInfoUser model)
     {

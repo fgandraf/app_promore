@@ -90,6 +90,15 @@ public class UserHandler
         
         return OperationResult<Responses.ReadUser>.SuccessResult(user);
     }
+    
+    public async Task<OperationResult<Responses.ReadUser>> GetByEmailAsync(string address)
+    {
+        var user = await _userRepository.GetByEmailAsync(address);
+        if (user is null)
+            return OperationResult<Responses.ReadUser>.FailureResult($"Usuário '{address}' não encontrado!");
+        
+        return OperationResult<Responses.ReadUser>.SuccessResult(user);
+    }
 
     public async Task<OperationResult> UpdateInfoAsync(Requests.UpdateInfoUser model)
     {

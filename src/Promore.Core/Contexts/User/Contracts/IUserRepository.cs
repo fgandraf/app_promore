@@ -9,6 +9,7 @@ public interface IUserRepository
     Task<List<ReadUser>> GetAllAsync();
     Task<long> InsertAsync(Entity.User user);
     Task<ReadUser> GetByIdAsync(int id);
+    Task<ReadUser> GetByEmailAsync(string address);
     Task<int> UpdateAsync(Entity.User user);
 
     

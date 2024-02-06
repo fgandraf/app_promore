@@ -83,6 +83,31 @@ public class UserRepository : IUserRepository
         return user;
     }
     
+    public async Task<Responses.ReadUser> GetByEmailAsync(string address)
+    {
+        var user = await _context
+            .Users
+            .AsNoTracking()
+            .Include(roles => roles.Roles)
+            .Include(regions => regions.Regions)
+            .Include(lots => lots.Lots)
+            .Select(user => new Responses.ReadUser
+            {
+                Id = user.Id,
+                Active = user.Active,
+                Email = user.Email,
+                Name = user.Name,
+                Cpf = user.Cpf,
+                Profession = user.Profession, 
+                Roles = user.Roles.Select(x => x.Id).ToList(),
+                Regions = user.Regions.Select(x=> x.Id).ToList(),
+                Lots = user.Lots.Select(x=> x.Id).ToList()
+            })
+            .FirstOrDefaultAsync(x => x.Email == address);
+        
+        return user;
+    }
+    
     public async Task<int> UpdateAsync(User user)
     {
         _context.Update(user);
