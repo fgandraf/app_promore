@@ -40,6 +40,6 @@ public class TokenService
             ci.AddClaim(new Claim(ClaimTypes.Role, role.Name));
 
         return ci;
-
     }
+    
 }

@@ -37,8 +37,7 @@ public class RegionMap : IEntityTypeConfiguration<Region>
         builder.Property(x => x.EndDate)
             .HasColumnName("EndDate")
             .HasColumnType("DATE");
-
-        //// Relation
-        // Regions <-> Users
+        
     }
+    
 }

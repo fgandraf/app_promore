@@ -10,25 +10,16 @@ namespace Promore.Api.Controllers;
 [Route("v1/regions")]
 public class RegionController : ControllerBase
 {
-    
     public readonly RegionHandler _handler;
     
     public RegionController(RegionHandler handler)
         => _handler = handler;
     
-    
+    [Authorize(Roles = "admin")]
     [HttpGet]
     public IActionResult GetAll()
     {
         var result = _handler.GetAllAsync().Result;
-        return result.Success ? Ok(result.Value) : BadRequest(result.Message);
-    }
-    
-    
-    [HttpGet("{id:int}")]
-    public IActionResult GetById(int id)
-    {
-        var result = _handler.GetByIdAsync(id).Result;
         return result.Success ? Ok(result.Value) : BadRequest(result.Message);
     }
     
@@ -38,8 +29,16 @@ public class RegionController : ControllerBase
     {
         var result = _handler.InsertAsync(model).Result;
         return result.Success ? Ok(result.Value) : BadRequest(result.Message);
-    }   
-   
+    }  
+    
+    [Authorize(Roles = "admin")]
+    [HttpDelete("{id:int}")]
+    public IActionResult Delete(int id)
+    {
+        var result = _handler.DeleteAsync(id).Result;
+        return result.Success ? Ok() : BadRequest(result.Message);
+    }
+    
     [Authorize(Roles = "admin")]
     [Authorize(Roles = "manager")]
     [HttpPut]
@@ -49,11 +48,12 @@ public class RegionController : ControllerBase
         return result.Success ? Ok() : BadRequest(result.Message);
     }
     
-    [Authorize(Roles = "admin")]
-    [HttpDelete("{id:int}")]
-    public IActionResult Delete(int id)
+    
+    [HttpGet("{id:int}")]
+    public IActionResult GetById(int id)
     {
-        var result = _handler.DeleteAsync(id).Result;
-        return result.Success ? Ok() : BadRequest(result.Message);
+        var result = _handler.GetByIdAsync(id).Result;
+        return result.Success ? Ok(result.Value) : BadRequest(result.Message);
     }
+
 }

@@ -97,8 +97,6 @@ public class UserMap : IEntityTypeConfiguration<User>
                     .HasForeignKey("UserId")
                     .HasConstraintName("FK_UserRegion_UserId")
             );
-        
-        // User <- Professional
-        
     }
+    
 }

@@ -14,19 +14,12 @@ public class LotHandler
     private readonly IClientRepository _clientRepository;
     private readonly IUserRepository _userRepository;
     
-
     public LotHandler(ILotRepository lotRepository, IRegionRepository regionRepository, IClientRepository clientRepository, IUserRepository userRepository)
     {
         _lotRepository = lotRepository;
         _regionRepository = regionRepository;
         _clientRepository = clientRepository;
         _userRepository = userRepository;
-    }
-
-    public async Task<OperationResult<List<Responses.ReadLot>>> GetAllAsync()
-    {
-        var regions = await _lotRepository.GetAll();
-        return OperationResult<List<Responses.ReadLot>>.SuccessResult(regions);
     }
     
     public async Task<OperationResult<List<Responses.ReadStatusLot>>> GetStatusByRegionAsync(int regionId)
@@ -35,13 +28,11 @@ public class LotHandler
         return OperationResult<List<Responses.ReadStatusLot>>.SuccessResult(regions);
     }
     
-    
     public async Task<OperationResult<Responses.ReadLot>> GetByIdAsync(string id)
     {
         var region = await _lotRepository.GetByIdAsync(id);
         return OperationResult<Responses.ReadLot>.SuccessResult(region);
     }
-    
     
     public async Task<OperationResult<string>> InsertAsync(Requests.CreateLot model)
     {
@@ -53,7 +44,7 @@ public class LotHandler
             LastModifiedDate = model.LastModifiedDate,
             Status = model.Status,
             Comments = model.Comments,
-            User = _userRepository.GetUserByIdAsync(model.UserId).Result,
+            User = _userRepository.GetEntityByIdAsync(model.UserId).Result,
             Region = _regionRepository.GetRegionByIdAsync(model.RegionId).Result,
             Clients = _clientRepository.GetClientsByIdListAsync(model.Clients).Result
         };
@@ -63,14 +54,13 @@ public class LotHandler
         return string.IsNullOrEmpty(id) ? OperationResult<string>.SuccessResult(id) : OperationResult<string>.FailureResult("Não foi possível inserir o lote!");
     }
     
-    
     public async Task<OperationResult> UpdateAsync(Requests.UpdateLot model)
     {
         var lot = await _lotRepository.GetLotById(model.Id);
         if (lot is null)
             return OperationResult.FailureResult($"Lote '{model.Id}' não encontrado!");
 
-        var user = _userRepository.GetUserByIdAsync(model.UserId).Result;
+        var user = _userRepository.GetEntityByIdAsync(model.UserId).Result;
         if (user is null)
             return OperationResult.FailureResult($"Usuário '{model.UserId}' não encontrado!");
         
@@ -92,7 +82,6 @@ public class LotHandler
         lot.Region = region;
         lot.Clients = clients;
         
-        
         var rowsAffected = await _lotRepository.UpdateAsync(lot);
 
         return rowsAffected > 0 ? OperationResult.SuccessResult() : OperationResult.FailureResult("Não foi possível alterar o lote!");
@@ -103,4 +92,5 @@ public class LotHandler
         var rowsAffected = await _lotRepository.DeleteAsync(id);
         return rowsAffected > 0 ? OperationResult.SuccessResult("Lote removido!") : OperationResult.FailureResult("Não foi possível apagar o lote!");
     }
+    
 }

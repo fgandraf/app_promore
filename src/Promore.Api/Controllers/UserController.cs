@@ -19,8 +19,7 @@ public class UserController : ControllerBase
         _handler = handler;
         _tokenService = tokenService;
     }
-
-
+    
     [AllowAnonymous]
     [HttpPost("login")]
     public IActionResult Login([FromBody]Requests.Login model)
@@ -29,33 +28,12 @@ public class UserController : ControllerBase
         return result.Success ? Ok(_tokenService.GenerateToken(result.Value)) : BadRequest(result.Message);
     }
     
-    
+    [Authorize(Roles = "admin")]
     [HttpGet]
     public IActionResult GetAll()
     {
         var result = _handler.GetAllAsync().Result;
         return result.Success ? Ok(result.Value) : BadRequest(result.Message);
-    }
-    
-    [HttpGet("id/{id:int}")]
-    public IActionResult GetById(int id)
-    {
-        var result = _handler.GetByIdAsync(id).Result;
-        return result.Success ? Ok(result.Value) : BadRequest(result.Message);
-    }
-    
-    [HttpGet("email/{email}")]
-    public IActionResult GetByEmailAddress(string email)
-    {
-        var result = _handler.GetByEmailAddressAsync(email).Result;
-        return result.Success ? Ok(result.Value) : BadRequest(result.Message);
-    }
-    
-    [HttpPut]
-    public IActionResult UpdateInfo([FromBody]Requests.UpdateInfoUser model)
-    {
-        var result = _handler.UpdateInfoAsync(model).Result;
-        return result.Success ? Ok() : BadRequest(result.Message);
     }
     
     [Authorize(Roles = "admin")]
@@ -74,11 +52,25 @@ public class UserController : ControllerBase
         return result.Success ? Ok() : BadRequest(result.Message);
     }
     
-    [Authorize(Roles = "admin")]
-    [HttpDelete("{id:int}")]
-    public IActionResult Delete(int id)
+    [HttpGet("id/{id:int}")]
+    public IActionResult GetById(int id)
     {
-        var result = _handler.DeleteAsync(id).Result;
+        var result = _handler.GetByIdAsync(id).Result;
+        return result.Success ? Ok(result.Value) : BadRequest(result.Message);
+    }
+    
+    [HttpPut]
+    public IActionResult UpdateInfo([FromBody]Requests.UpdateInfoUser model)
+    {
+        var result = _handler.UpdateInfoAsync(model).Result;
         return result.Success ? Ok() : BadRequest(result.Message);
     }
+    
+    [HttpDelete("lotfromuser/{userId:int},{lotId}")]
+    public IActionResult DeleteLotFromUser(int userId, string lotId)
+    {
+        var result = _handler.DeleteLotFromUserAsync(userId, lotId).Result;
+        return result.Success ? Ok() : BadRequest(result.Message);
+    }
+    
 }

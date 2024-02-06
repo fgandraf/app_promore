@@ -12,8 +12,8 @@ using Promore.Infra.Data;
 namespace Promore.Api.Migrations
 {
     [DbContext(typeof(PromoreDataContext))]
-    [Migration("20240203230416_v1")]
-    partial class v1
+    [Migration("20240206175505_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace Promore.Api.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Promore.Core.Entities.Client", b =>
+            modelBuilder.Entity("Promore.Core.Contexts.Client.Entity.Client", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -70,7 +70,7 @@ namespace Promore.Api.Migrations
                     b.ToTable("Client", (string)null);
                 });
 
-            modelBuilder.Entity("Promore.Core.Entities.Lot", b =>
+            modelBuilder.Entity("Promore.Core.Contexts.Lot.Entity.Lot", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(5)
@@ -89,7 +89,7 @@ namespace Promore.Api.Migrations
                     b.Property<DateTime>("LastModifiedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("DATETIME2")
-                        .HasDefaultValue(new DateTime(2024, 2, 3, 23, 4, 16, 688, DateTimeKind.Utc).AddTicks(4040))
+                        .HasDefaultValue(new DateTime(2024, 2, 6, 17, 55, 4, 975, DateTimeKind.Utc).AddTicks(5610))
                         .HasColumnName("LastModifiedDate");
 
                     b.Property<int>("Number")
@@ -107,8 +107,9 @@ namespace Promore.Api.Migrations
                         .HasColumnType("DATE")
                         .HasColumnName("SurveyDate");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<int?>("UserId")
+                        .HasColumnType("INT")
+                        .HasColumnName("UserId");
 
                     b.HasKey("Id");
 
@@ -119,7 +120,7 @@ namespace Promore.Api.Migrations
                     b.ToTable("Lot", (string)null);
                 });
 
-            modelBuilder.Entity("Promore.Core.Entities.Region", b =>
+            modelBuilder.Entity("Promore.Core.Contexts.Region.Entity.Region", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -150,7 +151,7 @@ namespace Promore.Api.Migrations
                     b.ToTable("Region", (string)null);
                 });
 
-            modelBuilder.Entity("Promore.Core.Entities.Role", b =>
+            modelBuilder.Entity("Promore.Core.Contexts.Role.Entity.Role", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -169,7 +170,7 @@ namespace Promore.Api.Migrations
                     b.ToTable("Role", (string)null);
                 });
 
-            modelBuilder.Entity("Promore.Core.Entities.User", b =>
+            modelBuilder.Entity("Promore.Core.Contexts.User.Entity.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -249,9 +250,9 @@ namespace Promore.Api.Migrations
                     b.ToTable("UserRole");
                 });
 
-            modelBuilder.Entity("Promore.Core.Entities.Client", b =>
+            modelBuilder.Entity("Promore.Core.Contexts.Client.Entity.Client", b =>
                 {
-                    b.HasOne("Promore.Core.Entities.Lot", "Lot")
+                    b.HasOne("Promore.Core.Contexts.Lot.Entity.Lot", "Lot")
                         .WithMany("Clients")
                         .HasForeignKey("LotId")
                         .HasConstraintName("FK_Lot_Client");
@@ -259,21 +260,18 @@ namespace Promore.Api.Migrations
                     b.Navigation("Lot");
                 });
 
-            modelBuilder.Entity("Promore.Core.Entities.Lot", b =>
+            modelBuilder.Entity("Promore.Core.Contexts.Lot.Entity.Lot", b =>
                 {
-                    b.HasOne("Promore.Core.Entities.Region", "Region")
+                    b.HasOne("Promore.Core.Contexts.Region.Entity.Region", "Region")
                         .WithMany("Lots")
                         .HasForeignKey("RegionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_Lot_Region");
 
-                    b.HasOne("Promore.Core.Entities.User", "User")
+                    b.HasOne("Promore.Core.Contexts.User.Entity.User", "User")
                         .WithMany("Lots")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_Lot_User");
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Region");
 
@@ -282,14 +280,14 @@ namespace Promore.Api.Migrations
 
             modelBuilder.Entity("UserRegion", b =>
                 {
-                    b.HasOne("Promore.Core.Entities.Region", null)
+                    b.HasOne("Promore.Core.Contexts.Region.Entity.Region", null)
                         .WithMany()
                         .HasForeignKey("RegionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_UserRegion_RegionId");
 
-                    b.HasOne("Promore.Core.Entities.User", null)
+                    b.HasOne("Promore.Core.Contexts.User.Entity.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -299,14 +297,14 @@ namespace Promore.Api.Migrations
 
             modelBuilder.Entity("UserRole", b =>
                 {
-                    b.HasOne("Promore.Core.Entities.Role", null)
+                    b.HasOne("Promore.Core.Contexts.Role.Entity.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_UserRole_RoleId");
 
-                    b.HasOne("Promore.Core.Entities.User", null)
+                    b.HasOne("Promore.Core.Contexts.User.Entity.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -314,17 +312,17 @@ namespace Promore.Api.Migrations
                         .HasConstraintName("FK_UserRole_UserId");
                 });
 
-            modelBuilder.Entity("Promore.Core.Entities.Lot", b =>
+            modelBuilder.Entity("Promore.Core.Contexts.Lot.Entity.Lot", b =>
                 {
                     b.Navigation("Clients");
                 });
 
-            modelBuilder.Entity("Promore.Core.Entities.Region", b =>
+            modelBuilder.Entity("Promore.Core.Contexts.Region.Entity.Region", b =>
                 {
                     b.Navigation("Lots");
                 });
 
-            modelBuilder.Entity("Promore.Core.Entities.User", b =>
+            modelBuilder.Entity("Promore.Core.Contexts.User.Entity.User", b =>
                 {
                     b.Navigation("Lots");
                 });

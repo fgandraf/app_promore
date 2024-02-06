@@ -10,8 +10,8 @@
             Success = success;
             Message = message;
         }
-
-        public static OperationResult SuccessResult(string message = "Ok") => new OperationResult ( success : true, message: message );
+        
+        public static OperationResult SuccessResult(string message = "OK", bool success = true) => new OperationResult ( success : success, message: message );
         public static OperationResult FailureResult(string message) => new OperationResult ( success : false, message : message );
     }
 

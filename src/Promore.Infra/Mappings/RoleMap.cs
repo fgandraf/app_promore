@@ -26,4 +26,5 @@ public class RoleMap : IEntityTypeConfiguration<Role>
             .HasColumnType("VARCHAR")
             .HasMaxLength(80);
     }
+    
 }

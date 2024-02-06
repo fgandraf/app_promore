@@ -9,7 +9,7 @@ public class Lot
     public DateTime LastModifiedDate { get; set; }
     public int Status { get; set; }
     public string Comments { get; set; }
-    public int UserId { get; set; }
+    public int? UserId { get; set; }
     public int RegionId { get; set; }
     
     public User.Entity.User User { get; set; }

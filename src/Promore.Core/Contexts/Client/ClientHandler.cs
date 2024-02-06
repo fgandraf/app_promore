@@ -18,14 +18,29 @@ public class ClientHandler
     
     public async Task<OperationResult<List<Responses.ReadClient>>> GetAllAsync()
     {
-        var users = await _clientRepository.GetAll();
-        return OperationResult<List<Responses.ReadClient>>.SuccessResult(users);
+        var clients = await _clientRepository.GetAll();
+        if (clients.Count == 0)
+            return OperationResult<List<Responses.ReadClient>>.FailureResult("Nenhum cliente cadastrado!");
+        
+        return OperationResult<List<Responses.ReadClient>>.SuccessResult(clients);
+    }
+    
+    public async Task<OperationResult<List<Responses.ReadClient>>> GetAllByLotIdAsync(string id)
+    {
+        var clients = await _clientRepository.GetAllByLotId(id);
+        if (clients.Count == 0)
+            return OperationResult<List<Responses.ReadClient>>.FailureResult("O lote não possui clientes cadastrados!");
+        
+        return OperationResult<List<Responses.ReadClient>>.SuccessResult(clients);
     }
     
     public async Task<OperationResult<Responses.ReadClient>> GetByIdAsync(int id)
     {
-        var user = await _clientRepository.GetByIdAsync(id);
-        return OperationResult<Responses.ReadClient>.SuccessResult(user);
+        var client = await _clientRepository.GetByIdAsync(id);
+        if (client is null)
+            return OperationResult<Responses.ReadClient>.FailureResult("Cliente não encontrado!");
+        
+        return OperationResult<Responses.ReadClient>.SuccessResult(client);
     }
 
     public async Task<OperationResult<long>> InsertAsync(Requests.CreateClient model)
@@ -73,7 +88,7 @@ public class ClientHandler
     public async Task<OperationResult> DeleteAsync(int id)
     {
         var rowsAffected = await _clientRepository.DeleteAsync(id);
-        return rowsAffected > 0 ? OperationResult.SuccessResult("Usuário removido!") : OperationResult.FailureResult("Não foi possível apagar o cliente!");
+        return rowsAffected > 0 ? OperationResult.SuccessResult("Cliente removido!") : OperationResult.FailureResult("Não foi possível apagar o cliente!");
     }
 
 }

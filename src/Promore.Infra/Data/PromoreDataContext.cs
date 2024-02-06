@@ -16,10 +16,7 @@ public class PromoreDataContext : DbContext
     public DbSet<User> Users { get; set; } = null!;
     public DbSet<Role> Roles { get; set; } = null!;
 
-    public PromoreDataContext()
-    {
-        
-    }
+    public PromoreDataContext() { }
     
     public PromoreDataContext(DbContextOptions<PromoreDataContext> options) : base(options) { }
     
@@ -30,5 +27,7 @@ public class PromoreDataContext : DbContext
         modelBuilder.ApplyConfiguration(new RegionMap());
         modelBuilder.ApplyConfiguration(new UserMap());
         modelBuilder.ApplyConfiguration(new RoleMap());
+        base.OnModelCreating(modelBuilder);
     }
+    
 }

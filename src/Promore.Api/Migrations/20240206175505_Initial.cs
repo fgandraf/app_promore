@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Promore.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class v1 : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -66,10 +66,10 @@ namespace Promore.Api.Migrations
                     Block = table.Column<string>(type: "VARCHAR(2)", maxLength: 2, nullable: false),
                     Number = table.Column<int>(type: "INT", nullable: false),
                     SurveyDate = table.Column<DateTime>(type: "DATE", nullable: false),
-                    LastModifiedDate = table.Column<DateTime>(type: "DATETIME2", nullable: false, defaultValue: new DateTime(2024, 2, 3, 23, 4, 16, 688, DateTimeKind.Utc).AddTicks(4040)),
+                    LastModifiedDate = table.Column<DateTime>(type: "DATETIME2", nullable: false, defaultValue: new DateTime(2024, 2, 6, 17, 55, 4, 975, DateTimeKind.Utc).AddTicks(5610)),
                     Status = table.Column<int>(type: "INT", nullable: false),
                     Comments = table.Column<string>(type: "TEXT", nullable: true),
-                    UserId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "INT", nullable: true),
                     RegionId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -82,11 +82,10 @@ namespace Promore.Api.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Lot_User",
+                        name: "FK_Lot_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(

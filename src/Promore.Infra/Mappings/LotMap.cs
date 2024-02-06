@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Promore.Core.Contexts.Lot.Entity;
+using Promore.Core.Contexts.User.Entity;
 
 namespace Promore.Infra.Mappings;
 
@@ -50,19 +51,18 @@ public class LotMap : IEntityTypeConfiguration<Lot>
             .HasColumnType("TEXT");
 
 
-        //// Relation
-        // Lot -> User
-        builder.HasOne(x => x.User)
-            .WithMany(x => x.Lots)
-            .IsRequired()
-            .HasConstraintName("FK_Lot_User");
-
+        builder.Property(x => x.UserId)
+            .HasColumnName("UserId")
+            .IsRequired(false)
+            .HasColumnType("INT");
+        
+        
+        // Relation
         // Lot -> Region
         builder.HasOne(x => x.Region)
             .WithMany(x => x.Lots)
             .IsRequired()
             .HasConstraintName("FK_Lot_Region");
-        
-        // Lot <- Clients
     }
+    
 }

@@ -13,32 +13,6 @@ public class LotRepository : ILotRepository
     public LotRepository(PromoreDataContext context)
         => _context = context;
     
-    public async Task<List<ReadLot>> GetAll()
-    {
-        var lots = await _context
-            .Lots
-            .AsNoTracking()
-            .Include(professional => professional.User)
-            .Include(region => region.Region)
-            .Include(clients => clients.Clients)
-            .Select(lot => new ReadLot
-            {
-                Id = lot.Id,
-                Block = lot.Block,
-                Number = lot.Number,
-                SurveyDate = lot.SurveyDate,
-                LastModifiedDate = lot.LastModifiedDate,
-                Status = lot.Status,
-                Comments = lot.Comments,
-                UserId = lot.UserId,
-                RegionId = lot.RegionId,
-                Clients = lot.Clients.Select(x=> x.Id).ToList()
-            })
-            .ToListAsync();
-        
-        return lots;
-    }
-
     public async Task<List<ReadStatusLot>> GetStatusByRegion(int regionId)
     {
          var lots = await _context
@@ -56,7 +30,6 @@ public class LotRepository : ILotRepository
         
          return lots;
     }
-
     
     public async Task<Lot> GetLotById(string id)
     {
@@ -67,7 +40,6 @@ public class LotRepository : ILotRepository
         
         return lot;
     }
-    
     
     public async Task<ReadLot> GetByIdAsync(string id)
     {
@@ -115,4 +87,5 @@ public class LotRepository : ILotRepository
         _context.Remove(lot);
         return await _context.SaveChangesAsync();
     }
+    
 }

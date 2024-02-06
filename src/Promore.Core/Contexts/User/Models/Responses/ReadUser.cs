@@ -11,4 +11,5 @@ public record ReadUser
     public string Profession { get; set; }
     public List<int> Roles { get; set; }
     public List<int> Regions { get; set; }
+    public List<string> Lots { get; set; }
 }

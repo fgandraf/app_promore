@@ -78,7 +78,6 @@ public class RegionRepository :IRegionRepository
         return await _context.SaveChangesAsync();
     }
     
-
     public async Task<int> UpdateAsync(Region region)
     {
         _context.Update(region);
@@ -94,4 +93,5 @@ public class RegionRepository :IRegionRepository
         _context.Remove(region);
         return await _context.SaveChangesAsync();
     }
+    
 }

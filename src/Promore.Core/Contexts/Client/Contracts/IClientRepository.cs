@@ -5,6 +5,7 @@ namespace Promore.Core.Contexts.Client.Contracts;
 public interface IClientRepository
 {
     Task<List<ReadClient>> GetAll();
+    Task<List<ReadClient>> GetAllByLotId(string lotId);
     Task<ReadClient> GetByIdAsync(int id);
     Task<Entity.Client> GetClientByIdAsync(int id);
     Task<List<Entity.Client>> GetClientsByIdListAsync(List<int> clientsIds);

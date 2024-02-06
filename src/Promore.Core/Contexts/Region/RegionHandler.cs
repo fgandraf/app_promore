@@ -15,23 +15,28 @@ public class RegionHandler
         _regionRepository = regionRepository;
         _userRepository = userRepository;
     }
-
-
+    
     public async Task<OperationResult<List<Responses.ReadRegion>>> GetAllAsync()
     {
         var regions = await _regionRepository.GetAll();
+        if (regions.Count == 0)
+            return OperationResult<List<Responses.ReadRegion>>.FailureResult("Nenhuma região cadastrada!");
+        
         return OperationResult<List<Responses.ReadRegion>>.SuccessResult(regions);
     }
 
     public async Task<OperationResult<Responses.ReadRegion>> GetByIdAsync(int id)
     {
         var region = await _regionRepository.GetByIdAsync(id);
+        if (region is null)
+            return OperationResult<Responses.ReadRegion>.FailureResult($"Região '{id}' não encontrada!");
+        
         return OperationResult<Responses.ReadRegion>.SuccessResult(region);
     }
     
     public async Task<OperationResult<long>> InsertAsync(Requests.CreateRegion model)
     {
-        var users = _userRepository.GetUsersByIdListAsync(model.Users).Result;
+        var users = _userRepository.GetEntitiesByIdsAsync(model.Users).Result;
         
         var region = new Entity.Region
         {
@@ -46,7 +51,6 @@ public class RegionHandler
 
         return id > 0 ? OperationResult<long>.SuccessResult(id) : OperationResult<long>.FailureResult("Não foi possível inserir a região!");
     }
-    
     
     public async Task<OperationResult> UpdateAsync(Requests.UpdateRegion model)
     {

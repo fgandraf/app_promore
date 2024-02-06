@@ -15,13 +15,6 @@ public class LotController : ControllerBase
     public LotController(LotHandler handler)
         => _handler = handler;
     
-    [HttpGet]
-    public IActionResult GetAll()
-    {
-        var result = _handler.GetAllAsync().Result;
-        return result.Success ? Ok(result.Value) : BadRequest(result.Message);
-    }
-    
     [HttpGet("status/{regionId:int}")]
     public IActionResult GetStatusByRegion(int regionId)
     {
@@ -49,7 +42,6 @@ public class LotController : ControllerBase
         var result = _handler.UpdateAsync(model).Result;
         return result.Success ? Ok() : BadRequest(result.Message);
     }
-    
     
     [Authorize(Roles = "admin")]
     [HttpDelete("{id}")]

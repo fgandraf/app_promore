@@ -31,25 +31,16 @@ public class UserHandler
         
         return OperationResult<Entity.User>.SuccessResult(user);
     }
-
+    
     public async Task<OperationResult<List<Responses.ReadUser>>> GetAllAsync()
     {
-        var users = await _userRepository.GetAll();
+        var users = await _userRepository.GetAllAsync();
+        if (users.Count == 0)
+            return OperationResult<List<Responses.ReadUser>>.FailureResult("Nenhum usuário cadastrado!");
+        
         return OperationResult<List<Responses.ReadUser>>.SuccessResult(users);
     }
-
-    public async Task<OperationResult<Responses.ReadUser>> GetByIdAsync(int id)
-    {
-        var user = await _userRepository.GetByIdAsync(id);
-        return OperationResult<Responses.ReadUser>.SuccessResult(user);
-    }
     
-    public async Task<OperationResult<Responses.ReadUser>> GetByEmailAddressAsync(string address)
-    {
-        var user = await _userRepository.GetByEmailAddress(address);
-        return OperationResult<Responses.ReadUser>.SuccessResult(user);
-    }
-
     public async Task<OperationResult<long>> InsertAsync(Requests.CreateUser model)
     {
         var regions = _regionRepository.GetRegionsByIdListAsync(model.Regions).Result;
@@ -72,9 +63,37 @@ public class UserHandler
         return id > 0 ? OperationResult<long>.SuccessResult(id) : OperationResult<long>.FailureResult("Não foi possível inserir o usuário!");
     }
     
+    public async Task<OperationResult> UpdateSettingsAsync(Requests.UpdateSettingsUser model)
+    {
+        var user = await _userRepository.GetEntityByIdAsync(model.Id);
+        
+        if (user is null || !user.Active)
+            return OperationResult.FailureResult($"Usuário '{model.Id}' não encontrado ou não está ativo!");
+        
+        var regions = _regionRepository.GetRegionsByIdListAsync(model.Regions).Result;
+        var roles = _roleRepository.GetRolesByIdListAsync(model.Roles).Result;
+
+        user.Active = model.Active;
+        user.Roles = roles;
+        user.Regions = regions;
+
+        var rowsAffected = await _userRepository.UpdateAsync(user);
+
+        return rowsAffected > 0 ? OperationResult.SuccessResult() : OperationResult.FailureResult("Não foi possível alterar o usuário!");
+    }
+    
+    public async Task<OperationResult<Responses.ReadUser>> GetByIdAsync(int id)
+    {
+        var user = await _userRepository.GetByIdAsync(id);
+        if (user is null)
+            return OperationResult<Responses.ReadUser>.FailureResult($"Usuário '{id}' não encontrado!");
+        
+        return OperationResult<Responses.ReadUser>.SuccessResult(user);
+    }
+
     public async Task<OperationResult> UpdateInfoAsync(Requests.UpdateInfoUser model)
     {
-        var user = await _userRepository.GetUserByIdAsync(model.Id);
+        var user = await _userRepository.GetEntityByIdAsync(model.Id);
         
         if (user is null || !user.Active)
             return OperationResult.FailureResult($"Usuário '{model.Email}' não encontrado ou não está ativo!");
@@ -85,33 +104,25 @@ public class UserHandler
         user.Cpf = model.Cpf;
         user.Profession = model.Profession;
 
-        var rowsAffected = await _userRepository.UpdateInfoAsync(user);
+        var rowsAffected = await _userRepository.UpdateAsync(user);
 
         return rowsAffected > 0 ? OperationResult.SuccessResult() : OperationResult.FailureResult("Não foi possível alterar o usuário!");
     }
     
-    public async Task<OperationResult> UpdateSettingsAsync(Requests.UpdateSettingsUser model)
+    public async Task<OperationResult> DeleteLotFromUserAsync(int userId, string lotId)
     {
-        var user = await _userRepository.GetUserByIdAsync(model.Id);
-        
-        if (user is null || !user.Active)
+        var user = await _userRepository.GetEntityByIdAsync(userId);
+        if (user.Equals(new Entity.User()))
             return OperationResult.FailureResult($"Usuário não encontrado ou não está ativo!");
-        
-        var regions = _regionRepository.GetRegionsByIdListAsync(model.Regions).Result;
-        var roles = _roleRepository.GetRolesByIdListAsync(model.Roles).Result;
 
-        user.Active = model.Active;
-        user.Roles = roles;
-        user.Regions = regions;
+        var lot = user.Lots.FirstOrDefault(x => x.Id == lotId);
+        if (lot is null)
+            return OperationResult.FailureResult($"Lote não vinculado ao usuário!");
 
-        var rowsAffected = await _userRepository.UpdateSettingsAsync(user);
+        user.Lots.Remove(lot);
 
-        return rowsAffected > 0 ? OperationResult.SuccessResult() : OperationResult.FailureResult("Não foi possível alterar o usuário!");
+        var rowsAffected = await _userRepository.UpdateAsync(user);
+        return rowsAffected > 0 ? OperationResult.SuccessResult() : OperationResult.FailureResult("Não foi possível remover o lote do usuário!");
     }
 
-    public async Task<OperationResult> DeleteAsync(int id)
-    {
-        var rowsAffected = await _userRepository.DeleteAsync(id);
-        return rowsAffected > 0 ? OperationResult.SuccessResult("Usuário removido!") : OperationResult.FailureResult("Não foi possível apagar o usuário!");
-    }
 }

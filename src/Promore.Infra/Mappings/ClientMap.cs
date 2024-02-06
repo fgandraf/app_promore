@@ -55,4 +55,5 @@ public class ClientMap : IEntityTypeConfiguration<Client>
             .WithMany(x => x.Clients)
             .HasConstraintName("FK_Lot_Client");
     }
+    
 }

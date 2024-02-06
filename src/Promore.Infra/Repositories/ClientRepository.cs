@@ -34,6 +34,28 @@ public class ClientRepository : IClientRepository
         return clients;
     }
 
+    public async Task<List<ReadClient>> GetAllByLotId(string lotId)
+    {
+        var client = await _context
+            .Clients
+            .AsNoTracking()
+            .Include(lots => lots.Lot)
+            .Where(x => x.LotId == lotId)
+            .Select(client => new ReadClient
+            {
+                Id = client.Id,
+                Name = client.Name,
+                Cpf = client.Cpf,
+                Phone = client.Phone,
+                MothersName = client.MothersName,
+                BirthdayDate = client.BirthdayDate,
+                LotId = client.LotId
+            })
+            .ToListAsync();
+        
+        return client;
+    }
+
     public async Task<ReadClient> GetByIdAsync(int id)
     {
         var client = await _context
@@ -99,4 +121,5 @@ public class ClientRepository : IClientRepository
         _context.Remove(client);
         return await _context.SaveChangesAsync();
     }
+    
 }

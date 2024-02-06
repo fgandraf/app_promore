@@ -15,7 +15,7 @@ public class ClientController : ControllerBase
     public ClientController(ClientHandler handler)
         => _handler = handler;
     
-    
+    [Authorize(Roles = "admin")]
     [HttpGet]
     public IActionResult GetAll()
     {
@@ -23,6 +23,12 @@ public class ClientController : ControllerBase
         return result.Success ? Ok(result.Value) : BadRequest(result.Message);
     }
     
+    [HttpGet("lot/{lotId}")]
+    public IActionResult GetAllByLotId(string lotId)
+    {
+        var result = _handler.GetAllByLotIdAsync(lotId).Result;
+        return result.Success ? Ok(result.Value) : BadRequest(result.Message);
+    }
     
     [HttpGet("{id:int}")]
     public IActionResult GetById(int id)
@@ -52,5 +58,4 @@ public class ClientController : ControllerBase
         return result.Success ? Ok() : BadRequest(result.Message);
     }
     
-
 }

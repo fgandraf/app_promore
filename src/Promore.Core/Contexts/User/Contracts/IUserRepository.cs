@@ -5,14 +5,13 @@ namespace Promore.Core.Contexts.User.Contracts;
 
 public interface IUserRepository
 {
-    Task<List<ReadUser>> GetAll();
-    Task<Entity.User> GetUserByIdAsync(int id);
-    Task<List<Entity.User>> GetUsersByIdListAsync(List<int> usersId);
-    Task<ReadUser> GetByIdAsync(int id);
-    Task<ReadUser> GetByEmailAddress(string address);
-    Task<long> InsertAsync(Entity.User user);
-    Task<int> UpdateInfoAsync(Entity.User user);
-    Task<int> UpdateSettingsAsync(Entity.User user);
-    Task<int> DeleteAsync(int id);
     Task<Entity.User> GetUserByLogin(Login model);
+    Task<List<ReadUser>> GetAllAsync();
+    Task<long> InsertAsync(Entity.User user);
+    Task<ReadUser> GetByIdAsync(int id);
+    Task<int> UpdateAsync(Entity.User user);
+
+    
+    Task<Entity.User> GetEntityByIdAsync(int id);
+    Task<List<Entity.User>> GetEntitiesByIdsAsync(List<int> ids);
 }
