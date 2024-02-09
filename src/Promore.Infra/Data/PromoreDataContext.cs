@@ -1,9 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Promore.Core.Contexts.Client.Entity;
-using Promore.Core.Contexts.Lot.Entity;
-using Promore.Core.Contexts.Region.Entity;
-using Promore.Core.Contexts.Role.Entity;
-using Promore.Core.Contexts.User.Entity;
+using Promore.Core.Entities;
 using Promore.Infra.Mappings;
 
 namespace Promore.Infra.Data;

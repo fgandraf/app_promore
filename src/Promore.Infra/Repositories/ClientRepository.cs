@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Promore.Core.Contexts.Client.Contracts;
-using Promore.Core.Contexts.Client.Entity;
-using Promore.Core.Contexts.Client.Models.Responses;
+using Promore.Core.Contracts;
+using Promore.Core.Entities;
+using Promore.Core.ViewModels.Responses;
 using Promore.Infra.Data;
 
 namespace Promore.Infra.Repositories;
@@ -13,13 +13,13 @@ public class ClientRepository : IClientRepository
     public ClientRepository(PromoreDataContext context)
         => _context = context;
     
-    public async Task<List<ReadClient>> GetAll()
+    public async Task<List<ClientResponse>> GetAll()
     {
         var clients = await _context
             .Clients
             .AsNoTracking()
             .Include(lots => lots.Lot)
-            .Select(client => new ReadClient
+            .Select(client => new ClientResponse
             {
                 Id = client.Id,
                 Name = client.Name,
@@ -34,14 +34,14 @@ public class ClientRepository : IClientRepository
         return clients;
     }
 
-    public async Task<List<ReadClient>> GetAllByLotId(string lotId)
+    public async Task<List<ClientResponse>> GetAllByLotId(string lotId)
     {
         var client = await _context
             .Clients
             .AsNoTracking()
             .Include(lots => lots.Lot)
             .Where(x => x.LotId == lotId)
-            .Select(client => new ReadClient
+            .Select(client => new ClientResponse
             {
                 Id = client.Id,
                 Name = client.Name,
@@ -56,13 +56,13 @@ public class ClientRepository : IClientRepository
         return client;
     }
 
-    public async Task<ReadClient> GetByIdAsync(int id)
+    public async Task<ClientResponse> GetByIdAsync(int id)
     {
         var client = await _context
             .Clients
             .AsNoTracking()
             .Include(lots => lots.Lot)
-            .Select(client => new ReadClient
+            .Select(client => new ClientResponse
             {
                 Id = client.Id,
                 Name = client.Name,

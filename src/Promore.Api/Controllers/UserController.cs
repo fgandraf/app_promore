@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Promore.Api.Services;
-using Promore.Core.Contexts.User;
-using Requests = Promore.Core.Contexts.User.Models.Requests;
+using Promore.UseCases.User;
+using Requests = Promore.Core.ViewModels.Requests;
 
 namespace Promore.Api.Controllers;
 
@@ -22,7 +22,7 @@ public class UserController : ControllerBase
     
     [AllowAnonymous]
     [HttpPost("login")]
-    public IActionResult Login([FromBody]Requests.Login model)
+    public IActionResult Login([FromBody]Requests.LoginRequest model)
     {
         var result = _handler.GetUserByLoginAsync(model).Result;
         return result.Success ? Ok(_tokenService.GenerateToken(result.Value)) : BadRequest(result.Message);
@@ -38,7 +38,7 @@ public class UserController : ControllerBase
     
     [Authorize(Roles = "admin")]
     [HttpPost]
-    public IActionResult Post([FromBody]Requests.CreateUser model)
+    public IActionResult Post([FromBody]Requests.UserCreateRequest model)
     {
         var result = _handler.InsertAsync(model).Result;
         return result.Success ? Ok(result.Value) : BadRequest(result.Message);
@@ -46,7 +46,7 @@ public class UserController : ControllerBase
     
     [Authorize(Roles = "admin")]
     [HttpPut("settings")]
-    public IActionResult UpdateSettings([FromBody]Requests.UpdateSettingsUser model)
+    public IActionResult UpdateSettings([FromBody]Requests.UserUpdateSettingsRequest model)
     {
         var result = _handler.UpdateSettingsAsync(model).Result;
         return result.Success ? Ok() : BadRequest(result.Message);
@@ -67,7 +67,7 @@ public class UserController : ControllerBase
     }
     
     [HttpPut]
-    public IActionResult UpdateInfo([FromBody]Requests.UpdateInfoUser model)
+    public IActionResult UpdateInfo([FromBody]Requests.UserUpdateInfoRequest model)
     {
         var result = _handler.UpdateInfoAsync(model).Result;
         return result.Success ? Ok() : BadRequest(result.Message);

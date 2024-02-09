@@ -24,6 +24,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Promore.Core\Promore.Core.csproj" />
     <ProjectReference Include="..\Promore.Infra\Promore.Infra.csproj" />
+    <ProjectReference Include="..\Promore.UseCases\Promore.UseCases.csproj" />
   </ItemGroup>
 
 </Project>

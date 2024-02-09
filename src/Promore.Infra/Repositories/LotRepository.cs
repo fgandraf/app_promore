@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Promore.Core.Contexts.Lot.Contracts;
-using Promore.Core.Contexts.Lot.Entity;
-using Promore.Core.Contexts.Lot.Models.Responses;
+using Promore.Core.Contracts;
+using Promore.Core.Entities;
+using Promore.Core.ViewModels.Responses;
 using Promore.Infra.Data;
 
 namespace Promore.Infra.Repositories;
@@ -13,14 +13,14 @@ public class LotRepository : ILotRepository
     public LotRepository(PromoreDataContext context)
         => _context = context;
     
-    public async Task<List<ReadStatusLot>> GetStatusByRegion(int regionId)
+    public async Task<List<LotStatusResponse>> GetStatusByRegion(int regionId)
     {
          var lots = await _context
              .Lots
              .Include(x => x.Region)
              .Where(x => x.Region.Id == regionId)
              .AsNoTracking()
-             .Select(lot => new ReadStatusLot
+             .Select(lot => new LotStatusResponse
              {
                  Id = lot.Id,
                  Status = lot.Status,
@@ -41,13 +41,13 @@ public class LotRepository : ILotRepository
         return lot;
     }
     
-    public async Task<ReadLot> GetByIdAsync(string id)
+    public async Task<LotResponse> GetByIdAsync(string id)
     {
         var lot = await _context
             .Lots
             .AsNoTracking()
             .Include(clients => clients.Clients)
-            .Select(lot => new ReadLot
+            .Select(lot => new LotResponse
             {
                 Id = lot.Id,
                 Block = lot.Block,
