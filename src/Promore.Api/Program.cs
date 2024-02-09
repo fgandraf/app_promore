@@ -19,6 +19,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-app.ConfigureFirstRun();
+app.InitiateEmptyDataBase();
 
 app.Run();
