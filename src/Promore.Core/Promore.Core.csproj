@@ -10,9 +10,4 @@
     <PackageReference Include="SecureIdentity" Version="1.0.4" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Contexts\RegionContext\UseCases\Shared\" />
-    <Folder Include="Contexts\UserContext\UseCases\Shared\" />
-  </ItemGroup>
-
 </Project>

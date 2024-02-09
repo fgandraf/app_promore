@@ -75,7 +75,8 @@ public class RegionRepository :IRegionRepository
     public async Task<long> InsertAsync(Region region)
     {
         _context.Regions.Add(region);
-        return await _context.SaveChangesAsync();
+        var rowsAffected = await _context.SaveChangesAsync();
+        return rowsAffected > 0 ? region.Id : 0;
     }
     
     public async Task<int> UpdateAsync(Region region)

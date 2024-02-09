@@ -23,7 +23,7 @@ public class CreateUserRequest
     public string Name { get; set; }
     
     [Required(ErrorMessage = "O campo 'Cpf' é obrigatório.")]
-    [Length(11,11,ErrorMessage = "Cpf deve conter 11 números.")]
+    [Length(11,11,ErrorMessage = "'Cpf' deve conter 11 números.")]
     [DefaultValue("")]
     public string Cpf { get; set; } 
     
