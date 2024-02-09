@@ -1,10 +1,9 @@
 
 using Microsoft.EntityFrameworkCore;
-using Promore.Core.Contracts;
-using Promore.Core.Entities;
+using Promore.Core.Contexts.UserContext.Contracts;
+using Promore.Core.Contexts.UserContext.Entities;
 using Promore.Infra.Data;
-using LoginRequest = Promore.Core.ViewModels.Requests.LoginRequest;
-using UserResponse = Promore.Core.ViewModels.Responses.UserResponse;
+using UseCases = Promore.Core.Contexts.UserContext.UseCases;
 
 namespace Promore.Infra.Repositories;
 
@@ -15,7 +14,7 @@ public class UserRepository : IUserRepository
     public UserRepository(PromoreDataContext context)
         => _context = context;
     
-    public async Task<User> GetUserByLogin(LoginRequest model)
+    public async Task<User> GetUserByLogin(UseCases.GetByLogin.LoginRequest model)
     {
         var user = await _context
             .Users
@@ -26,7 +25,7 @@ public class UserRepository : IUserRepository
         return user;
     }
     
-    public async Task<List<UserResponse>> GetAllAsync()
+    public async Task<List<UseCases.GetAll.Response>> GetAllAsync()
     {
         var users = await _context
             .Users
@@ -34,18 +33,18 @@ public class UserRepository : IUserRepository
             .Include(roles => roles.Roles)
             .Include(regions => regions.Regions)
             .Include(lots => lots.Lots)
-            .Select(user => new UserResponse
-            {
-                Id = user.Id,
-                Active = user.Active,
-                Email = user.Email,
-                Name = user.Name,
-                Cpf = user.Cpf,
-                Profession = user.Profession, 
-                Roles = user.Roles.Select(x => x.Id).ToList(),
-                Regions = user.Regions.Select(x=> x.Id).ToList(),
-                Lots = user.Lots.Select(x=> x.Id).ToList()
-            })
+            .Select(user => new UseCases.GetAll.Response
+            (
+                user.Id,
+                user.Active,
+                user.Email,
+                user.Name,
+                user.Cpf,
+                user.Profession, 
+                user.Roles.Select(x => x.Id).ToList(),
+                user.Regions.Select(x=> x.Id).ToList(),
+                user.Lots.Select(x=> x.Id).ToList()
+            ))
             .ToListAsync();
         
         return users;
@@ -58,7 +57,7 @@ public class UserRepository : IUserRepository
         return rowsAffected > 0 ? user.Id : 0;
     }
     
-    public async Task<UserResponse> GetByIdAsync(int id)
+    public async Task<UseCases.GetById.Response> GetByIdAsync(int id)
     {
         var user = await _context
             .Users
@@ -66,24 +65,24 @@ public class UserRepository : IUserRepository
             .Include(roles => roles.Roles)
             .Include(regions => regions.Regions)
             .Include(lots => lots.Lots)
-            .Select(user => new UserResponse
-            {
-                Id = user.Id,
-                Active = user.Active,
-                Email = user.Email,
-                Name = user.Name,
-                Cpf = user.Cpf,
-                Profession = user.Profession, 
-                Roles = user.Roles.Select(x => x.Id).ToList(),
-                Regions = user.Regions.Select(x=> x.Id).ToList(),
-                Lots = user.Lots.Select(x=> x.Id).ToList()
-            })
+            .Select(user => new UseCases.GetById.Response
+            (
+                user.Id,
+                user.Active,
+                user.Email,
+                user.Name,
+                user.Cpf,
+                user.Profession, 
+                user.Roles.Select(x => x.Id).ToList(),
+                user.Regions.Select(x=> x.Id).ToList(),
+                user.Lots.Select(x=> x.Id).ToList()
+            ))
             .FirstOrDefaultAsync(x => x.Id == id);
         
         return user;
     }
     
-    public async Task<UserResponse> GetByEmailAsync(string address)
+    public async Task<UseCases.GetByEmail.Response> GetByEmailAsync(string address)
     {
         var user = await _context
             .Users
@@ -91,18 +90,18 @@ public class UserRepository : IUserRepository
             .Include(roles => roles.Roles)
             .Include(regions => regions.Regions)
             .Include(lots => lots.Lots)
-            .Select(user => new UserResponse
-            {
-                Id = user.Id,
-                Active = user.Active,
-                Email = user.Email,
-                Name = user.Name,
-                Cpf = user.Cpf,
-                Profession = user.Profession, 
-                Roles = user.Roles.Select(x => x.Id).ToList(),
-                Regions = user.Regions.Select(x=> x.Id).ToList(),
-                Lots = user.Lots.Select(x=> x.Id).ToList()
-            })
+            .Select(user => new UseCases.GetByEmail.Response
+            (
+                user.Id,
+                user.Active,
+                user.Email,
+                user.Name,
+                user.Cpf,
+                user.Profession, 
+                user.Roles.Select(x => x.Id).ToList(),
+                user.Regions.Select(x=> x.Id).ToList(),
+                user.Lots.Select(x=> x.Id).ToList()
+            ))
             .FirstOrDefaultAsync(x => x.Email == address);
         
         return user;

@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using Promore.Core.Contracts;
-using Promore.Core.Entities;
-using Promore.Core.ViewModels.Responses;
+using Promore.Core.Contexts.LotContext.Contracts;
+using Promore.Core.Contexts.LotContext.Entities;
 using Promore.Infra.Data;
+using UseCases = Promore.Core.Contexts.LotContext.UseCases;
 
 namespace Promore.Infra.Repositories;
 
@@ -13,19 +13,19 @@ public class LotRepository : ILotRepository
     public LotRepository(PromoreDataContext context)
         => _context = context;
     
-    public async Task<List<LotStatusResponse>> GetStatusByRegion(int regionId)
+    public async Task<List<UseCases.GetStatusByRegion.Response>> GetStatusByRegion(int regionId)
     {
          var lots = await _context
              .Lots
              .Include(x => x.Region)
              .Where(x => x.Region.Id == regionId)
              .AsNoTracking()
-             .Select(lot => new LotStatusResponse
-             {
-                 Id = lot.Id,
-                 Status = lot.Status,
-                 UserId = lot.UserId,
-             })
+             .Select(lot => new UseCases.GetStatusByRegion.Response
+             (
+                 lot.Id,
+                 lot.Status,
+                 lot.UserId
+             ))
              .ToListAsync();
         
          return lots;
@@ -41,25 +41,25 @@ public class LotRepository : ILotRepository
         return lot;
     }
     
-    public async Task<LotResponse> GetByIdAsync(string id)
+    public async Task<UseCases.GetById.Response> GetByIdAsync(string id)
     {
         var lot = await _context
             .Lots
             .AsNoTracking()
             .Include(clients => clients.Clients)
-            .Select(lot => new LotResponse
-            {
-                Id = lot.Id,
-                Block = lot.Block,
-                Number = lot.Number,
-                SurveyDate = lot.SurveyDate,
-                LastModifiedDate = lot.LastModifiedDate,
-                Status = lot.Status,
-                Comments = lot.Comments,
-                UserId = lot.UserId,
-                RegionId = lot.RegionId,
-                Clients = lot.Clients.Select(x=> x.Id).ToList()
-            })
+            .Select(lot => new UseCases.GetById.Response
+            (
+                lot.Id,
+                lot.Block,
+                lot.Number,
+                lot.SurveyDate,
+                lot.LastModifiedDate,
+                lot.Status,
+                lot.Comments,
+                lot.UserId,
+                lot.RegionId,
+                lot.Clients.Select(x=> x.Id).ToList()
+            ))
             .FirstOrDefaultAsync(x => x.Id == id);
         
         return lot;

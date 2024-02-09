@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Promore.UseCases.Region;
-using Requests = Promore.Core.ViewModels.Requests;
+using Promore.Core.Contexts.RegionContext;
+using Promore.Core.Contexts.RegionContext.UseCases.Create;
+using Promore.Core.Contexts.RegionContext.UseCases.Update;
 
 namespace Promore.Api.Controllers;
 
@@ -25,9 +26,9 @@ public class RegionController : ControllerBase
     
     [Authorize(Roles = "admin")]
     [HttpPost]
-    public IActionResult Post([FromBody]Requests.RegionCreateRequest model)
+    public IActionResult Post([FromBody]CreateRegionRequest model)
     {
-        var result = _handler.InsertAsync(model).Result;
+        var result = _handler.CreateAsync(model).Result;
         return result.Success ? Ok(result.Value) : BadRequest(result.Message);
     }  
     
@@ -42,7 +43,7 @@ public class RegionController : ControllerBase
     [Authorize(Roles = "admin")]
     [Authorize(Roles = "manager")]
     [HttpPut]
-    public IActionResult Update([FromBody]Requests.RegionUpdateRequest model)
+    public IActionResult Update([FromBody]UpdateRegionRequest model)
     {
         var result = _handler.UpdateAsync(model).Result;
         return result.Success ? Ok() : BadRequest(result.Message);

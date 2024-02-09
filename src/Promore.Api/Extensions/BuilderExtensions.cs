@@ -6,13 +6,17 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Promore.Api.Services;
 using Promore.Core;
-using Promore.Core.Contracts;
+using Promore.Core.Contexts.ClientContext;
+using Promore.Core.Contexts.ClientContext.Contracts;
+using Promore.Core.Contexts.LotContext;
+using Promore.Core.Contexts.LotContext.Contracts;
+using Promore.Core.Contexts.RegionContext;
+using Promore.Core.Contexts.RegionContext.Contracts;
+using Promore.Core.Contexts.RoleContext.Contracts;
+using Promore.Core.Contexts.UserContext;
+using Promore.Core.Contexts.UserContext.Contracts;
 using Promore.Infra.Data;
 using Promore.Infra.Repositories;
-using Promore.UseCases.Client;
-using Promore.UseCases.Lot;
-using Promore.UseCases.Region;
-using Promore.UseCases.User;
 
 namespace Promore.Api.Extensions;
 
@@ -79,10 +83,8 @@ public static class BuilderExtensions
         #endregion
         
         #region Contexts
-        builder.Services.AddScoped<DbInserts>();
         builder.Services.AddScoped<PromoreDataContext>();
         builder.Services.AddScoped<TokenService>();
-
         #endregion
     }
     

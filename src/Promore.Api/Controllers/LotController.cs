@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Promore.UseCases.Lot;
-using Requests = Promore.Core.ViewModels.Requests;
+using Promore.Core.Contexts.LotContext;
+using Promore.Core.Contexts.LotContext.UseCases.Create;
+using Promore.Core.Contexts.LotContext.UseCases.Update;
 
 namespace Promore.Api.Controllers;
 
@@ -30,14 +31,14 @@ public class LotController : ControllerBase
     }
     
     [HttpPost]
-    public IActionResult Post([FromBody]Requests.LotCreateRequest model)
+    public IActionResult Post([FromBody]CreateLotRequest model)
     {
-        var result = _handler.InsertAsync(model).Result;
+        var result = _handler.CreateAsync(model).Result;
         return result.Success ? Ok(result.Value) : BadRequest(result.Message);
     }   
    
     [HttpPut]
-    public IActionResult Update([FromBody]Requests.LotUpdateRequest model)
+    public IActionResult Update([FromBody]UpdateLotRequest model)
     {
         var result = _handler.UpdateAsync(model).Result;
         return result.Success ? Ok() : BadRequest(result.Message);

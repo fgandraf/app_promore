@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using Promore.Core.Contracts;
-using Promore.Core.Entities;
+using Promore.Core.Contexts.RoleContext.Contracts;
+using Promore.Core.Contexts.RoleContext.Entities;
 using Promore.Infra.Data;
 
 namespace Promore.Infra.Repositories;

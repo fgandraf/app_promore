@@ -1,77 +1,77 @@
 using Microsoft.EntityFrameworkCore;
-using Promore.Core.Contracts;
-using Promore.Core.Entities;
-using Promore.Core.ViewModels.Responses;
+using Promore.Core.Contexts.ClientContext.Contracts;
+using Promore.Core.Contexts.ClientContext.Entities;
+using UseCases = Promore.Core.Contexts.ClientContext.UseCases;
 using Promore.Infra.Data;
 
 namespace Promore.Infra.Repositories;
 
 public class ClientRepository : IClientRepository
 {
-    private PromoreDataContext _context;
+    private readonly PromoreDataContext _context;
 
     public ClientRepository(PromoreDataContext context)
         => _context = context;
     
-    public async Task<List<ClientResponse>> GetAll()
+    public async Task<List<UseCases.GetAll.Response>> GetAll()
     {
         var clients = await _context
             .Clients
             .AsNoTracking()
             .Include(lots => lots.Lot)
-            .Select(client => new ClientResponse
-            {
-                Id = client.Id,
-                Name = client.Name,
-                Cpf = client.Cpf,
-                Phone = client.Phone,
-                MothersName = client.MothersName,
-                BirthdayDate = client.BirthdayDate,
-                LotId = client.LotId
-            })
+            .Select(client => new UseCases.GetAll.Response
+            (
+                client.Id,
+                client.Name,
+                client.Cpf,
+                client.Phone,
+                client.MothersName,
+                client.BirthdayDate,
+                client.LotId
+            ))
             .ToListAsync();
         
         return clients;
     }
 
-    public async Task<List<ClientResponse>> GetAllByLotId(string lotId)
+    public async Task<List<UseCases.GetAllByLotId.Response>> GetAllByLotId(string lotId)
     {
         var client = await _context
             .Clients
             .AsNoTracking()
             .Include(lots => lots.Lot)
             .Where(x => x.LotId == lotId)
-            .Select(client => new ClientResponse
-            {
-                Id = client.Id,
-                Name = client.Name,
-                Cpf = client.Cpf,
-                Phone = client.Phone,
-                MothersName = client.MothersName,
-                BirthdayDate = client.BirthdayDate,
-                LotId = client.LotId
-            })
+            .Select(client => new UseCases.GetAllByLotId.Response
+            (
+                client.Id,
+                client.Name,
+                client.Cpf,
+                client.Phone,
+                client.MothersName,
+                client.BirthdayDate,
+                client.LotId
+            ))
             .ToListAsync();
         
         return client;
     }
 
-    public async Task<ClientResponse> GetByIdAsync(int id)
+    public async Task<UseCases.GetById.Response> GetByIdAsync(int id)
     {
         var client = await _context
             .Clients
             .AsNoTracking()
             .Include(lots => lots.Lot)
-            .Select(client => new ClientResponse
-            {
-                Id = client.Id,
-                Name = client.Name,
-                Cpf = client.Cpf,
-                Phone = client.Phone,
-                MothersName = client.MothersName,
-                BirthdayDate = client.BirthdayDate,
-                LotId = client.LotId
-            })
+            .Select(client => new UseCases.GetById.Response
+            (
+                client.Id,
+                client.Name,
+                client.Cpf,
+                client.Phone,
+                client.MothersName,
+                client.BirthdayDate,
+                client.LotId
+            ))
             .FirstOrDefaultAsync(x => x.Id == id);
         
         return client;

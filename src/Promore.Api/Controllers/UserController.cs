@@ -1,8 +1,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Promore.Api.Services;
-using Promore.UseCases.User;
-using Requests = Promore.Core.ViewModels.Requests;
+using Promore.Core.Contexts.UserContext;
+using Promore.Core.Contexts.UserContext.UseCases.Create;
+using Promore.Core.Contexts.UserContext.UseCases.GetByLogin;
+using Promore.Core.Contexts.UserContext.UseCases.UpdateInfo;
+using Promore.Core.Contexts.UserContext.UseCases.UpdateSettings;
 
 namespace Promore.Api.Controllers;
 
@@ -22,7 +25,7 @@ public class UserController : ControllerBase
     
     [AllowAnonymous]
     [HttpPost("login")]
-    public IActionResult Login([FromBody]Requests.LoginRequest model)
+    public IActionResult Login([FromBody]LoginRequest model)
     {
         var result = _handler.GetUserByLoginAsync(model).Result;
         return result.Success ? Ok(_tokenService.GenerateToken(result.Value)) : BadRequest(result.Message);
@@ -38,15 +41,15 @@ public class UserController : ControllerBase
     
     [Authorize(Roles = "admin")]
     [HttpPost]
-    public IActionResult Post([FromBody]Requests.UserCreateRequest model)
+    public IActionResult Post([FromBody]CreateUserRequest model)
     {
-        var result = _handler.InsertAsync(model).Result;
+        var result = _handler.CreateAsync(model).Result;
         return result.Success ? Ok(result.Value) : BadRequest(result.Message);
     }
     
     [Authorize(Roles = "admin")]
     [HttpPut("settings")]
-    public IActionResult UpdateSettings([FromBody]Requests.UserUpdateSettingsRequest model)
+    public IActionResult UpdateSettings([FromBody]UpdateUserSettingsRequest model)
     {
         var result = _handler.UpdateSettingsAsync(model).Result;
         return result.Success ? Ok() : BadRequest(result.Message);
@@ -67,7 +70,7 @@ public class UserController : ControllerBase
     }
     
     [HttpPut]
-    public IActionResult UpdateInfo([FromBody]Requests.UserUpdateInfoRequest model)
+    public IActionResult UpdateInfo([FromBody]UpdateUserInfoRequest model)
     {
         var result = _handler.UpdateInfoAsync(model).Result;
         return result.Success ? Ok() : BadRequest(result.Message);

@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Promore.UseCases.Client;
-using Requests = Promore.Core.ViewModels.Requests;
+using Promore.Core.Contexts.ClientContext;
+using Promore.Core.Contexts.ClientContext.UseCases.Update;
+using Promore.Core.Contexts.ClientContext.UseCases.Create;
 
 namespace Promore.Api.Controllers;
 
@@ -38,14 +39,14 @@ public class ClientController : ControllerBase
     }
     
     [HttpPost]
-    public IActionResult Post([FromBody]Requests.CreateClientRequest model)
+    public IActionResult Post([FromBody]CreateClientRequest model)
     {
-        var result = _handler.InsertAsync(model).Result;
+        var result = _handler.CreateAsync(model).Result;
         return result.Success ? Ok(result.Value) : BadRequest(result.Message);
     }   
    
     [HttpPut]
-    public IActionResult Update([FromBody]Requests.UpdateClientRequest model)
+    public IActionResult Update([FromBody]UpdateClientRequest model)
     {
         var result = _handler.UpdateAsync(model).Result;
         return result.Success ? Ok() : BadRequest(result.Message);

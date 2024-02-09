@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using Promore.Core.Contracts;
-using Promore.Core.Entities;
-using Promore.Core.ViewModels.Responses;
+using Promore.Core.Contexts.RegionContext.Contracts;
+using Promore.Core.Contexts.RegionContext.Entities;
 using Promore.Infra.Data;
+using UseCases = Promore.Core.Contexts.RegionContext.UseCases;
 
 namespace Promore.Infra.Repositories;
 
@@ -13,19 +13,19 @@ public class RegionRepository :IRegionRepository
     public RegionRepository(PromoreDataContext context)
         => _context = context;
     
-    public async Task<List<RegionResponse>> GetAll()
+    public async Task<List<UseCases.GetAll.Response>> GetAll()
     {
         var regions = await _context
             .Regions
             .AsNoTracking()
-            .Select(region => new RegionResponse
-            {
-                Id = region.Id,
-                Name = region.Name,
-                EstablishedDate = region.EstablishedDate,
-                StartDate = region.StartDate,
-                EndDate = region.EndDate,
-            })
+            .Select(region => new UseCases.GetAll.Response
+            (
+                region.Id,
+                region.Name,
+                region.EstablishedDate,
+                region.StartDate,
+                region.EndDate
+            ))
             .ToListAsync();
 
         return regions;
@@ -54,19 +54,19 @@ public class RegionRepository :IRegionRepository
         return region;
     }
 
-    public async Task<RegionResponse> GetByIdAsync(int id)
+    public async Task<UseCases.GetById.Response> GetByIdAsync(int id)
     {
         var region = await _context
             .Regions
             .AsNoTracking()
-            .Select(region => new RegionResponse
-            {
-                Id = region.Id,
-                Name = region.Name,
-                EstablishedDate = region.EstablishedDate,
-                StartDate = region.StartDate,
-                EndDate = region.EndDate,
-            })
+            .Select(region => new UseCases.GetById.Response
+            (
+                region.Id,
+                region.Name,
+                region.EstablishedDate,
+                region.StartDate,
+                region.EndDate
+            ))
             .FirstOrDefaultAsync(x => x.Id == id);
 
         return region;

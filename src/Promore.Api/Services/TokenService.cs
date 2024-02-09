@@ -3,7 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Promore.Core;
-using Promore.Core.Entities;
+using Promore.Core.Contexts.UserContext.Entities;
 
 namespace Promore.Api.Services;
 
