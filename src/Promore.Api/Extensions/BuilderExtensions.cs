@@ -6,17 +6,13 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Promore.Api.Services;
 using Promore.Core;
-using Promore.Core.Contexts.Client;
-using Promore.Core.Contexts.Client.Contracts;
-using Promore.Core.Contexts.Lot;
-using Promore.Core.Contexts.Lot.Contracts;
-using Promore.Core.Contexts.Region;
-using Promore.Core.Contexts.Region.Contracts;
-using Promore.Core.Contexts.Role.Contracts;
-using Promore.Core.Contexts.User;
-using Promore.Core.Contexts.User.Contracts;
+using Promore.Core.Contracts;
 using Promore.Infra.Data;
 using Promore.Infra.Repositories;
+using Promore.UseCases.Client;
+using Promore.UseCases.Lot;
+using Promore.UseCases.Region;
+using Promore.UseCases.User;
 
 namespace Promore.Api.Extensions;
 

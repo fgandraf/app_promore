@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Promore.Core.Contexts.Region.Contracts;
-using Promore.Core.Contexts.Region.Entity;
-using Promore.Core.Contexts.Region.Models.Responses;
+using Promore.Core.Contracts;
+using Promore.Core.Entities;
+using Promore.Core.ViewModels.Responses;
 using Promore.Infra.Data;
 
 namespace Promore.Infra.Repositories;
@@ -13,12 +13,12 @@ public class RegionRepository :IRegionRepository
     public RegionRepository(PromoreDataContext context)
         => _context = context;
     
-    public async Task<List<ReadRegion>> GetAll()
+    public async Task<List<RegionResponse>> GetAll()
     {
         var regions = await _context
             .Regions
             .AsNoTracking()
-            .Select(region => new ReadRegion
+            .Select(region => new RegionResponse
             {
                 Id = region.Id,
                 Name = region.Name,
@@ -54,12 +54,12 @@ public class RegionRepository :IRegionRepository
         return region;
     }
 
-    public async Task<ReadRegion> GetByIdAsync(int id)
+    public async Task<RegionResponse> GetByIdAsync(int id)
     {
         var region = await _context
             .Regions
             .AsNoTracking()
-            .Select(region => new ReadRegion
+            .Select(region => new RegionResponse
             {
                 Id = region.Id,
                 Name = region.Name,
