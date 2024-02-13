@@ -10,6 +10,11 @@ public static class WebApplicationExtensions
 {
     public static void InitiateEmptyDataBase(this WebApplication app)
     {
+        var isMock = app.Configuration.GetValue<bool>("MockDataSource");
+
+        if (isMock)
+            return;
+        
         using var scope = app.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<PromoreDataContext>();
 

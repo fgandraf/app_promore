@@ -16,7 +16,8 @@ using Promore.Core.Contexts.RoleContext.Contracts;
 using Promore.Core.Contexts.UserContext;
 using Promore.Core.Contexts.UserContext.Contracts;
 using Promore.Infra.Data;
-using Promore.Infra.Repositories;
+using Promore.Infra.Repositories.Database;
+using Promore.Infra.Repositories.Mock;
 
 namespace Promore.Api.Extensions;
 
@@ -26,6 +27,7 @@ public static class BuilderExtensions
     {
         Configuration.Database.ConnectionString = builder.Configuration.GetConnectionString("Default");
         Configuration.Secrets.JwtPrivateKey = builder.Configuration.GetSection("Secrets").GetValue<string>("JwtPrivateKey") ?? string.Empty;
+        Configuration.IsMockDataBase = builder.Configuration.GetValue<bool>("MockDataSource");
     }
 
     public static void AddDatabase(this WebApplicationBuilder builder)
@@ -67,25 +69,31 @@ public static class BuilderExtensions
         
     public static void AddRepositoryServices(this WebApplicationBuilder builder)
     {
-        #region Repositories
-        builder.Services.AddScoped<IUserRepository, UserRepository>();
-        builder.Services.AddScoped<IRegionRepository, RegionRepository>();
-        builder.Services.AddScoped<IClientRepository, ClientRepository>();
-        builder.Services.AddScoped<ILotRepository, LotRepository>();
-        builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-        #endregion
+        if (Configuration.IsMockDataBase)
+        {
+            builder.Services.AddScoped<IUserRepository, UserRepositoryMock>();
+            builder.Services.AddScoped<IRegionRepository, RegionRepositoryMock>();
+            builder.Services.AddScoped<IClientRepository, ClientRepositoryMock>();
+            builder.Services.AddScoped<ILotRepository, LotRepositoryMock>();
+            builder.Services.AddScoped<IRoleRepository, RoleRepositoryMock>();
+            builder.Services.AddSingleton<MockContext>();
+        }
+        else
+        {
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IRegionRepository, RegionRepository>();
+            builder.Services.AddScoped<IClientRepository, ClientRepository>();
+            builder.Services.AddScoped<ILotRepository, LotRepository>();
+            builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+            
+            builder.Services.AddScoped<PromoreDataContext>();
+        }
         
-        #region Handlers
         builder.Services.AddScoped<UserHandler>();
         builder.Services.AddScoped<ClientHandler>();
         builder.Services.AddScoped<RegionHandler>();
         builder.Services.AddScoped<LotHandler>();
-        #endregion
-        
-        #region Contexts
-        builder.Services.AddScoped<PromoreDataContext>();
         builder.Services.AddScoped<TokenService>();
-        #endregion
     }
     
     public static void AddSwaggerConfigurations(this WebApplicationBuilder builder)

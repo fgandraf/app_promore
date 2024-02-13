@@ -1,10 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Promore.Core.Contexts.ClientContext.Contracts;
 using Promore.Core.Contexts.ClientContext.Entities;
-using UseCases = Promore.Core.Contexts.ClientContext.UseCases;
 using Promore.Infra.Data;
+using UseCases = Promore.Core.Contexts.ClientContext.UseCases;
 
-namespace Promore.Infra.Repositories;
+namespace Promore.Infra.Repositories.Database;
 
 public class ClientRepository : IClientRepository
 {

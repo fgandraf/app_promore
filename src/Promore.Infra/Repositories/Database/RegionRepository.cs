@@ -4,7 +4,7 @@ using Promore.Core.Contexts.RegionContext.Entities;
 using Promore.Infra.Data;
 using UseCases = Promore.Core.Contexts.RegionContext.UseCases;
 
-namespace Promore.Infra.Repositories;
+namespace Promore.Infra.Repositories.Database;
 
 public class RegionRepository :IRegionRepository
 {

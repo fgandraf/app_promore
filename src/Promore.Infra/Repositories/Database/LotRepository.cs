@@ -4,7 +4,7 @@ using Promore.Core.Contexts.LotContext.Entities;
 using Promore.Infra.Data;
 using UseCases = Promore.Core.Contexts.LotContext.UseCases;
 
-namespace Promore.Infra.Repositories;
+namespace Promore.Infra.Repositories.Database;
 
 public class LotRepository : ILotRepository
 {

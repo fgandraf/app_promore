@@ -10,5 +10,4 @@ public record Response(
     string Profession,
     List<int> Roles,
     List<int> Regions,
-    List<string> Lots
-);
+    List<string> Lots);

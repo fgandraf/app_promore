@@ -3,7 +3,7 @@ using Promore.Core.Contexts.RoleContext.Contracts;
 using Promore.Core.Contexts.RoleContext.Entities;
 using Promore.Infra.Data;
 
-namespace Promore.Infra.Repositories;
+namespace Promore.Infra.Repositories.Database;
 
 public class RoleRepository : IRoleRepository
 {

@@ -1,11 +1,10 @@
-
 using Microsoft.EntityFrameworkCore;
 using Promore.Core.Contexts.UserContext.Contracts;
 using Promore.Core.Contexts.UserContext.Entities;
 using Promore.Infra.Data;
 using UseCases = Promore.Core.Contexts.UserContext.UseCases;
 
-namespace Promore.Infra.Repositories;
+namespace Promore.Infra.Repositories.Database;
 
 public class UserRepository : IUserRepository
 {
