@@ -5,20 +5,19 @@ namespace Promore.Tests.Core.UseCases;
 [TestClass]
 public class ClientTests
 {
-    private MockContext context;
-    private ClientRepositoryMock clientRepository;
-    private LotRepositoryMock lotRepository;
+    private MockContext _context;
+    private ClientRepositoryMock _clientRepository;
+    private LotRepositoryMock _lotRepository;
 
     private const string NotExistentCpf = "98765432100";
     private const int ExistentClientId = 5;
     
-    
     [TestInitialize]
     public void TestInitialize()
     {
-        context = new MockContext();
-        clientRepository = new ClientRepositoryMock(context);
-        lotRepository = new LotRepositoryMock(context);
+        _context = new MockContext();
+        _clientRepository = new ClientRepositoryMock(_context);
+        _lotRepository = new LotRepositoryMock(_context);
     }
     
     [TestMethod]
@@ -27,70 +26,65 @@ public class ClientTests
     {
         var model = BuildCreateClientRequest(NotExistentCpf, existentLotId:"A10");
         
-        var clientNotExists = !context.Clients.Exists(x => x.Cpf == model.Cpf);
-        var result = new Promore.Core.Contexts.ClientContext.UseCases.Create.Handler(clientRepository,lotRepository).Handle(model).Result;
-        var created = context.Clients.Exists(x => x.Id == result.Value);
+        var clientNotExists = !_context.Clients.Exists(x => x.Cpf == model.Cpf);
+        var result = new Promore.Core.Contexts.ClientContext.UseCases.Create.Handler(_clientRepository,_lotRepository).Handle(model).Result;
+        var created = _context.Clients.Exists(x => x.Id == result.Value);
         
         Assert.IsTrue(clientNotExists && result.Success && created);
     }
     
-
     [TestMethod]
     [TestCategory("Delete")]
     public void Delete_Client_ReturnsTrue()
     {
-        var clientExists = context.Clients.Exists(x => x.Id == ExistentClientId);
-        var result = new Promore.Core.Contexts.ClientContext.UseCases.Delete.Handler(clientRepository).Handle(ExistentClientId).Result;
-        var deleted = !context.Clients.Exists(x => x.Id == ExistentClientId);
+        var clientExists = _context.Clients.Exists(x => x.Id == ExistentClientId);
+        var result = new Promore.Core.Contexts.ClientContext.UseCases.Delete.Handler(_clientRepository).Handle(ExistentClientId).Result;
+        var deleted = !_context.Clients.Exists(x => x.Id == ExistentClientId);
         
         Assert.IsTrue(clientExists && result.Success && deleted);
     }
-    
     
     [TestMethod]
     [TestCategory("Get")]
     public void GetAll_Clients_SameCountThanMock()
     {
-        const int existentClients = 5;
+        var existentClients = _context.Clients.Count;
         
-        var result = new Promore.Core.Contexts.ClientContext.UseCases.GetAll.Handler(clientRepository).Handle().Result.Value;
+        var result = new Promore.Core.Contexts.ClientContext.UseCases.GetAll.Handler(_clientRepository).Handle().Result.Value;
         
         Assert.AreEqual(existentClients, result.Count);
     }
-    
     
     [TestMethod]
     [TestCategory("Get")]
     public void GetAll_ClientsByLotId_SameCountThanMock()
     {
         const string existentLotId = "A10";
-        const int existentClientsInLotA10 = 2;
+        var existentClientsInLotA10 = _context.Lots.FirstOrDefault(x => x.Id == existentLotId)!.Clients.Count;
         
-        var result = new Promore.Core.Contexts.ClientContext.UseCases.GetAllByLotId.Handler(clientRepository).Handle(existentLotId).Result.Value;
+        var result = new Promore.Core.Contexts.ClientContext.UseCases.GetAllByLotId.Handler(_clientRepository).Handle(existentLotId).Result.Value;
         
         Assert.AreEqual(existentClientsInLotA10, result.Count);
     }
-
     
     [TestMethod]
     [TestCategory("Get")]
-    public void GetClient_ByLotId_ReturnsNotNull()
+    public void GetClient_ById_ReturnsNotNull()
     {
-        var result = new Promore.Core.Contexts.ClientContext.UseCases.GetById.Handler(clientRepository).Handle(ExistentClientId).Result.Value;
+        var result = new Promore.Core.Contexts.ClientContext.UseCases.GetById.Handler(_clientRepository).Handle(ExistentClientId).Result.Value;
         
         Assert.IsNotNull(result);
     }
-    
     
     [TestMethod]
     [TestCategory("Update")]
     public void Update_Client_ReturnsTrue()
     {
-        var existentClientCpf = context.Clients.FirstOrDefault(x => x.Id == ExistentClientId)!.Cpf;
+        var existentClientCpf = _context.Clients.FirstOrDefault(x => x.Id == ExistentClientId)!.Cpf;
         var model = BuildUpdateClientRequest(ExistentClientId, NotExistentCpf);
         
-        var result = new Promore.Core.Contexts.ClientContext.UseCases.Update.UpdateHandler(clientRepository, lotRepository).Handle(model).Result;
-        var updatedClientCpf = context.Clients.FirstOrDefault(x => x.Id == ExistentClientId)!.Cpf;
+        var result = new Promore.Core.Contexts.ClientContext.UseCases.Update.UpdateHandler(_clientRepository, _lotRepository).Handle(model).Result;
+        var updatedClientCpf = _context.Clients.FirstOrDefault(x => x.Id == ExistentClientId)!.Cpf;
         
         Assert.IsTrue(result.Success && updatedClientCpf != existentClientCpf);
     }
