@@ -35,7 +35,6 @@ public class RegionRepository :IRegionRepository
     {
         var regions = await _context
             .Regions
-            .AsNoTracking()
             .Where(region => regionsId.Contains(region.Id))
             .ToListAsync();
 
@@ -46,9 +45,8 @@ public class RegionRepository :IRegionRepository
     {
         var region = await _context
             .Regions
-            .AsNoTracking()
-            .Include(region => region.Users)
-            .Include(region => region.Lots)
+            //.Include(region => region.Users)
+            //.Include(region => region.Lots)
             .FirstOrDefaultAsync(x => x.Id == id);
         
         return region;
@@ -59,6 +57,7 @@ public class RegionRepository :IRegionRepository
         var region = await _context
             .Regions
             .AsNoTracking()
+            .Where(x => x.Id == id)
             .Select(region => new UseCases.GetById.Response
             (
                 region.Id,
@@ -67,7 +66,7 @@ public class RegionRepository :IRegionRepository
                 region.StartDate,
                 region.EndDate
             ))
-            .FirstOrDefaultAsync(x => x.Id == id);
+            .FirstOrDefaultAsync();
 
         return region;
     }

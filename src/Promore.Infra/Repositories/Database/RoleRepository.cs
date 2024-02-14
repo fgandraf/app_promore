@@ -16,7 +16,6 @@ public class RoleRepository : IRoleRepository
     {
         var roles = await _context
             .Roles
-            .AsNoTracking()
             .Where(role => rolesId.Contains(role.Id))
             .ToListAsync();
 

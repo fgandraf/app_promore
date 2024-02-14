@@ -12,19 +12,19 @@ public class Hander(ILotRepository lotRepository, IUserRepository userRepository
     {
         var lot = new Lot
         {
-            Block = model.Block,
-            Number = model.Number,
+            Id = model.Id,
+            Block = new string(model.Id.Where(char.IsLetter).ToArray()),
+            Number = Convert.ToInt32(new string(model.Id.Where(char.IsDigit).ToArray())),
             SurveyDate = model.SurveyDate,
             LastModifiedDate = model.LastModifiedDate,
             Status = model.Status,
             Comments = model.Comments,
-            User = userRepository.GetEntityByIdAsync(model.UserId).Result,
-            Region = regionRepository.GetRegionByIdAsync(model.RegionId).Result,
-            Clients = clientRepository.GetClientsByIdListAsync(model.Clients).Result
+            User = await userRepository.GetUserByIdAsync(model.UserId),
+            Region = await regionRepository.GetRegionByIdAsync(model.RegionId)
         };
         
         var id = await lotRepository.InsertAsync(lot);
 
-        return string.IsNullOrEmpty(id) ? OperationResult<string>.SuccessResult(id) : OperationResult<string>.FailureResult("Não foi possível inserir o lote!");
+        return !string.IsNullOrEmpty(id) ? OperationResult<string>.SuccessResult(id) : OperationResult<string>.FailureResult("Não foi possível inserir o lote!");
     }
 }

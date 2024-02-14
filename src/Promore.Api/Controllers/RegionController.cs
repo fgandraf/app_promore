@@ -40,8 +40,7 @@ public class RegionController : ControllerBase
         return result.Success ? Ok() : BadRequest(result.Message);
     }
     
-    [Authorize(Roles = "admin")]
-    [Authorize(Roles = "manager")]
+    [Authorize(Roles = "admin, manager")]
     [HttpPut]
     public IActionResult Update([FromBody]UpdateRegionRequest model)
     {

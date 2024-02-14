@@ -7,7 +7,7 @@ public class Handler(IUserRepository userRepository)
 {
     public async Task<OperationResult> Handle(UpdateUserInfoRequest model)
     {
-        var user = await userRepository.GetEntityByIdAsync(model.Id);
+        var user = await userRepository.GetUserByIdAsync(model.Id);
         
         if (user is null || !user.Active)
             return OperationResult.FailureResult($"Usuário '{model.Email}' não encontrado ou não está ativo!");

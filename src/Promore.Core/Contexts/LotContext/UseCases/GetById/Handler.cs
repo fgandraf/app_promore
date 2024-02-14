@@ -6,7 +6,7 @@ public class Handler(ILotRepository lotRepository)
 {
     public async Task<OperationResult<Response>> Handle(string id)
     {
-        var region = await lotRepository.GetByIdAsync(id);
-        return OperationResult<Response>.SuccessResult(region);
+        var lot = await lotRepository.GetByIdAsync(id);
+        return OperationResult<Response>.SuccessResult(lot);
     }
 }

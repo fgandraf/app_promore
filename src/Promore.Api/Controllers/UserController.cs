@@ -70,6 +70,7 @@ public class UserController : ControllerBase
     }
     
     [HttpPut]
+    [HttpPut("info")]
     public IActionResult UpdateInfo([FromBody]UpdateUserInfoRequest model)
     {
         var result = _handler.UpdateInfoAsync(model).Result;

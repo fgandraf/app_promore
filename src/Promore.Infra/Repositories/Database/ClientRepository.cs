@@ -39,8 +39,8 @@ public class ClientRepository : IClientRepository
         var client = await _context
             .Clients
             .AsNoTracking()
-            .Include(lots => lots.Lot)
             .Where(x => x.LotId == lotId)
+            .Include(lots => lots.Lot)
             .Select(client => new UseCases.GetAllByLotId.Response
             (
                 client.Id,
@@ -61,6 +61,7 @@ public class ClientRepository : IClientRepository
         var client = await _context
             .Clients
             .AsNoTracking()
+            .Where(x => x.Id == id)
             .Include(lots => lots.Lot)
             .Select(client => new UseCases.GetById.Response
             (
@@ -72,7 +73,7 @@ public class ClientRepository : IClientRepository
                 client.BirthdayDate,
                 client.LotId
             ))
-            .FirstOrDefaultAsync(x => x.Id == id);
+            .FirstOrDefaultAsync();
         
         return client;
     }
@@ -81,7 +82,6 @@ public class ClientRepository : IClientRepository
     {
         var clients = await _context
             .Clients
-            .AsNoTracking()
             .Where(client => clientsIds.Contains(client.Id))
             .ToListAsync();
 
@@ -92,7 +92,6 @@ public class ClientRepository : IClientRepository
     {
         var client = await _context
             .Clients
-            .AsNoTracking()
             .Include(lots => lots.Lot)
             .FirstOrDefaultAsync(x => x.Id == id);
         

@@ -10,15 +10,6 @@ public class CreateLotRequest
     [DefaultValue("")]
     public string Id { get; set; }
     
-    [Required(ErrorMessage = "O campo 'Block' é obrigatório.")]
-    [MaxLength(2)]
-    [DefaultValue("")]
-    public string Block { get; set; }
-    
-    [Required(ErrorMessage = "O campo 'Number' é obrigatório.")]
-    [DefaultValue("")]
-    public int Number { get; set; }
-    
     public DateTime SurveyDate { get; set; }
     
     public DateTime LastModifiedDate { get; set; }
@@ -30,13 +21,11 @@ public class CreateLotRequest
     public string Comments { get; set; }
     
     [Required(ErrorMessage = "O campo 'UserId' é obrigatório.")]
-    [DefaultValue("")]
+    [DefaultValue(0)]
     public int UserId { get; set; }
     
     [Required(ErrorMessage = "O campo 'RegionId' é obrigatório.")]
-    [DefaultValue("")]
+    [DefaultValue(0)]
     public int RegionId { get; set; }
     
-    [DefaultValue("[]")]
-    public List<int> Clients { get; set; }
 }

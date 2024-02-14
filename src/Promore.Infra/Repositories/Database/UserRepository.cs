@@ -61,6 +61,7 @@ public class UserRepository : IUserRepository
         var user = await _context
             .Users
             .AsNoTracking()
+            .Where(x => x.Id == id)
             .Include(roles => roles.Roles)
             .Include(regions => regions.Regions)
             .Include(lots => lots.Lots)
@@ -76,7 +77,7 @@ public class UserRepository : IUserRepository
                 user.Regions.Select(x=> x.Id).ToList(),
                 user.Lots.Select(x=> x.Id).ToList()
             ))
-            .FirstOrDefaultAsync(x => x.Id == id);
+            .FirstOrDefaultAsync();
         
         return user;
     }
@@ -86,6 +87,7 @@ public class UserRepository : IUserRepository
         var user = await _context
             .Users
             .AsNoTracking()
+            .Where(x => x.Email == address)
             .Include(roles => roles.Roles)
             .Include(regions => regions.Regions)
             .Include(lots => lots.Lots)
@@ -101,7 +103,7 @@ public class UserRepository : IUserRepository
                 user.Regions.Select(x=> x.Id).ToList(),
                 user.Lots.Select(x=> x.Id).ToList()
             ))
-            .FirstOrDefaultAsync(x => x.Email == address);
+            .FirstOrDefaultAsync();
         
         return user;
     }
@@ -126,7 +128,7 @@ public class UserRepository : IUserRepository
         return users;
     }
     
-    public async Task<User> GetEntityByIdAsync(int id)
+    public async Task<User> GetUserByIdAsync(int id)
     {
         var user = await _context
             .Users

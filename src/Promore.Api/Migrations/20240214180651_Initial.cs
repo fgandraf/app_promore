@@ -66,7 +66,7 @@ namespace Promore.Api.Migrations
                     Block = table.Column<string>(type: "VARCHAR(2)", maxLength: 2, nullable: false),
                     Number = table.Column<int>(type: "INT", nullable: false),
                     SurveyDate = table.Column<DateTime>(type: "DATE", nullable: false),
-                    LastModifiedDate = table.Column<DateTime>(type: "DATETIME2", nullable: false, defaultValue: new DateTime(2024, 2, 6, 17, 55, 4, 975, DateTimeKind.Utc).AddTicks(5610)),
+                    LastModifiedDate = table.Column<DateTime>(type: "DATETIME2", nullable: false, defaultValue: new DateTime(2024, 2, 14, 18, 6, 50, 906, DateTimeKind.Utc).AddTicks(5320)),
                     Status = table.Column<int>(type: "INT", nullable: false),
                     Comments = table.Column<string>(type: "TEXT", nullable: true),
                     UserId = table.Column<int>(type: "INT", nullable: true),

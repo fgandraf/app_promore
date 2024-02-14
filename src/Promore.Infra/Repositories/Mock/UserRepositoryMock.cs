@@ -106,7 +106,7 @@ public class UserRepositoryMock : IUserRepository
         return Task.FromResult(users);
     }
     
-    public Task<User> GetEntityByIdAsync(int id)
+    public Task<User> GetUserByIdAsync(int id)
     {
         var user = _context.Users
             .FirstOrDefault(x => x.Id == id);

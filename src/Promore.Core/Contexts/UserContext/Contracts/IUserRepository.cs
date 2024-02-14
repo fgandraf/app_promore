@@ -10,6 +10,6 @@ public interface IUserRepository
     Task<int> UpdateAsync(Entities.User user);
 
     
-    Task<Entities.User> GetEntityByIdAsync(int id);
+    Task<Entities.User> GetUserByIdAsync(int id);
     Task<List<Entities.User>> GetEntitiesByIdsAsync(List<int> ids);
 }

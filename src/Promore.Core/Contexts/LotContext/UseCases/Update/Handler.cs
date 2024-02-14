@@ -13,7 +13,7 @@ public class Handler(ILotRepository lotRepository, IUserRepository userRepositor
         if (lot is null)
             return OperationResult.FailureResult($"Lote '{model.Id}' não encontrado!");
 
-        var user = userRepository.GetEntityByIdAsync(model.UserId).Result;
+        var user = userRepository.GetUserByIdAsync(model.UserId).Result;
         if (user is null)
             return OperationResult.FailureResult($"Usuário '{model.UserId}' não encontrado!");
         
@@ -25,12 +25,12 @@ public class Handler(ILotRepository lotRepository, IUserRepository userRepositor
         if (clients is null)
             return OperationResult.FailureResult($"Clientes não encontrados!");
         
-        lot.Block = lot.Block;
-        lot.Number = lot.Number;
-        lot.SurveyDate = lot.SurveyDate;
-        lot.LastModifiedDate = lot.LastModifiedDate;
-        lot.Status = lot.Status;
-        lot.Comments = lot.Comments;
+        lot.Block = new string(model.Id.Where(char.IsLetter).ToArray());
+        lot.Number = Convert.ToInt32(new string(model.Id.Where(char.IsDigit).ToArray()));
+        lot.SurveyDate = model.SurveyDate;
+        lot.LastModifiedDate = model.LastModifiedDate;
+        lot.Status = model.Status;
+        lot.Comments = model.Comments;
         lot.User = user;
         lot.Region = region;
         lot.Clients = clients;

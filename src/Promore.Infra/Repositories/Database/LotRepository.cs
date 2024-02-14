@@ -35,7 +35,9 @@ public class LotRepository : ILotRepository
     {
         var lot = await _context
             .Lots
-            .AsNoTracking()
+            .Include(x => x.User)
+            .Include(x => x.Region)
+            .Include(x => x.Clients)
             .FirstOrDefaultAsync(x => x.Id == id);
         
         return lot;
@@ -46,6 +48,7 @@ public class LotRepository : ILotRepository
         var lot = await _context
             .Lots
             .AsNoTracking()
+            .Where(x => x.Id == id)
             .Include(clients => clients.Clients)
             .Select(lot => new UseCases.GetById.Response
             (
@@ -60,7 +63,7 @@ public class LotRepository : ILotRepository
                 lot.RegionId,
                 lot.Clients.Select(x=> x.Id).ToList()
             ))
-            .FirstOrDefaultAsync(x => x.Id == id);
+            .FirstOrDefaultAsync();
         
         return lot;
     }

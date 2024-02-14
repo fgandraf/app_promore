@@ -31,6 +31,7 @@ public class ClientController : ControllerBase
         return result.Success ? Ok(result.Value) : BadRequest(result.Message);
     }
     
+    
     [HttpGet("{id:int}")]
     public IActionResult GetById(int id)
     {

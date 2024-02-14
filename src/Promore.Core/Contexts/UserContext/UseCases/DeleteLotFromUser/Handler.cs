@@ -7,8 +7,8 @@ public class Handler(IUserRepository userRepository)
 {
     public async Task<OperationResult> Handle(int userId, string lotId)
     {
-        var user = await userRepository.GetEntityByIdAsync(userId);
-        if (user.Equals(new User()))
+        var user = await userRepository.GetUserByIdAsync(userId);
+        if (user is null)
             return OperationResult.FailureResult($"Usuário não encontrado ou não está ativo!");
 
         var lot = user.Lots.FirstOrDefault(x => x.Id == lotId);

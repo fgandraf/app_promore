@@ -10,15 +10,6 @@ public class UpdateLotRequest
     [DefaultValue("")]
     public string Id { get; set; }
     
-    [Required(ErrorMessage = "O campo 'Block' é obrigatório.")]
-    [MaxLength(2)]
-    [DefaultValue("")]
-    public string Block { get; set; }
-    
-    [Required(ErrorMessage = "O campo 'Number' é obrigatório.")]
-    [DefaultValue("")]
-    public int Number { get; set; }
-    
     public DateTime SurveyDate { get; set; }
     
     public DateTime LastModifiedDate { get; set; }
