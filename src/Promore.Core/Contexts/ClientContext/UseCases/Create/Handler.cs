@@ -10,7 +10,9 @@ public class Handler(IClientRepository clientRepository, ILotRepository lotRepos
     public async Task<OperationResult<long>> Handle(CreateClientRequest model)
     {
         var lot = lotRepository.GetLotById(model.LotId).Result;
-        
+        if (lot is null)
+            return OperationResult<long>.FailureResult("Lote não encontrado!");
+
         var client = new Client
         {
             Name = model.Name,
