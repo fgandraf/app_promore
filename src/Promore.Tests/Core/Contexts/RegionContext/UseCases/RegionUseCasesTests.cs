@@ -1,13 +1,13 @@
 using Promore.Infra.Repositories.Mock;
 
-namespace Promore.Tests.Core.UseCases;
+namespace Promore.Tests.Core.Contexts.RegionContext.UseCases;
 
 [TestClass]
-public class RegionTests
+public class RegionUseCasesTests
 {
-    private MockContext _context;
-    private RegionRepositoryMock _regionRepository;
-    private UserRepositoryMock _userRepository;
+    private MockContext? _context;
+    private RegionRepositoryMock? _regionRepository;
+    private UserRepositoryMock? _userRepository;
     
     private const int ExistentRegiontId = 1;
     
@@ -25,9 +25,9 @@ public class RegionTests
     {
         var model = BuildCreateRegionRequest();
         
-        var regionNotExists = !_context.Regions.Exists(x => x.Name == model.Name);
+        var regionNotExists = !_context!.Regions.Exists(x => x.Name == model.Name);
         var result = new Promore.Core.Contexts.RegionContext.UseCases.Create.Handler(_regionRepository, _userRepository).Handle(model).Result;
-        var created = _context.Regions.Exists(x => x.Id == result.Value);
+        var created = _context!.Regions.Exists(x => x.Id == result.Value);
         
         Assert.IsTrue(regionNotExists && result.Success && created);
     }
@@ -35,7 +35,7 @@ public class RegionTests
     [TestMethod]
     public void Delete_Region_ReturnsTrue()
     {
-        var regionExists = _context.Regions.Exists(x => x.Id == ExistentRegiontId);
+        var regionExists = _context!.Regions.Exists(x => x.Id == ExistentRegiontId);
         var result = new Promore.Core.Contexts.RegionContext.UseCases.Delete.Handler(_regionRepository).Handle(ExistentRegiontId).Result;
         var deleted = !_context.Regions.Exists(x => x.Id == ExistentRegiontId);
         
@@ -46,7 +46,7 @@ public class RegionTests
     [TestCategory("Get")]
     public void GetAll_Regions_SameCountThanMock()
     {
-        var existentRegions = _context.Regions.Count;
+        var existentRegions = _context!.Regions.Count;
         
         var result = new Promore.Core.Contexts.RegionContext.UseCases.GetAll.Handler(_regionRepository).Handle().Result.Value;
         
@@ -66,7 +66,7 @@ public class RegionTests
     [TestCategory("Update")]
     public void Update_Region_ReturnsTrue()
     {
-        var existentRegionName = _context.Regions.FirstOrDefault(x => x.Id == ExistentRegiontId)!.Name;
+        var existentRegionName = _context!.Regions.FirstOrDefault(x => x.Id == ExistentRegiontId)!.Name;
         var model = BuildUpdateRegionRequest(ExistentRegiontId);
         
         var result = new Promore.Core.Contexts.RegionContext.UseCases.Update.Handler(_regionRepository).Handle(model).Result;

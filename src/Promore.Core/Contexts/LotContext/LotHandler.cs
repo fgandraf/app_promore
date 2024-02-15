@@ -18,7 +18,7 @@ public class LotHandler(
         => await new UseCases.GetById.Handler(lotRepository).Handle(id);
     
     public async Task<OperationResult<string>> CreateAsync(UseCases.Create.CreateLotRequest model)
-        => await new UseCases.Create.Hander(lotRepository,userRepository,regionRepository,clientRepository).Handle(model);
+        => await new UseCases.Create.Hander(lotRepository,userRepository,regionRepository).Handle(model);
 
     public async Task<OperationResult> UpdateAsync(UseCases.Update.UpdateLotRequest model)
         => await new UseCases.Update.Handler(lotRepository, userRepository, regionRepository, clientRepository).Handle(model);

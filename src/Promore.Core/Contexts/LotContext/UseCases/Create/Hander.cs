@@ -1,4 +1,3 @@
-using Promore.Core.Contexts.ClientContext.Contracts;
 using Promore.Core.Contexts.LotContext.Contracts;
 using Promore.Core.Contexts.LotContext.Entities;
 using Promore.Core.Contexts.RegionContext.Contracts;
@@ -6,7 +5,7 @@ using Promore.Core.Contexts.UserContext.Contracts;
 
 namespace Promore.Core.Contexts.LotContext.UseCases.Create;
 
-public class Hander(ILotRepository lotRepository, IUserRepository userRepository, IRegionRepository regionRepository, IClientRepository clientRepository)
+public class Hander(ILotRepository lotRepository, IUserRepository userRepository, IRegionRepository regionRepository)
 {
     public async Task<OperationResult<string>> Handle(CreateLotRequest model)
     {

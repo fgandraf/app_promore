@@ -1,15 +1,15 @@
 using Promore.Core.Contexts.UserContext.UseCases.RemoveLotFromUser;
 using Promore.Infra.Repositories.Mock;
 
-namespace Promore.Tests.Core.UseCases;
+namespace Promore.Tests.Core.Contexts.UserContext.UseCases;
 
 [TestClass]
-public class UserTests
+public class UserUseCasesTests
 {
-    private MockContext _context;
-    private UserRepositoryMock _userRepository;
-    private RegionRepositoryMock _regionRepository;
-    private RoleRepositoryMock _roleRepository;
+    private MockContext? _context;
+    private UserRepositoryMock? _userRepository;
+    private RegionRepositoryMock? _regionRepository;
+    private RoleRepositoryMock? _roleRepository;
     
     private const string ExistentLotId = "A10";
     private const string ExistentEmail = "fgandraf@gmail.com";
@@ -31,7 +31,7 @@ public class UserTests
     {
         var model = BuildCreateUserRequest(NotExistentEmail);
         
-        var userNotExists = !_context.Users.Exists(x => x.Email == model.Email);
+        var userNotExists = !_context!.Users.Exists(x => x.Email == model.Email);
         var result = new Promore.Core.Contexts.UserContext.UseCases.Create.Handler(_userRepository,_regionRepository,_roleRepository).Handle(model).Result;
         var created = _context.Users.Exists(x => x.Id == result.Value);
         
@@ -41,7 +41,7 @@ public class UserTests
     [TestMethod]
     public void RemoveLot_User_ReturnsTrue()
     {
-        var userAndLotExists = _context
+        var userAndLotExists = _context!
             .Users
             .FirstOrDefault(x => x.Id == ExistentUserId)!
             .Lots
@@ -62,7 +62,7 @@ public class UserTests
     [TestCategory("Get")]
     public void GetAll_Users_SameCountThanMock()
     {
-        var existentUsers = _context.Users.Count;
+        var existentUsers = _context!.Users.Count;
         
         var result = new Promore.Core.Contexts.UserContext.UseCases.GetAll.Handler(_userRepository).Handle().Result.Value;
         
@@ -102,7 +102,7 @@ public class UserTests
     [TestCategory("Update")]
     public void Update_UserInfo_ReturnsTrue()
     {
-        var existentUserEmail = _context.Users.FirstOrDefault(x => x.Id == ExistentUserId)!.Email;
+        var existentUserEmail = _context!.Users.FirstOrDefault(x => x.Id == ExistentUserId)!.Email;
         var model = BuildUpdateUserInfoRequest(ExistentUserId, NotExistentEmail);
         
         var result = new Promore.Core.Contexts.UserContext.UseCases.UpdateInfo.Handler(_userRepository).Handle(model).Result;
@@ -116,7 +116,7 @@ public class UserTests
     [TestCategory("Update")]
     public void Update_UserSettings_ReturnsTrue()
     {
-        var existentUserActive = _context.Users.FirstOrDefault(x => x.Id == ExistentUserId)!.Active;
+        var existentUserActive = _context!.Users.FirstOrDefault(x => x.Id == ExistentUserId)!.Active;
         var model = BuildUpdateUserSettingsRequest(ExistentUserId);
         
         var result = new Promore.Core.Contexts.UserContext.UseCases.UpdateSettings.Handler(_userRepository, _regionRepository, _roleRepository).Handle(model).Result;
