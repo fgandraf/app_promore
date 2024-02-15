@@ -1,7 +1,6 @@
 using Promore.Core.Contexts.UserContext.Contracts;
-using Promore.Core.Contexts.UserContext.Entities;
 
-namespace Promore.Core.Contexts.UserContext.UseCases.DeleteLotFromUser;
+namespace Promore.Core.Contexts.UserContext.UseCases.RemoveLotFromUser;
 
 public class Handler(IUserRepository userRepository)
 {

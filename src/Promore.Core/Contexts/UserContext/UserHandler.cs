@@ -31,7 +31,7 @@ public class UserHandler(
     public async Task<OperationResult> UpdateInfoAsync(UseCases.UpdateInfo.UpdateUserInfoRequest model)
         => await new UseCases.UpdateInfo.Handler(userRepository).Handle(model); 
     
-    public async Task<OperationResult> DeleteLotFromUserAsync(int userId, string lotId)
-        => await new UseCases.DeleteLotFromUser.Handler(userRepository).Handle(userId,lotId); 
+    public async Task<OperationResult> RemoveLotFromUserAsync(int userId, string lotId)
+        => await new UseCases.RemoveLotFromUser.Handler(userRepository).Handle(userId,lotId); 
 
 }

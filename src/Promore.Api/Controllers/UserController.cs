@@ -78,9 +78,9 @@ public class UserController : ControllerBase
     }
     
     [HttpDelete("lotfromuser/{userId:int},{lotId}")]
-    public IActionResult DeleteLotFromUser(int userId, string lotId)
+    public IActionResult RemoveLotFromUser(int userId, string lotId)
     {
-        var result = _handler.DeleteLotFromUserAsync(userId, lotId).Result;
+        var result = _handler.RemoveLotFromUserAsync(userId, lotId).Result;
         return result.Success ? Ok() : BadRequest(result.Message);
     }
     
