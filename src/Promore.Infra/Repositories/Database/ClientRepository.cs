@@ -1,25 +1,25 @@
 using Microsoft.EntityFrameworkCore;
-using Promore.Core.Contexts.ClientContext.Contracts;
-using Promore.Core.Contexts.ClientContext.Entities;
+using Promore.Core.Handlers;
+using Promore.Core.Models;
+using Promore.Core.Responses.Clients;
 using Promore.Infra.Data;
-using UseCases = Promore.Core.Contexts.ClientContext.UseCases;
 
 namespace Promore.Infra.Repositories.Database;
 
-public class ClientRepository : IClientRepository
+public class ClientRepository : IClientHandler
 {
     private readonly PromoreDataContext _context;
 
     public ClientRepository(PromoreDataContext context)
         => _context = context;
     
-    public async Task<List<UseCases.GetAll.Response>> GetAll()
+    public async Task<List<GetClientsResponse>> GetAll()
     {
         var clients = await _context
             .Clients
             .AsNoTracking()
             .Include(lots => lots.Lot)
-            .Select(client => new UseCases.GetAll.Response
+            .Select(client => new GetClientsResponse
             (
                 client.Id,
                 client.Name,
@@ -34,14 +34,14 @@ public class ClientRepository : IClientRepository
         return clients;
     }
 
-    public async Task<List<UseCases.GetAllByLotId.Response>> GetAllByLotId(string lotId)
+    public async Task<List<GetClientsByLotIdResponse>> GetAllByLotId(string lotId)
     {
         var client = await _context
             .Clients
             .AsNoTracking()
             .Where(x => x.LotId == lotId)
             .Include(lots => lots.Lot)
-            .Select(client => new UseCases.GetAllByLotId.Response
+            .Select(client => new GetClientsByLotIdResponse
             (
                 client.Id,
                 client.Name,
@@ -56,14 +56,14 @@ public class ClientRepository : IClientRepository
         return client;
     }
 
-    public async Task<UseCases.GetById.Response> GetByIdAsync(int id)
+    public async Task<GetClientByIdResponse> GetByIdAsync(int id)
     {
         var client = await _context
             .Clients
             .AsNoTracking()
             .Where(x => x.Id == id)
             .Include(lots => lots.Lot)
-            .Select(client => new UseCases.GetById.Response
+            .Select(client => new GetClientByIdResponse
             (
                 client.Id,
                 client.Name,

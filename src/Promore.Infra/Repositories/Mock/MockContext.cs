@@ -1,8 +1,4 @@
-using Promore.Core.Contexts.ClientContext.Entities;
-using Promore.Core.Contexts.LotContext.Entities;
-using Promore.Core.Contexts.RegionContext.Entities;
-using Promore.Core.Contexts.RoleContext.Entities;
-using Promore.Core.Contexts.UserContext.Entities;
+using Promore.Core.Models;
 using SecureIdentity.Password;
 
 namespace Promore.Infra.Repositories.Mock;

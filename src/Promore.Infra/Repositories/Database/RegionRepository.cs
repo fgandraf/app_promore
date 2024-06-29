@@ -1,24 +1,24 @@
 using Microsoft.EntityFrameworkCore;
-using Promore.Core.Contexts.RegionContext.Contracts;
-using Promore.Core.Contexts.RegionContext.Entities;
+using Promore.Core.Handlers;
+using Promore.Core.Models;
+using Promore.Core.Responses.Regions;
 using Promore.Infra.Data;
-using UseCases = Promore.Core.Contexts.RegionContext.UseCases;
 
 namespace Promore.Infra.Repositories.Database;
 
-public class RegionRepository :IRegionRepository
+public class RegionRepository :IRegionHandler
 {
     private PromoreDataContext _context;
 
     public RegionRepository(PromoreDataContext context)
         => _context = context;
     
-    public async Task<List<UseCases.GetAll.Response>> GetAll()
+    public async Task<List<GetRegionsResponse>> GetAll()
     {
         var regions = await _context
             .Regions
             .AsNoTracking()
-            .Select(region => new UseCases.GetAll.Response
+            .Select(region => new GetRegionsResponse
             (
                 region.Id,
                 region.Name,
@@ -52,13 +52,13 @@ public class RegionRepository :IRegionRepository
         return region;
     }
 
-    public async Task<UseCases.GetById.Response> GetByIdAsync(int id)
+    public async Task<GetRegionsByIdResponse> GetByIdAsync(int id)
     {
         var region = await _context
             .Regions
             .AsNoTracking()
             .Where(x => x.Id == id)
-            .Select(region => new UseCases.GetById.Response
+            .Select(region => new GetRegionsByIdResponse
             (
                 region.Id,
                 region.Name,

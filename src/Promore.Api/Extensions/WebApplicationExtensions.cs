@@ -1,6 +1,4 @@
-using Promore.Core.Contexts.RegionContext.Entities;
-using Promore.Core.Contexts.RoleContext.Entities;
-using Promore.Core.Contexts.UserContext.Entities;
+using Promore.Core.Models;
 using Promore.Infra.Data;
 using SecureIdentity.Password;
 

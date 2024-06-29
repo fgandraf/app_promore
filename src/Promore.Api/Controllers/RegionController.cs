@@ -1,26 +1,22 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Promore.Core.Contexts.RegionContext;
-using Promore.Core.Contexts.RegionContext.UseCases.Create;
-using Promore.Core.Contexts.RegionContext.UseCases.Update;
+using Promore.Api.Services;
+using Promore.Core.Requests.Regions;
 
 namespace Promore.Api.Controllers;
 
 [Authorize]
 [ApiController]
 [Route("v1/regions")]
-public class RegionController : ControllerBase
+public class RegionController(RegionService service) : ControllerBase
 {
-    public readonly RegionHandler _handler;
-    
-    public RegionController(RegionHandler handler)
-        => _handler = handler;
-    
+    public readonly RegionService Service = service;
+
     [Authorize(Roles = "admin")]
     [HttpGet]
     public IActionResult GetAll()
     {
-        var result = _handler.GetAllAsync().Result;
+        var result = Service.GetAllAsync().Result;
         return result.Success ? Ok(result.Value) : BadRequest(result.Message);
     }
     
@@ -28,7 +24,7 @@ public class RegionController : ControllerBase
     [HttpPost]
     public IActionResult Post([FromBody]CreateRegionRequest model)
     {
-        var result = _handler.CreateAsync(model).Result;
+        var result = Service.CreateAsync(model).Result;
         return result.Success ? Ok(result.Value) : BadRequest(result.Message);
     }  
     
@@ -36,7 +32,7 @@ public class RegionController : ControllerBase
     [HttpDelete("{id:int}")]
     public IActionResult Delete(int id)
     {
-        var result = _handler.DeleteAsync(id).Result;
+        var result = Service.DeleteAsync(id).Result;
         return result.Success ? Ok() : BadRequest(result.Message);
     }
     
@@ -44,7 +40,7 @@ public class RegionController : ControllerBase
     [HttpPut]
     public IActionResult Update([FromBody]UpdateRegionRequest model)
     {
-        var result = _handler.UpdateAsync(model).Result;
+        var result = Service.UpdateAsync(model).Result;
         return result.Success ? Ok() : BadRequest(result.Message);
     }
     
@@ -52,7 +48,7 @@ public class RegionController : ControllerBase
     [HttpGet("{id:int}")]
     public IActionResult GetById(int id)
     {
-        var result = _handler.GetByIdAsync(id).Result;
+        var result = Service.GetByIdAsync(id).Result;
         return result.Success ? Ok(result.Value) : BadRequest(result.Message);
     }
 

@@ -1,26 +1,26 @@
 using Microsoft.EntityFrameworkCore;
-using Promore.Core.Contexts.LotContext.Contracts;
-using Promore.Core.Contexts.LotContext.Entities;
+using Promore.Core.Handlers;
+using Promore.Core.Models;
+using Promore.Core.Responses.Lots;
 using Promore.Infra.Data;
-using UseCases = Promore.Core.Contexts.LotContext.UseCases;
 
 namespace Promore.Infra.Repositories.Database;
 
-public class LotRepository : ILotRepository
+public class LotRepository : ILotHandler
 {
     private PromoreDataContext _context;
 
     public LotRepository(PromoreDataContext context)
         => _context = context;
     
-    public async Task<List<UseCases.GetStatusByRegion.Response>> GetStatusByRegion(int regionId)
+    public async Task<List<GetStatusByRegionResponse>> GetStatusByRegion(int regionId)
     {
          var lots = await _context
              .Lots
              .Include(x => x.Region)
              .Where(x => x.Region.Id == regionId)
              .AsNoTracking()
-             .Select(lot => new UseCases.GetStatusByRegion.Response
+             .Select(lot => new GetStatusByRegionResponse
              (
                  lot.Id,
                  lot.Status,
@@ -43,14 +43,14 @@ public class LotRepository : ILotRepository
         return lot;
     }
     
-    public async Task<UseCases.GetById.Response> GetByIdAsync(string id)
+    public async Task<GetLotByIdResponse> GetByIdAsync(string id)
     {
         var lot = await _context
             .Lots
             .AsNoTracking()
             .Where(x => x.Id == id)
             .Include(clients => clients.Clients)
-            .Select(lot => new UseCases.GetById.Response
+            .Select(lot => new GetLotByIdResponse
             (
                 lot.Id,
                 lot.Block,

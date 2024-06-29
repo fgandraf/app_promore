@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Promore.Core.Contexts.LotContext.Entities;
+using Promore.Core.Models;
 
 namespace Promore.Infra.Mappings;
 

@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Promore.Api\Promore.Api.csproj" />
     <ProjectReference Include="..\Promore.Core\Promore.Core.csproj" />
     <ProjectReference Include="..\Promore.Infra\Promore.Infra.csproj" />
   </ItemGroup>

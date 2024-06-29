@@ -1,19 +1,20 @@
 using Microsoft.EntityFrameworkCore;
-using Promore.Core.Contexts.UserContext.Contracts;
-using Promore.Core.Contexts.UserContext.Entities;
+using Promore.Core.Handlers;
+using Promore.Core.Models;
+using Promore.Core.Requests.Users;
+using Promore.Core.Responses.Users;
 using Promore.Infra.Data;
-using UseCases = Promore.Core.Contexts.UserContext.UseCases;
 
 namespace Promore.Infra.Repositories.Database;
 
-public class UserRepository : IUserRepository
+public class UserRepository : IUserHandler
 {
     private PromoreDataContext _context;
 
     public UserRepository(PromoreDataContext context)
         => _context = context;
     
-    public async Task<User> GetUserByLogin(UseCases.GetByLogin.LoginRequest model)
+    public async Task<User> GetUserByLogin(GetUserByLoginRequest model)
     {
         var user = await _context
             .Users
@@ -24,7 +25,7 @@ public class UserRepository : IUserRepository
         return user;
     }
     
-    public async Task<List<UseCases.GetAll.Response>> GetAllAsync()
+    public async Task<List<GetUsersResponse>> GetAllAsync()
     {
         var users = await _context
             .Users
@@ -32,7 +33,7 @@ public class UserRepository : IUserRepository
             .Include(roles => roles.Roles)
             .Include(regions => regions.Regions)
             .Include(lots => lots.Lots)
-            .Select(user => new UseCases.GetAll.Response
+            .Select(user => new GetUsersResponse
             (
                 user.Id,
                 user.Active,
@@ -56,7 +57,7 @@ public class UserRepository : IUserRepository
         return rowsAffected > 0 ? user.Id : 0;
     }
     
-    public async Task<UseCases.GetById.Response> GetByIdAsync(int id)
+    public async Task<GetUserByIdResponse> GetByIdAsync(int id)
     {
         var user = await _context
             .Users
@@ -65,7 +66,7 @@ public class UserRepository : IUserRepository
             .Include(roles => roles.Roles)
             .Include(regions => regions.Regions)
             .Include(lots => lots.Lots)
-            .Select(user => new UseCases.GetById.Response
+            .Select(user => new GetUserByIdResponse
             (
                 user.Id,
                 user.Active,
@@ -82,7 +83,7 @@ public class UserRepository : IUserRepository
         return user;
     }
     
-    public async Task<UseCases.GetByEmail.Response> GetByEmailAsync(string address)
+    public async Task<GetUserByEmailResponse> GetByEmailAsync(string address)
     {
         var user = await _context
             .Users
@@ -91,7 +92,7 @@ public class UserRepository : IUserRepository
             .Include(roles => roles.Roles)
             .Include(regions => regions.Regions)
             .Include(lots => lots.Lots)
-            .Select(user => new UseCases.GetByEmail.Response
+            .Select(user => new GetUserByEmailResponse
             (
                 user.Id,
                 user.Active,

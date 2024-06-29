@@ -6,15 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Promore.Api.Services;
 using Promore.Core;
-using Promore.Core.Contexts.ClientContext;
-using Promore.Core.Contexts.ClientContext.Contracts;
-using Promore.Core.Contexts.LotContext;
-using Promore.Core.Contexts.LotContext.Contracts;
-using Promore.Core.Contexts.RegionContext;
-using Promore.Core.Contexts.RegionContext.Contracts;
-using Promore.Core.Contexts.RoleContext.Contracts;
-using Promore.Core.Contexts.UserContext;
-using Promore.Core.Contexts.UserContext.Contracts;
+using Promore.Core.Handlers;
 using Promore.Infra.Data;
 using Promore.Infra.Repositories.Database;
 using Promore.Infra.Repositories.Mock;
@@ -71,28 +63,28 @@ public static class BuilderExtensions
     {
         if (Configuration.IsMockDataBase)
         {
-            builder.Services.AddScoped<IUserRepository, UserRepositoryMock>();
-            builder.Services.AddScoped<IRegionRepository, RegionRepositoryMock>();
-            builder.Services.AddScoped<IClientRepository, ClientRepositoryMock>();
-            builder.Services.AddScoped<ILotRepository, LotRepositoryMock>();
-            builder.Services.AddScoped<IRoleRepository, RoleRepositoryMock>();
+            builder.Services.AddScoped<IUserHandler, UserHandlerMock>();
+            builder.Services.AddScoped<IRegionHandler, RegionHandlerMock>();
+            builder.Services.AddScoped<IClientHandler, ClientHandlerMock>();
+            builder.Services.AddScoped<ILotHandler, LotHandlerMock>();
+            builder.Services.AddScoped<IRoleHandler, RoleHandlerMock>();
             builder.Services.AddSingleton<MockContext>();
         }
         else
         {
-            builder.Services.AddScoped<IUserRepository, UserRepository>();
-            builder.Services.AddScoped<IRegionRepository, RegionRepository>();
-            builder.Services.AddScoped<IClientRepository, ClientRepository>();
-            builder.Services.AddScoped<ILotRepository, LotRepository>();
-            builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+            builder.Services.AddScoped<IUserHandler, UserRepository>();
+            builder.Services.AddScoped<IRegionHandler, RegionRepository>();
+            builder.Services.AddScoped<IClientHandler, ClientRepository>();
+            builder.Services.AddScoped<ILotHandler, LotRepository>();
+            builder.Services.AddScoped<IRoleHandler, RoleRepository>();
             
             builder.Services.AddScoped<PromoreDataContext>();
         }
         
-        builder.Services.AddScoped<UserHandler>();
-        builder.Services.AddScoped<ClientHandler>();
-        builder.Services.AddScoped<RegionHandler>();
-        builder.Services.AddScoped<LotHandler>();
+        builder.Services.AddScoped<UserService>();
+        builder.Services.AddScoped<ClientService>();
+        builder.Services.AddScoped<RegionService>();
+        builder.Services.AddScoped<LotService>();
         builder.Services.AddScoped<TokenService>();
     }
     
