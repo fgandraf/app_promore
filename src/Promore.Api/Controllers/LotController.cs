@@ -14,32 +14,44 @@ public class LotController(ILotHandler handler) : ControllerBase
     public IActionResult GetStatusByRegion(GetLotsStatusByRegionIdRequest request)
     {
         var result = handler.GetAllStatusByRegionIdAsync(request).Result;
-        //return result.Success ? Ok(result.Value) : BadRequest(result.Message);
-        return Ok(); // Apagar
+        
+        if (!result.IsSuccess)
+            return BadRequest(result.Message);
+        
+        return Ok(result);
     }
     
     [HttpGet("id")]
     public IActionResult GetById(GetLotByIdRequest request)
     {
         var result = handler.GetByIdAsync(request).Result;
-        //return result.Success ? Ok(result.Value) : BadRequest(result.Message);
-        return Ok(); // Apagar
+        
+        if (!result.IsSuccess)
+            return BadRequest(result.Message);
+        
+        return Ok(result);
     }
     
     [HttpPost]
     public IActionResult Post(CreateLotRequest request)
     {
         var result = handler.CreateAsync(request).Result;
-        //return result.Success ? Ok(result.Value) : BadRequest(result.Message);
-        return Ok(); // Apagar
+        
+        if (!result.IsSuccess)
+            return BadRequest(result.Message);
+        
+        return Ok(result);
     }   
    
     [HttpPut]
     public IActionResult Update(UpdateLotRequest request)
     {
         var result = handler.UpdateAsync(request).Result;
-        //return result.Success ? Ok() : BadRequest(result.Message);
-        return Ok(); // Apagar
+        
+        if (!result.IsSuccess)
+            return BadRequest(result.Message);
+        
+        return Ok(result);
     }
     
     [Authorize(Roles = "admin")]
@@ -47,8 +59,11 @@ public class LotController(ILotHandler handler) : ControllerBase
     public IActionResult Delete(DeleteLotRequest request)
     {
         var result = handler.DeleteAsync(request).Result;
-        //return result.Success ? Ok() : BadRequest(result.Message);
-        return Ok(); // Apagar
+        
+        if (!result.IsSuccess)
+            return BadRequest(result.Message);
+        
+        return Ok(result);
     }
     
 }

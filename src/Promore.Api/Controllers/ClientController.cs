@@ -15,16 +15,22 @@ public class ClientController(IClientHandler handler) : ControllerBase
     public IActionResult GetAll(GetAllClientsRequest request)
     {
         var result = handler.GetAllAsync(request).Result;
-        //return result.Success ? Ok(result.Value) : BadRequest(result.Message);
-        return Ok(); // Apagar
+        
+        if (!result.IsSuccess)
+            return BadRequest(result.Message);
+        
+        return Ok(result);
     }
     
     [HttpGet("lot")]
     public IActionResult GetAllByLotId(GetAllClientsByLotIdRequest request)
     {
         var result = handler.GetAllByLotIdAsync(request).Result;
-        //return result.Success ? Ok(result.Value) : BadRequest(result.Message);
-        return Ok(); // Apagar
+        
+        if (!result.IsSuccess)
+            return BadRequest(result.Message);
+        
+        return Ok(result);
     }
     
     
@@ -32,32 +38,44 @@ public class ClientController(IClientHandler handler) : ControllerBase
     public IActionResult GetById(GetClientByIdRequest request)
     {
         var result = handler.GetByIdAsync(request).Result;
-        //return result.Success ? Ok(result.Value) : BadRequest(result.Message);
-        return Ok(); // Apagar
+        
+        if (!result.IsSuccess)
+            return BadRequest(result.Message);
+        
+        return Ok(result);
     }
     
     [HttpPost]
     public IActionResult Post(CreateClientRequest request)
     {
         var result = handler.CreateAsync(request).Result;
-        //return result.Success ? Ok(result.Value) : BadRequest(result.Message);
-        return Ok(); // Apagar
+        
+        if (!result.IsSuccess)
+            return BadRequest(result.Message);
+        
+        return Ok(result);
     }   
    
     [HttpPut]
     public IActionResult Update(UpdateClientRequest request)
     {
         var result = handler.UpdateAsync(request).Result;
-        //return result.Success ? Ok() : BadRequest(result.Message);
-        return Ok(); //apagar
+        
+        if (!result.IsSuccess)
+            return BadRequest(result.Message);
+        
+        return Ok(result);
     }
     
     [HttpDelete]
     public IActionResult Delete(DeleteClientRequest request)
     {
         var result = handler.DeleteAsync(request).Result;
-        //return result.Success ? Ok() : BadRequest(result.Message);
-        return Ok(); //apagar
+        
+        if (!result.IsSuccess)
+            return BadRequest(result.Message);
+        
+        return Ok(result);
     }
     
 }
