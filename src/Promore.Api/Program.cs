@@ -7,8 +7,8 @@ builder.AddDatabase();
 builder.AddJwtAuthentication();
 builder.AddAuthorizationPolicies();
 builder.JsonIgnoreCycles();
-builder.AddRepositoryServices();
-builder.AddSwaggerConfigurations();
+builder.AddDependencies();
+builder.AddDocumentation();
 
 var app = builder.Build();
 
@@ -18,7 +18,6 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-
 app.InitiateEmptyDataBase();
 
 app.Run();

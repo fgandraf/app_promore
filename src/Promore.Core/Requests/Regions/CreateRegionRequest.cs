@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Promore.Core.Requests.Regions;
 
-public class CreateRegionRequest
+public class CreateRegionRequest : Request
 {
     [Required(ErrorMessage = "O campo 'Name' é obrigatório.")]
     [MaxLength(100)]

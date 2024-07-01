@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Promore.Core.Requests.Users;
 
-public class UpdateUserInfoRequest
+public class UpdateUserInfoRequest : Request
 {
     [Required(ErrorMessage = "O campo 'Id' é obrigatório.")]
     [DefaultValue("")]

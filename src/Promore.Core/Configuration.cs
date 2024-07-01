@@ -7,6 +7,7 @@ public static class Configuration
     public static bool IsMockDataBase { get; set; } = false;
     
     
+    
     public class DatabaseConfiguration
     {
         public string ConnectionString { get; set; } = string.Empty;

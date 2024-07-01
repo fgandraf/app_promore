@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Promore.Core.Requests.Regions;
 
-public class UpdateRegionRequest
+public class UpdateRegionRequest : Request
 {
     [Required(ErrorMessage = "O campo 'Id' é obrigatório.")]
     [DefaultValue("")]

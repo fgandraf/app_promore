@@ -1,6 +1,6 @@
+using Promore.Api.Data;
 using Promore.Core.Models;
-using Promore.Infra.Data;
-using SecureIdentity.Password;
+using SecureIdentity3.Password;
 
 namespace Promore.Api.Extensions;
 

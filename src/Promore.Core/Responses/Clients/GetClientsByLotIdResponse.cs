@@ -7,5 +7,5 @@ public record GetClientsByLotIdResponse(
     string Phone, 
     string MothersName, 
     DateTime BirthdayDate, 
-    string LotId
+    int LotId
     );

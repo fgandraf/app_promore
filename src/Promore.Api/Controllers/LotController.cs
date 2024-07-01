@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Promore.Api.Services;
+using Promore.Core.Handlers;
 using Promore.Core.Requests.Lots;
 
 namespace Promore.Api.Controllers;
@@ -8,41 +8,41 @@ namespace Promore.Api.Controllers;
 [Authorize]
 [ApiController]
 [Route("v1/lots")]
-public class LotController(LotService service) : ControllerBase
+public class LotController(ILotHandler handler) : ControllerBase
 {
-    [HttpGet("status/{regionId:int}")]
-    public IActionResult GetStatusByRegion(int regionId)
+    [HttpGet("status")]
+    public IActionResult GetStatusByRegion(GetLotsStatusByRegionIdRequest request)
     {
-        var result = service.GetStatusByRegionAsync(regionId).Result;
+        var result = handler.GetStatusByRegionAsync(request).Result;
         return result.Success ? Ok(result.Value) : BadRequest(result.Message);
     }
     
-    [HttpGet("{id}")]
-    public IActionResult GetById(string id)
+    [HttpGet("id")]
+    public IActionResult GetById(GetLotByIdRequest request)
     {
-        var result = service.GetByIdAsync(id).Result;
+        var result = handler.GetByIdAsync(request).Result;
         return result.Success ? Ok(result.Value) : BadRequest(result.Message);
     }
     
     [HttpPost]
-    public IActionResult Post([FromBody]CreateLotRequest model)
+    public IActionResult Post(CreateLotRequest request)
     {
-        var result = service.CreateAsync(model).Result;
+        var result = handler.CreateAsync(request).Result;
         return result.Success ? Ok(result.Value) : BadRequest(result.Message);
     }   
    
     [HttpPut]
-    public IActionResult Update([FromBody]UpdateLotRequest model)
+    public IActionResult Update(UpdateLotRequest request)
     {
-        var result = service.UpdateAsync(model).Result;
+        var result = handler.UpdateAsync(request).Result;
         return result.Success ? Ok() : BadRequest(result.Message);
     }
     
     [Authorize(Roles = "admin")]
-    [HttpDelete("{id}")]
-    public IActionResult Delete(string id)
+    [HttpDelete]
+    public IActionResult Delete(DeleteLotRequest request)
     {
-        var result = service.DeleteAsync(id).Result;
+        var result = handler.DeleteAsync(request).Result;
         return result.Success ? Ok() : BadRequest(result.Message);
     }
     

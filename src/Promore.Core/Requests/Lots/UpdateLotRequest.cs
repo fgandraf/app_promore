@@ -3,12 +3,17 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Promore.Core.Requests.Lots;
 
-public class UpdateLotRequest
+public class UpdateLotRequest : Request
 {
     [Required(ErrorMessage = "O campo 'Id' é obrigatório.")]
-    [MaxLength(5)]
-    [DefaultValue("")]
-    public string Id { get; set; }
+    public int Id { get; set; }
+    
+    [Required(ErrorMessage = "O campo 'Block' é obrigatória.")]
+    [MaxLength(2)]
+    public string Block { get; set; }
+    
+    [Required(ErrorMessage = "O campo 'Number' é obrigatório.")]
+    public int Number { get; set; }
     
     public DateTime SurveyDate { get; set; }
     

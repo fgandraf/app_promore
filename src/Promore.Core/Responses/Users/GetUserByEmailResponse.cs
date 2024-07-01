@@ -10,5 +10,5 @@ public record GetUserByEmailResponse(
     string Profession,
     List<int> Roles,
     List<int> Regions,
-    List<string> Lots
+    List<int> Lots
 );

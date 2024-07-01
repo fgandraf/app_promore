@@ -3,12 +3,8 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>disable</Nullable>
+    <Nullable>enable</Nullable>
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="SecureIdentity" Version="1.0.4" />
-  </ItemGroup>
 
 </Project>

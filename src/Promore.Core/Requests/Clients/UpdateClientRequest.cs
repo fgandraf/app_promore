@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Promore.Core.Requests.Clients;
 
-public class UpdateClientRequest
+public class UpdateClientRequest : Request
 {
     [Required(ErrorMessage = "O campo 'Id' é obrigatório.")]
     [DefaultValue("")]
@@ -23,14 +23,12 @@ public class UpdateClientRequest
     [Length(11,11,ErrorMessage = "'Phone' deve conter 11 números.")]
     [DefaultValue("")]
     public string Phone { get; set; }
-    
-    [MaxLength(100)]
-    public string MothersName { get; set; }
+
+    [MaxLength(100)] 
+    public string MothersName { get; set; } = string.Empty;
     
     public DateTime BirthdayDate { get; set; }
     
     [Required(ErrorMessage = "O campo 'LotId' é obrigatório.")]
-    [MaxLength(5)]
-    [DefaultValue("")]
-    public string LotId { get; set; }
+    public int LotId { get; set; }
 }

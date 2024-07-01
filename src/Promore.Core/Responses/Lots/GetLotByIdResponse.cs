@@ -1,7 +1,7 @@
 namespace Promore.Core.Responses.Lots;
 
 public record GetLotByIdResponse (
-     string Id,
+     int Id,
      string Block,
      int Number,
      DateTime SurveyDate,

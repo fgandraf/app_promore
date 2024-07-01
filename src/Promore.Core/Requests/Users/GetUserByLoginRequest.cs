@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Promore.Core.Requests.Users;
 
-public record GetUserByLoginRequest
+public class GetUserByLoginRequest : Request
 {
     [Required]
     [EmailAddress]

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Promore.Api.Services;
+using Promore.Core.Handlers;
 using Promore.Core.Requests.Regions;
 
 namespace Promore.Api.Controllers;
@@ -8,47 +8,45 @@ namespace Promore.Api.Controllers;
 [Authorize]
 [ApiController]
 [Route("v1/regions")]
-public class RegionController(RegionService service) : ControllerBase
+public class RegionController(IRegionHandler handler) : ControllerBase
 {
-    public readonly RegionService Service = service;
-
     [Authorize(Roles = "admin")]
     [HttpGet]
-    public IActionResult GetAll()
+    public IActionResult GetAll(GetAllRegionsRequest request)
     {
-        var result = Service.GetAllAsync().Result;
+        var result = handler.GetAllAsync(request).Result;
         return result.Success ? Ok(result.Value) : BadRequest(result.Message);
     }
     
     [Authorize(Roles = "admin")]
     [HttpPost]
-    public IActionResult Post([FromBody]CreateRegionRequest model)
+    public IActionResult Post(CreateRegionRequest request)
     {
-        var result = Service.CreateAsync(model).Result;
+        var result = handler.CreateAsync(request).Result;
         return result.Success ? Ok(result.Value) : BadRequest(result.Message);
     }  
     
     [Authorize(Roles = "admin")]
-    [HttpDelete("{id:int}")]
-    public IActionResult Delete(int id)
+    [HttpDelete]
+    public IActionResult Delete(DeleteRegionRequest request)
     {
-        var result = Service.DeleteAsync(id).Result;
+        var result = handler.DeleteAsync(request).Result;
         return result.Success ? Ok() : BadRequest(result.Message);
     }
     
     [Authorize(Roles = "admin, manager")]
     [HttpPut]
-    public IActionResult Update([FromBody]UpdateRegionRequest model)
+    public IActionResult Update(UpdateRegionRequest request)
     {
-        var result = Service.UpdateAsync(model).Result;
+        var result = handler.UpdateAsync(request).Result;
         return result.Success ? Ok() : BadRequest(result.Message);
     }
     
     
-    [HttpGet("{id:int}")]
-    public IActionResult GetById(int id)
+    [HttpGet("id")]
+    public IActionResult GetById(GetRegionByIdRequest request)
     {
-        var result = Service.GetByIdAsync(id).Result;
+        var result = handler.GetByIdAsync(request).Result;
         return result.Success ? Ok(result.Value) : BadRequest(result.Message);
     }
 

@@ -4,12 +4,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Promore.Api.Data;
+using Promore.Api.Handlers;
 using Promore.Api.Services;
 using Promore.Core;
 using Promore.Core.Handlers;
-using Promore.Infra.Data;
-using Promore.Infra.Repositories.Database;
-using Promore.Infra.Repositories.Mock;
 
 namespace Promore.Api.Extensions;
 
@@ -17,7 +16,7 @@ public static class BuilderExtensions
 {
     public static void AddConfigurationKeys(this WebApplicationBuilder builder)
     {
-        Configuration.Database.ConnectionString = builder.Configuration.GetConnectionString("Default");
+        Configuration.Database.ConnectionString = builder.Configuration.GetConnectionString("Default")!;
         Configuration.Secrets.JwtPrivateKey = builder.Configuration.GetSection("Secrets").GetValue<string>("JwtPrivateKey") ?? string.Empty;
         Configuration.IsMockDataBase = builder.Configuration.GetValue<bool>("MockDataSource");
     }
@@ -26,8 +25,7 @@ public static class BuilderExtensions
     {
         builder.Services.AddDbContext<PromoreDataContext>(options =>
             options.UseSqlServer(
-                Configuration.Database.ConnectionString,
-                b => b.MigrationsAssembly("Promore.Api")
+                Configuration.Database.ConnectionString
                 )
             );
     }
@@ -59,37 +57,35 @@ public static class BuilderExtensions
             x.AddPolicy("manager", p => p.RequireRole("manager"));
         });
         
-    public static void AddRepositoryServices(this WebApplicationBuilder builder)
+    public static void AddDependencies(this WebApplicationBuilder builder)
     {
-        if (Configuration.IsMockDataBase)
-        {
-            builder.Services.AddScoped<IUserHandler, UserHandlerMock>();
-            builder.Services.AddScoped<IRegionHandler, RegionHandlerMock>();
-            builder.Services.AddScoped<IClientHandler, ClientHandlerMock>();
-            builder.Services.AddScoped<ILotHandler, LotHandlerMock>();
-            builder.Services.AddScoped<IRoleHandler, RoleHandlerMock>();
-            builder.Services.AddSingleton<MockContext>();
-        }
-        else
-        {
-            builder.Services.AddScoped<IUserHandler, UserRepository>();
-            builder.Services.AddScoped<IRegionHandler, RegionRepository>();
-            builder.Services.AddScoped<IClientHandler, ClientRepository>();
-            builder.Services.AddScoped<ILotHandler, LotRepository>();
-            builder.Services.AddScoped<IRoleHandler, RoleRepository>();
+        // if (Configuration.IsMockDataBase)
+        // {
+        //     builder.Services.AddScoped<IUserHandler, UserHandlerMock>();
+        //     builder.Services.AddScoped<IRegionHandler, RegionHandlerMock>();
+        //     builder.Services.AddScoped<IClientHandler, ClientHandlerMock>();
+        //     builder.Services.AddScoped<ILotHandler, LotHandlerMock>();
+        //     builder.Services.AddScoped<IRoleHandler, RoleHandlerMock>();
+        //     builder.Services.AddSingleton<MockContext>();
+        // }
+        // else
+        // {
+            builder.Services.AddScoped<IUserHandler, UserHandler>();
+            builder.Services.AddScoped<IRegionHandler, RegionHandler>();
+            builder.Services.AddScoped<IClientHandler, ClientHandler>();
+            builder.Services.AddScoped<ILotHandler, LotHandler>();
+            builder.Services.AddScoped<IRoleHandler, RoleHandler>();
             
             builder.Services.AddScoped<PromoreDataContext>();
-        }
+        //}
         
-        builder.Services.AddScoped<UserService>();
-        builder.Services.AddScoped<ClientService>();
-        builder.Services.AddScoped<RegionService>();
-        builder.Services.AddScoped<LotService>();
         builder.Services.AddScoped<TokenService>();
     }
     
-    public static void AddSwaggerConfigurations(this WebApplicationBuilder builder)
+    public static void AddDocumentation(this WebApplicationBuilder builder)
     {
+        builder.Services.AddEndpointsApiExplorer();
+        
         builder.Services.AddSwaggerGen(setup =>
         {
             var jwtSecurityScheme = new OpenApiSecurityScheme
@@ -114,6 +110,8 @@ public static class BuilderExtensions
             {
                 { jwtSecurityScheme, Array.Empty<string>() }
             });
+            
+            setup.CustomSchemaIds(n => n.FullName);
 
         });
     }

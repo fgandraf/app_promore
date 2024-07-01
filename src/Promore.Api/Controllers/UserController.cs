@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Promore.Api.Services;
+using Promore.Core.Handlers;
 using Promore.Core.Requests.Users;
 
 namespace Promore.Api.Controllers;
@@ -8,66 +9,66 @@ namespace Promore.Api.Controllers;
 [Authorize]
 [ApiController]
 [Route("v1/users")]
-public class UserController(UserService service, TokenService tokenService) : ControllerBase
+public class UserController(IUserHandler handler, TokenService tokenService) : ControllerBase
 {
     [AllowAnonymous]
     [HttpPost("login")]
-    public IActionResult Login([FromBody]GetUserByLoginRequest model)
+    public IActionResult Login(GetUserByLoginRequest request)
     {
-        var result = service.GetUserByLoginAsync(model).Result;
+        var result = handler.GetUserByLoginAsync(request).Result;
         return result.Success ? Ok(tokenService.GenerateToken(result.Value)) : BadRequest(result.Message);
     }
     
     [Authorize(Roles = "admin")]
     [HttpGet]
-    public IActionResult GetAll()
+    public IActionResult GetAll(GetAllUsersRequest request)
     {
-        var result = service.GetAllAsync().Result;
+        var result = handler.GetAllAsync(request).Result;
         return result.Success ? Ok(result.Value) : BadRequest(result.Message);
     }
     
     [Authorize(Roles = "admin")]
     [HttpPost]
-    public IActionResult Post([FromBody]CreateUserRequest model)
+    public IActionResult Post(CreateUserRequest request)
     {
-        var result = service.CreateAsync(model).Result;
+        var result = handler.CreateAsync(request).Result;
         return result.Success ? Ok(result.Value) : BadRequest(result.Message);
     }
     
     [Authorize(Roles = "admin")]
     [HttpPut("settings")]
-    public IActionResult UpdateSettings([FromBody]UpdateUserSettingsRequest model)
+    public IActionResult UpdateSettings(UpdateUserSettingsRequest request)
     {
-        var result = service.UpdateSettingsAsync(model).Result;
+        var result = handler.UpdateSettingsAsync(request).Result;
         return result.Success ? Ok() : BadRequest(result.Message);
     }
     
-    [HttpGet("id/{id:int}")]
-    public IActionResult GetById(int id)
+    [HttpGet("id")]
+    public IActionResult GetById(GetUserByIdRequest request)
     {
-        var result = service.GetByIdAsync(id).Result;
+        var result = handler.GetByIdAsync(request).Result;
         return result.Success ? Ok(result.Value) : BadRequest(result.Message);
     }
     
-    [HttpGet("email/{address}")]
-    public IActionResult GetByEmail(string address)
+    [HttpGet("email")]
+    public IActionResult GetByEmail(GetUserByEmailRequest request)
     {
-        var result = service.GetByEmailAsync(address).Result;
+        var result = handler.GetByEmailAsync(request).Result;
         return result.Success ? Ok(result.Value) : BadRequest(result.Message);
     }
     
     [HttpPut]
     [HttpPut("info")]
-    public IActionResult UpdateInfo([FromBody]UpdateUserInfoRequest model)
+    public IActionResult UpdateInfo(UpdateUserInfoRequest request)
     {
-        var result = service.UpdateInfoAsync(model).Result;
+        var result = handler.UpdateInfoAsync(request).Result;
         return result.Success ? Ok() : BadRequest(result.Message);
     }
     
-    [HttpDelete("lotfromuser/{userId:int},{lotId}")]
-    public IActionResult RemoveLotFromUser(int userId, string lotId)
+    [HttpPut("lot-from-user")]
+    public IActionResult RemoveLotFromUser(RemoveLotFromUserRequest request)
     {
-        var result = service.RemoveLotFromUserAsync(userId, lotId).Result;
+        var result = handler.RemoveLotFromUserAsync(request).Result;
         return result.Success ? Ok() : BadRequest(result.Message);
     }
     

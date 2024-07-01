@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Promore.Api.Services;
+using Promore.Core.Handlers;
 using Promore.Core.Requests.Clients;
 
 namespace Promore.Api.Controllers;
@@ -8,49 +8,49 @@ namespace Promore.Api.Controllers;
 [Authorize]
 [ApiController]
 [Route("v1/clients")]
-public class ClientController(ClientService service) : ControllerBase
+public class ClientController(IClientHandler handler) : ControllerBase
 {
     [Authorize(Roles = "admin")]
     [HttpGet]
-    public IActionResult GetAll()
+    public IActionResult GetAll(GetAllClientsRequest request)
     {
-        var result = service.GetAllAsync().Result;
+        var result = handler.GetAllAsync(request).Result;
         return result.Success ? Ok(result.Value) : BadRequest(result.Message);
     }
     
-    [HttpGet("lot/{lotId}")]
-    public IActionResult GetAllByLotId(string lotId)
+    [HttpGet("lot")]
+    public IActionResult GetAllByLotId(GetAllClientsByLotIdRequest request)
     {
-        var result = service.GetAllByLotIdAsync(lotId).Result;
+        var result = handler.GetAllByLotIdAsync(request).Result;
         return result.Success ? Ok(result.Value) : BadRequest(result.Message);
     }
     
     
-    [HttpGet("{id:int}")]
-    public IActionResult GetById(int id)
+    [HttpGet("id")]
+    public IActionResult GetById(GetClientByIdRequest request)
     {
-        var result = service.GetByIdAsync(id).Result;
+        var result = handler.GetClientByIdAsync(request).Result;
         return result.Success ? Ok(result.Value) : BadRequest(result.Message);
     }
     
     [HttpPost]
-    public IActionResult Post([FromBody]CreateClientRequest model)
+    public IActionResult Post(CreateClientRequest request)
     {
-        var result = service.CreateAsync(model).Result;
+        var result = handler.CreateAsync(request).Result;
         return result.Success ? Ok(result.Value) : BadRequest(result.Message);
     }   
    
     [HttpPut]
-    public IActionResult Update([FromBody]UpdateClientRequest model)
+    public IActionResult Update(UpdateClientRequest request)
     {
-        var result = service.UpdateAsync(model).Result;
+        var result = handler.UpdateAsync(request).Result;
         return result.Success ? Ok() : BadRequest(result.Message);
     }
     
-    [HttpDelete("{id:int}")]
-    public IActionResult Delete(int id)
+    [HttpDelete]
+    public IActionResult Delete(DeleteClientRequest request)
     {
-        var result = service.DeleteAsync(id).Result;
+        var result = handler.DeleteAsync(request).Result;
         return result.Success ? Ok() : BadRequest(result.Message);
     }
     

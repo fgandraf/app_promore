@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Promore.Core.Requests.Users;
 
-public class CreateUserRequest
+public class CreateUserRequest : Request
 {
     [Required(ErrorMessage = "O campo 'Active' é obrigatório.")]
     [DefaultValue(false)]
