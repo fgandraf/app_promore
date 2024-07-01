@@ -20,13 +20,14 @@ public class UserController(IUserHandler handler, TokenService tokenService) : C
         if (!result.IsSuccess)
             return BadRequest(result.Message);
         
-        return Ok(result);
+        return Ok(tokenService.GenerateToken(result.Data!));
     }
     
     [Authorize(Roles = "admin")]
     [HttpGet]
-    public IActionResult GetAll(GetAllUsersRequest request)
+    public IActionResult GetAll()
     {
+        var request = new GetAllUsersRequest();
         var result = handler.GetAllAsync(request).Result;
         
         if (!result.IsSuccess)
@@ -59,9 +60,10 @@ public class UserController(IUserHandler handler, TokenService tokenService) : C
         return Ok(result);
     }
     
-    [HttpGet("id")]
-    public IActionResult GetById(GetUserByIdRequest request)
+    [HttpGet("id/{id}")]
+    public IActionResult GetById(int id)
     {
+        var request = new GetUserByIdRequest { Id = id };
         var result = handler.GetByIdAsync(request).Result;
         
         if (!result.IsSuccess)
@@ -70,9 +72,10 @@ public class UserController(IUserHandler handler, TokenService tokenService) : C
         return Ok(result);
     }
     
-    [HttpGet("email")]
-    public IActionResult GetByEmail(GetUserByEmailRequest request)
+    [HttpGet("email/{email}")]
+    public IActionResult GetByEmail(string email)
     {
+        var request = new GetUserByEmailRequest { Email = email };
         var result = handler.GetByEmailAsync(request).Result;
         
         if (!result.IsSuccess)
@@ -93,7 +96,7 @@ public class UserController(IUserHandler handler, TokenService tokenService) : C
         return Ok(result);
     }
     
-    [HttpPut("lot-from-user")]
+    [HttpPut("remove-lot")]
     public IActionResult RemoveLotFromUser(RemoveLotFromUserRequest request)
     {
         var result = handler.RemoveLotFromUserAsync(request).Result;

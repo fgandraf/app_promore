@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Promore.Api", "Promore.Api\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Promore.Core", "Promore.Core\Promore.Core.csproj", "{D3F7B03F-FDFA-4C2E-8BCB-F649835D3AB4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Promore.Tests", "Promore.Tests\Promore.Tests.csproj", "{5D35CAD8-1E39-48C1-AA89-CD2A28414318}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{D3F7B03F-FDFA-4C2E-8BCB-F649835D3AB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3F7B03F-FDFA-4C2E-8BCB-F649835D3AB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3F7B03F-FDFA-4C2E-8BCB-F649835D3AB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D35CAD8-1E39-48C1-AA89-CD2A28414318}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D35CAD8-1E39-48C1-AA89-CD2A28414318}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D35CAD8-1E39-48C1-AA89-CD2A28414318}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D35CAD8-1E39-48C1-AA89-CD2A28414318}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

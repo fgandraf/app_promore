@@ -209,10 +209,10 @@ public class UserHandler(PromoreDataContext context) : IUserHandler
                     user.Lots.Select(x => x.Id).ToList()
                 ))
                 .FirstOrDefaultAsync();
-            if (user is null)
-                return new Response<GetUserResponse?>(null, 404, $"Usuário '{request.Id}' não encontrado!");
-
-            return new Response<GetUserResponse?>(user);
+            
+            return user is null 
+                ? new Response<GetUserResponse?>(null, 404, $"Usuário '{request.Id}' não encontrado!") 
+                : new Response<GetUserResponse?>(user);
         }
         catch
         {
@@ -244,10 +244,10 @@ public class UserHandler(PromoreDataContext context) : IUserHandler
                     user.Lots.Select(x => x.Id).ToList()
                 ))
                 .FirstOrDefaultAsync();
-            if (user is null)
-                return new Response<GetUserResponse?>(null, 404, $"Usuário '{request.Email}' não encontrado!");
-
-            return new Response<GetUserResponse?>(user);
+            
+            return user is null 
+                ? new Response<GetUserResponse?>(null, 404, $"Usuário '{request.Email}' não encontrado!") 
+                : new Response<GetUserResponse?>(user);
         }
         catch
         {
@@ -268,10 +268,9 @@ public class UserHandler(PromoreDataContext context) : IUserHandler
             if (user is null || !user.Active)
                 return new Response<User?>(null, 404, $"Usuário '{request.Email}' não encontrado ou não está ativo!");
 
-            if (!PasswordHasher.Verify(user.PasswordHash, request.Password))
-                return new Response<User?>(null, 400, "Usuário ou senha inválida!");
-
-            return new Response<User?>(user);
+            return !PasswordHasher.Verify(user.PasswordHash, request.Password) 
+                ? new Response<User?>(null, 400, "Usuário ou senha inválida!") 
+                : new Response<User?>(user);
         }
         catch
         {
@@ -305,10 +304,9 @@ public class UserHandler(PromoreDataContext context) : IUserHandler
                 .Take(request.PageSize)
                 .ToListAsync();
 
-            if (users.Count == 0)
-                return new Response<List<GetUsersResponse>?>(null, 404, "Nenhum usuário cadastrado!");
-
-            return new Response<List<GetUsersResponse>?>(users);
+            return users.Count == 0 
+                ? new Response<List<GetUsersResponse>?>(null, 404, "Nenhum usuário cadastrado!") 
+                : new Response<List<GetUsersResponse>?>(users);
         }
         catch
         {

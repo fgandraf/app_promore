@@ -17,10 +17,10 @@ public class RoleHandler(PromoreDataContext context) : IRoleHandler
                 .Roles
                 .Where(role => request.RolesIds.Contains(role.Id))
                 .ToListAsync();
-            if (roles.Count == 0)
-                return new Response<List<Role>?>(null, 404, "Nenhum papel cadastrado!");
-
-            return new Response<List<Role>?>(roles);
+            
+            return roles.Count == 0 
+                ? new Response<List<Role>?>(null, 404, "Nenhum papel cadastrado!") 
+                : new Response<List<Role>?>(roles);
         }
         catch
         {

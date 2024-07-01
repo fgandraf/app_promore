@@ -141,10 +141,10 @@ public class LotHandler(PromoreDataContext context) : ILotHandler
                 .Where(x => x.Id == request.Id)
                 .Include(clients => clients.Clients)
                 .FirstOrDefaultAsync();
-            if (lot is null)
-                return new Response<Lot?>(null, 404, $"Lote '{request.Id}' não encontrado!");
             
-            return new Response<Lot?>(lot);
+            return lot is null 
+                ? new Response<Lot?>(null, 404, $"Lote '{request.Id}' não encontrado!") 
+                : new Response<Lot?>(lot);
         }
         catch
         {

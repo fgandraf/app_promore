@@ -12,8 +12,9 @@ public class ClientController(IClientHandler handler) : ControllerBase
 {
     [Authorize(Roles = "admin")]
     [HttpGet]
-    public IActionResult GetAll(GetAllClientsRequest request)
+    public IActionResult GetAll()
     {
+        var request = new GetAllClientsRequest();
         var result = handler.GetAllAsync(request).Result;
         
         if (!result.IsSuccess)
@@ -22,9 +23,10 @@ public class ClientController(IClientHandler handler) : ControllerBase
         return Ok(result);
     }
     
-    [HttpGet("lot")]
-    public IActionResult GetAllByLotId(GetAllClientsByLotIdRequest request)
+    [HttpGet("lot/{lotId}")]
+    public IActionResult GetAllByLotId(int lotId)
     {
+        var request = new GetAllClientsByLotIdRequest { LotId = lotId };
         var result = handler.GetAllByLotIdAsync(request).Result;
         
         if (!result.IsSuccess)
@@ -34,9 +36,10 @@ public class ClientController(IClientHandler handler) : ControllerBase
     }
     
     
-    [HttpGet("id")]
-    public IActionResult GetById(GetClientByIdRequest request)
+    [HttpGet("id/{id}")]
+    public IActionResult GetById(int id)
     {
+        var request = new GetClientByIdRequest { Id = id };
         var result = handler.GetByIdAsync(request).Result;
         
         if (!result.IsSuccess)
@@ -67,9 +70,10 @@ public class ClientController(IClientHandler handler) : ControllerBase
         return Ok(result);
     }
     
-    [HttpDelete]
-    public IActionResult Delete(DeleteClientRequest request)
+    [HttpDelete("{id}")]
+    public IActionResult Delete(int id)
     {
+        var request = new DeleteClientRequest { Id = id };
         var result = handler.DeleteAsync(request).Result;
         
         if (!result.IsSuccess)

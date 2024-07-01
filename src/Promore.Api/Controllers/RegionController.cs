@@ -12,9 +12,22 @@ public class RegionController(IRegionHandler handler) : ControllerBase
 {
     [Authorize(Roles = "admin")]
     [HttpGet]
-    public IActionResult GetAll(GetAllRegionsRequest request)
+    public IActionResult GetAll()
     {
+        var request = new GetAllRegionsRequest();
         var result = handler.GetAllAsync(request).Result;
+        
+        if (!result.IsSuccess)
+            return BadRequest(result.Message);
+        
+        return Ok(result);
+    }
+    
+    [HttpGet("id/{id}")]
+    public IActionResult GetById(int id)
+    {
+        var request = new GetRegionByIdRequest { Id = id };
+        var result = handler.GetByIdAsync(request).Result;
         
         if (!result.IsSuccess)
             return BadRequest(result.Message);
@@ -35,9 +48,10 @@ public class RegionController(IRegionHandler handler) : ControllerBase
     }  
     
     [Authorize(Roles = "admin")]
-    [HttpDelete]
-    public IActionResult Delete(DeleteRegionRequest request)
+    [HttpDelete("{id}")]
+    public IActionResult Delete(int id)
     {
+        var request = new DeleteRegionRequest { Id = id };
         var result = handler.DeleteAsync(request).Result;
         
         if (!result.IsSuccess)
@@ -59,15 +73,6 @@ public class RegionController(IRegionHandler handler) : ControllerBase
     }
     
     
-    [HttpGet("id")]
-    public IActionResult GetById(GetRegionByIdRequest request)
-    {
-        var result = handler.GetByIdAsync(request).Result;
-        
-        if (!result.IsSuccess)
-            return BadRequest(result.Message);
-        
-        return Ok(result);
-    }
+    
 
 }

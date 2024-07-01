@@ -52,7 +52,6 @@ public class ClientHandler(PromoreDataContext context) : IClientHandler
         {
             var client = await context
                 .Clients
-                .AsNoTracking()
                 .Where(x => x.Id == request.Id)
                 .Include(lots => lots.Lot)
                 .FirstOrDefaultAsync();
@@ -116,10 +115,10 @@ public class ClientHandler(PromoreDataContext context) : IClientHandler
                 .Where(x => x.Id == request.Id)
                 .Include(lots => lots.Lot)
                 .FirstOrDefaultAsync();
-            if (client is null)
-                return new Response<Client?>(null, 404, $"Cliente '{request.Id}' não encontrado!");
             
-            return new Response<Client?>(client);
+            return client is null 
+                ? new Response<Client?>(null, 404, $"Cliente '{request.Id}' não encontrado!") 
+                : new Response<Client?>(client);
         }
         catch
         {
@@ -146,10 +145,9 @@ public class ClientHandler(PromoreDataContext context) : IClientHandler
             ))
             .ToListAsync();
         
-        if (clients.Count == 0)
-            return new Response<List<ClientResponse>?>(null, 404, "Nenhum cliente cadastrado!");
-        
-        return new Response<List<ClientResponse>?>(clients);
+        return clients.Count == 0 
+            ? new Response<List<ClientResponse>?>(null, 404, "Nenhum cliente cadastrado!") 
+            : new Response<List<ClientResponse>?>(clients);
     }
     
     public async Task<Response<List<ClientResponse>?>> GetAllAsync(GetAllClientsRequest request)
@@ -174,10 +172,9 @@ public class ClientHandler(PromoreDataContext context) : IClientHandler
                 .Take(request.PageSize)
                 .ToListAsync();
 
-            if (clients.Count == 0)
-                return new Response<List<ClientResponse>?>(null, 404, "Nenhum cliente cadastrado!");
-
-            return new Response<List<ClientResponse>?>(clients);
+            return clients.Count == 0 
+                ? new Response<List<ClientResponse>?>(null, 404, "Nenhum cliente cadastrado!") 
+                : new Response<List<ClientResponse>?>(clients);
         }
         catch
         {

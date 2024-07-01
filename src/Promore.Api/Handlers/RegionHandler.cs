@@ -99,10 +99,9 @@ public class RegionHandler(PromoreDataContext context) : IRegionHandler
                 .Where(x => x.Id == request.Id)
                 .FirstOrDefaultAsync();
 
-            if (region is null)
-                return new Response<Region?>(null, 404, $"Região '{request.Id}' não encontrada!");
-
-            return new Response<Region?>(region);
+            return region is null 
+                ? new Response<Region?>(null, 404, $"Região '{request.Id}' não encontrada!") 
+                : new Response<Region?>(region);
         }
         catch
         {
@@ -129,10 +128,9 @@ public class RegionHandler(PromoreDataContext context) : IRegionHandler
                 .Take(request.PageSize)
                 .ToListAsync();
 
-            if (regions.Count == 0)
-                return new Response<List<GetRegionsResponse>?>(null, 404, "Nenhuma região cadastrada!");
-
-            return new Response<List<GetRegionsResponse>?>(regions);
+            return regions.Count == 0 
+                ? new Response<List<GetRegionsResponse>?>(null, 404, "Nenhuma região cadastrada!") 
+                : new Response<List<GetRegionsResponse>?>(regions);
         }
         catch
         {

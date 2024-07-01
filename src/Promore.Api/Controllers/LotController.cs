@@ -10,9 +10,10 @@ namespace Promore.Api.Controllers;
 [Route("v1/lots")]
 public class LotController(ILotHandler handler) : ControllerBase
 {
-    [HttpGet("status")]
-    public IActionResult GetStatusByRegion(GetLotsStatusByRegionIdRequest request)
+    [HttpGet("status-by-region/{regionId}")]
+    public IActionResult GetStatusByRegion(int regionId)
     {
+        var request = new GetLotsStatusByRegionIdRequest { RegionId = regionId };
         var result = handler.GetAllStatusByRegionIdAsync(request).Result;
         
         if (!result.IsSuccess)
@@ -21,9 +22,10 @@ public class LotController(ILotHandler handler) : ControllerBase
         return Ok(result);
     }
     
-    [HttpGet("id")]
-    public IActionResult GetById(GetLotByIdRequest request)
+    [HttpGet("id/{id}")]
+    public IActionResult GetById(int id)
     {
+        var request = new GetLotByIdRequest{ Id = id };
         var result = handler.GetByIdAsync(request).Result;
         
         if (!result.IsSuccess)
@@ -55,9 +57,10 @@ public class LotController(ILotHandler handler) : ControllerBase
     }
     
     [Authorize(Roles = "admin")]
-    [HttpDelete]
-    public IActionResult Delete(DeleteLotRequest request)
+    [HttpDelete("{id}")]
+    public IActionResult Delete(int id)
     {
+        var request = new DeleteLotRequest{ Id = id };
         var result = handler.DeleteAsync(request).Result;
         
         if (!result.IsSuccess)
