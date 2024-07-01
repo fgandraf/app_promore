@@ -28,14 +28,16 @@ public class LotController(ILotHandler handler) : ControllerBase
     public IActionResult Post(CreateLotRequest request)
     {
         var result = handler.CreateAsync(request).Result;
-        return result.Success ? Ok(result.Value) : BadRequest(result.Message);
+        //return result.Success ? Ok(result.Value) : BadRequest(result.Message);
+        return Ok(); // Apagar
     }   
    
     [HttpPut]
     public IActionResult Update(UpdateLotRequest request)
     {
         var result = handler.UpdateAsync(request).Result;
-        return result.Success ? Ok() : BadRequest(result.Message);
+        //return result.Success ? Ok() : BadRequest(result.Message);
+        return Ok(); // Apagar
     }
     
     [Authorize(Roles = "admin")]
@@ -43,7 +45,8 @@ public class LotController(ILotHandler handler) : ControllerBase
     public IActionResult Delete(DeleteLotRequest request)
     {
         var result = handler.DeleteAsync(request).Result;
-        return result.Success ? Ok() : BadRequest(result.Message);
+        //return result.Success ? Ok() : BadRequest(result.Message);
+        return Ok(); // Apagar
     }
     
 }

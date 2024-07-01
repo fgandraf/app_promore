@@ -4,12 +4,109 @@ using Promore.Core;
 using Promore.Core.Handlers;
 using Promore.Core.Models;
 using Promore.Core.Requests.Regions;
+using Promore.Core.Responses;
 using Promore.Core.Responses.Regions;
 
 namespace Promore.Api.Handlers;
 
 public class RegionHandler(PromoreDataContext context) : IRegionHandler
 {
+    
+    public async Task<Response<Region?>> CreateAsync(CreateRegionRequest request)
+    {
+        try
+        {
+            var users = await context
+                .Users
+                .Include(x => x.Roles)
+                .Include(x => x.Regions)
+                .Include(x => x.Lots)
+                .Where(user => request.Users.Contains(user.Id))
+                .ToListAsync();
+
+            var region = new Region
+            {
+                Name = request.Name,
+                EstablishedDate = request.EstablishedDate,
+                StartDate = request.StartDate,
+                EndDate = request.EndDate,
+                Users = users
+            };
+
+            await context.Regions.AddAsync(region);
+            await context.SaveChangesAsync();
+
+            return new Response<Region?>(region, 201, "Região criada com sucesso!");
+        }
+        catch
+        {
+            return new Response<Region?>(null, 500, "[AHRCR12] Não foi possível criar a região!");
+        }
+    }
+
+    public async Task<Response<Region?>> UpdateAsync(UpdateRegionRequest request)
+    {
+        try
+        {
+            var region = await context
+                .Regions
+                .FirstOrDefaultAsync(x => x.Id == request.Id);
+            if (region is null)
+                return new Response<Region?>(null, 404, $"Lote '{request.Id}' não encontrado!");
+        
+            region.Name = request.Name;
+            region.EstablishedDate = request.EstablishedDate;
+            region.StartDate = request.StartDate;
+            region.EndDate = request.EndDate;
+        
+            context.Update(region);
+            await context.SaveChangesAsync();
+            
+            return new Response<Region?>(region);
+        }
+        catch
+        {
+            return new Response<Region?>(null, 500, "[AHRUP12] Não foi possível alterar a região!");
+        }
+        
+    }
+    
+    public async Task<Response<Region?>> DeleteAsync(DeleteRegionRequest request)
+    {
+        try
+        {
+            var region = await context.Regions.FirstOrDefaultAsync(x => x.Id == request.Id);
+            if (region is null)
+                return new Response<Region?>(null, 404, $"Região '{request.Id}' não encontrada!");
+
+            context.Remove(region);
+            await context.SaveChangesAsync();
+        
+            return new Response<Region?>(null, 200, $"Região {request.Id} removida com sucesso!");
+        }
+        catch
+        {
+            return new Response<Region?>(null, 500, "[AHRDE12] Não foi possível excluir a região!");
+        }
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     public async Task<OperationResult<List<GetRegionsResponse>>> GetAllAsync(GetAllRegionsRequest request)
     {
         var regions = await context
@@ -53,59 +150,7 @@ public class RegionHandler(PromoreDataContext context) : IRegionHandler
         return OperationResult<GetRegionsByIdResponse>.SuccessResult(region);
     }
 
-    public async Task<OperationResult<long>> CreateAsync(CreateRegionRequest request)
-    {
-        var users = await context
-            .Users
-            .AsNoTracking()
-            .Include(x => x.Roles)
-            .Include(x => x.Regions)
-            .Include(x => x.Lots)
-            .Where(user => request.Users.Contains(user.Id))
-            .ToListAsync();
-        
-        var region = new Region
-        {
-            Name = request.Name,
-            EstablishedDate = request.EstablishedDate,
-            StartDate = request.StartDate,
-            EndDate = request.EndDate,
-            Users = users
-        };
-        
-        context.Regions.Add(region);
-        var rowsAffected = await context.SaveChangesAsync();
-        var id = rowsAffected > 0 ? region.Id : 0;
-        
-        return id > 0 ? OperationResult<long>.SuccessResult(id) : OperationResult<long>.FailureResult("Não foi possível inserir a região!");
-    }
+    
 
-    public async Task<OperationResult> UpdateAsync(UpdateRegionRequest request)
-    {
-        var region = await context
-            .Regions
-            .FirstOrDefaultAsync(x => x.Id == request.Id);
-        
-        region.Name = request.Name;
-        region.EstablishedDate = request.EstablishedDate;
-        region.StartDate = request.StartDate;
-        region.EndDate = request.EndDate;
-        
-        context.Update(region);
-        var rowsAffected = await context.SaveChangesAsync();
-
-        return rowsAffected > 0 ? OperationResult.SuccessResult() : OperationResult.FailureResult("Não foi possível alterar a região!");
-    }
-
-    public async Task<OperationResult> DeleteAsync(DeleteRegionRequest request)
-    {
-        var region = await context.Regions.FirstOrDefaultAsync(x => x.Id == request.Id);
-        if (region is null)
-            return OperationResult.FailureResult("Não foi possível apagar a região!");
-
-        context.Remove(region);
-        var rowsAffected = await context.SaveChangesAsync();
-        
-        return rowsAffected > 0 ? OperationResult.SuccessResult("Região removida!") : OperationResult.FailureResult("Não foi possível apagar a região!");
-    }
+    
 }

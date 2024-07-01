@@ -15,7 +15,8 @@ public class ClientController(IClientHandler handler) : ControllerBase
     public IActionResult GetAll(GetAllClientsRequest request)
     {
         var result = handler.GetAllAsync(request).Result;
-        return result.Success ? Ok(result.Value) : BadRequest(result.Message);
+        //return result.Success ? Ok(result.Value) : BadRequest(result.Message);
+        return Ok(); // Apagar
     }
     
     [HttpGet("lot")]
@@ -37,21 +38,24 @@ public class ClientController(IClientHandler handler) : ControllerBase
     public IActionResult Post(CreateClientRequest request)
     {
         var result = handler.CreateAsync(request).Result;
-        return result.Success ? Ok(result.Value) : BadRequest(result.Message);
+        //return result.Success ? Ok(result.Value) : BadRequest(result.Message);
+        return Ok(); // Apagar
     }   
    
     [HttpPut]
     public IActionResult Update(UpdateClientRequest request)
     {
         var result = handler.UpdateAsync(request).Result;
-        return result.Success ? Ok() : BadRequest(result.Message);
+        //return result.Success ? Ok() : BadRequest(result.Message);
+        return Ok(); //apagar
     }
     
     [HttpDelete]
     public IActionResult Delete(DeleteClientRequest request)
     {
         var result = handler.DeleteAsync(request).Result;
-        return result.Success ? Ok() : BadRequest(result.Message);
+        //return result.Success ? Ok() : BadRequest(result.Message);
+        return Ok(); //apagar
     }
     
 }

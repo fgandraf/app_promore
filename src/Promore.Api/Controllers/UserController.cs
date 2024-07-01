@@ -32,7 +32,8 @@ public class UserController(IUserHandler handler, TokenService tokenService) : C
     public IActionResult Post(CreateUserRequest request)
     {
         var result = handler.CreateAsync(request).Result;
-        return result.Success ? Ok(result.Value) : BadRequest(result.Message);
+        //return result.Success ? Ok(result.Value) : BadRequest(result.Message);
+        return Ok();// apagar
     }
     
     [Authorize(Roles = "admin")]
@@ -40,7 +41,8 @@ public class UserController(IUserHandler handler, TokenService tokenService) : C
     public IActionResult UpdateSettings(UpdateUserSettingsRequest request)
     {
         var result = handler.UpdateSettingsAsync(request).Result;
-        return result.Success ? Ok() : BadRequest(result.Message);
+        //return result.Success ? Ok() : BadRequest(result.Message);
+        return Ok();// apagar
     }
     
     [HttpGet("id")]
@@ -62,14 +64,16 @@ public class UserController(IUserHandler handler, TokenService tokenService) : C
     public IActionResult UpdateInfo(UpdateUserInfoRequest request)
     {
         var result = handler.UpdateInfoAsync(request).Result;
-        return result.Success ? Ok() : BadRequest(result.Message);
+        //return result.Success ? Ok() : BadRequest(result.Message);
+        return Ok();// apagar
     }
     
     [HttpPut("lot-from-user")]
     public IActionResult RemoveLotFromUser(RemoveLotFromUserRequest request)
     {
         var result = handler.RemoveLotFromUserAsync(request).Result;
-        return result.Success ? Ok() : BadRequest(result.Message);
+        //return result.Success ? Ok() : BadRequest(result.Message);
+        return Ok();// apagar
     }
     
 }

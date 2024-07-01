@@ -23,7 +23,8 @@ public class RegionController(IRegionHandler handler) : ControllerBase
     public IActionResult Post(CreateRegionRequest request)
     {
         var result = handler.CreateAsync(request).Result;
-        return result.Success ? Ok(result.Value) : BadRequest(result.Message);
+        //return result.Success ? Ok(result.Value) : BadRequest(result.Message);
+        return Ok();// apagar
     }  
     
     [Authorize(Roles = "admin")]
@@ -31,7 +32,8 @@ public class RegionController(IRegionHandler handler) : ControllerBase
     public IActionResult Delete(DeleteRegionRequest request)
     {
         var result = handler.DeleteAsync(request).Result;
-        return result.Success ? Ok() : BadRequest(result.Message);
+        //return result.Success ? Ok() : BadRequest(result.Message);
+        return Ok();// apagar
     }
     
     [Authorize(Roles = "admin, manager")]
@@ -39,7 +41,8 @@ public class RegionController(IRegionHandler handler) : ControllerBase
     public IActionResult Update(UpdateRegionRequest request)
     {
         var result = handler.UpdateAsync(request).Result;
-        return result.Success ? Ok() : BadRequest(result.Message);
+        //return result.Success ? Ok() : BadRequest(result.Message);
+        return Ok();// apagar
     }
     
     
