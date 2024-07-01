@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Promore.Api.Data;
-using Promore.Core;
 using Promore.Core.Handlers;
 using Promore.Core.Models;
 using Promore.Core.Requests.Regions;
@@ -11,7 +10,6 @@ namespace Promore.Api.Handlers;
 
 public class RegionHandler(PromoreDataContext context) : IRegionHandler
 {
-    
     public async Task<Response<Region?>> CreateAsync(CreateRegionRequest request)
     {
         try
@@ -91,66 +89,54 @@ public class RegionHandler(PromoreDataContext context) : IRegionHandler
         
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    public async Task<OperationResult<List<GetRegionsResponse>>> GetAllAsync(GetAllRegionsRequest request)
+    public async Task<Response<Region?>> GetByIdAsync(GetRegionByIdRequest request)
     {
-        var regions = await context
-            .Regions
-            .AsNoTracking()
-            .Select(region => new GetRegionsResponse
-            (
-                region.Id,
-                region.Name,
-                region.EstablishedDate,
-                region.StartDate,
-                region.EndDate
-            ))
-            .ToListAsync();
-        
-        if (regions.Count == 0)
-            return OperationResult<List<GetRegionsResponse>>.FailureResult("Nenhuma região cadastrada!");
-        
-        return OperationResult<List<GetRegionsResponse>>.SuccessResult(regions);
-    }
+        try
+        {
+            var region = await context
+                .Regions
+                .AsNoTracking()
+                .Where(x => x.Id == request.Id)
+                .FirstOrDefaultAsync();
 
-    public async Task<OperationResult<GetRegionsByIdResponse>> GetByIdAsync(GetRegionByIdRequest request)
+            if (region is null)
+                return new Response<Region?>(null, 404, $"Região '{request.Id}' não encontrada!");
+
+            return new Response<Region?>(region);
+        }
+        catch
+        {
+            return new Response<Region?>(null, 500, "[AHRGT12] Não foi possível encontrar a região!");
+        }
+    }    
+   
+    public async Task<Response<List<GetRegionsResponse>?>> GetAllAsync(GetAllRegionsRequest request)
     {
-        var region = await context
-            .Regions
-            .AsNoTracking()
-            .Where(x => x.Id == request.Id)
-            .Select(region => new GetRegionsByIdResponse
-            (
-                region.Id,
-                region.Name,
-                region.EstablishedDate,
-                region.StartDate,
-                region.EndDate
-            ))
-            .FirstOrDefaultAsync();
-        
-        if (region is null)
-            return OperationResult<GetRegionsByIdResponse>.FailureResult($"Região '{request.Id}' não encontrada!");
-        
-        return OperationResult<GetRegionsByIdResponse>.SuccessResult(region);
+        try
+        {
+            var regions = await context
+                .Regions
+                .AsNoTracking()
+                .Select(region => new GetRegionsResponse
+                (
+                    region.Id,
+                    region.Name,
+                    region.EstablishedDate,
+                    region.StartDate,
+                    region.EndDate
+                ))
+                .Skip(request.PageNumber * request.PageSize)
+                .Take(request.PageSize)
+                .ToListAsync();
+
+            if (regions.Count == 0)
+                return new Response<List<GetRegionsResponse>?>(null, 404, "Nenhuma região cadastrada!");
+
+            return new Response<List<GetRegionsResponse>?>(regions);
+        }
+        catch
+        {
+            return new Response<List<GetRegionsResponse>?>(null, 500, "[AHLGA12] Não foi possível encontrar a região!");
+        }
     }
-
-    
-
-    
 }

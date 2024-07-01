@@ -9,13 +9,22 @@ namespace Promore.Api.Handlers;
 
 public class RoleHandler(PromoreDataContext context) : IRoleHandler
 {
-    public async Task<Response<List<Role>>> GetRolesByUserIdListAsync(GetRolesByUserIdListRequest request)
+    public async Task<Response<List<Role>?>> GetAllByUserIdAsync(GetRolesByUserIdListRequest request)
     {
-        var roles = await context
-             .Roles
-             .Where(role => request.RolesIds.Contains(role.Id))
-             .ToListAsync();
-        
-        return new Response<List<Role>>(roles);
+        try
+        {
+            var roles = await context
+                .Roles
+                .Where(role => request.RolesIds.Contains(role.Id))
+                .ToListAsync();
+            if (roles.Count == 0)
+                return new Response<List<Role>?>(null, 404, "Nenhum papel cadastrado!");
+
+            return new Response<List<Role>?>(roles);
+        }
+        catch
+        {
+            return new Response<List<Role>?>(null, 500, "[AHROGA12] Não foi possível encontrar os papéis!");
+        }
     }
 }

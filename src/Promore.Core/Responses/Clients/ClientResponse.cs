@@ -1,6 +1,6 @@
 namespace Promore.Core.Responses.Clients;
 
-public record GetClientsResponse(
+public record ClientResponse(
     int Id, 
     string Name, 
     string Cpf, 

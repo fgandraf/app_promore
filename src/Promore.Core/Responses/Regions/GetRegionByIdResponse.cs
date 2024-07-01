@@ -1,6 +1,6 @@
 namespace Promore.Core.Responses.Regions;
 
-public record GetRegionsByIdResponse(
+public record GetRegionByIdResponse(
     int Id,
     string Name,
     DateTime EstablishedDate,

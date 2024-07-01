@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Promore.Api.Data;
-using Promore.Core;
 using Promore.Core.Handlers;
 using Promore.Core.Models;
 using Promore.Core.Requests.Clients;
@@ -107,47 +106,35 @@ public class ClientHandler(PromoreDataContext context) : IClientHandler
         }
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    public async Task<Response<List<GetClientsResponse>>> GetAllAsync(GetAllClientsRequest request)
+    public async Task<Response<Client?>> GetByIdAsync(GetClientByIdRequest request)
     {
-        var clients = await context
-            .Clients
-            .AsNoTracking()
-            .Include(lots => lots.Lot)
-            .Select(client => new GetClientsResponse
-            (
-                client.Id,
-                client.Name,
-                client.Cpf,
-                client.Phone,
-                client.MothersName,
-                client.BirthdayDate,
-                client.LotId
-            ))
-            .ToListAsync();
-        
-        if (clients.Count == 0)
-            return new Response<List<GetClientsResponse>>(null, 404, "Nenhum cliente cadastrado!");
-        
-        return new Response<List<GetClientsResponse>>(clients, 201);
+        try
+        {
+            var client = await context
+                .Clients
+                .AsNoTracking()
+                .Where(x => x.Id == request.Id)
+                .Include(lots => lots.Lot)
+                .FirstOrDefaultAsync();
+            if (client is null)
+                return new Response<Client?>(null, 404, $"Cliente '{request.Id}' não encontrado!");
+            
+            return new Response<Client?>(client);
+        }
+        catch
+        {
+            return new Response<Client?>(null, 500, "[AHCGT12] Não foi possível encontrar o cliente!");
+        }
     }
     
-    public async Task<OperationResult<List<GetClientsByLotIdResponse>>> GetAllByLotIdAsync(GetAllClientsByLotIdRequest request)
+    public async Task<Response<List<ClientResponse>?>> GetAllByLotIdAsync(GetAllClientsByLotIdRequest request)
     {
         var clients = await context
             .Clients
             .AsNoTracking()
             .Where(x => x.LotId == request.LotId)
             .Include(lots => lots.Lot)
-            .Select(client => new GetClientsByLotIdResponse
+            .Select(client => new ClientResponse
             (
                 client.Id,
                 client.Name,
@@ -160,38 +147,41 @@ public class ClientHandler(PromoreDataContext context) : IClientHandler
             .ToListAsync();
         
         if (clients.Count == 0)
-            return OperationResult<List<GetClientsByLotIdResponse>>.FailureResult("O lote não possui clientes cadastrados!");
+            return new Response<List<ClientResponse>?>(null, 404, "Nenhum cliente cadastrado!");
         
-        return OperationResult<List<GetClientsByLotIdResponse>>.SuccessResult(clients);
+        return new Response<List<ClientResponse>?>(clients);
     }
     
-    public async Task<OperationResult<GetClientByIdResponse>> GetClientByIdAsync(GetClientByIdRequest request)
+    public async Task<Response<List<ClientResponse>?>> GetAllAsync(GetAllClientsRequest request)
     {
-        var client = await context
-            .Clients
-            .AsNoTracking()
-            .Where(x => x.Id == request.Id)
-            .Include(lots => lots.Lot)
-            .Select(client => new GetClientByIdResponse
-            (
-                client.Id,
-                client.Name,
-                client.Cpf,
-                client.Phone,
-                client.MothersName,
-                client.BirthdayDate,
-                client.LotId
-            ))
-            .FirstOrDefaultAsync();
-        
-        if (client is null)
-            return OperationResult<GetClientByIdResponse>.FailureResult("Cliente não encontrado!");
-        
-        return OperationResult<GetClientByIdResponse>.SuccessResult(client);
-    }
+        try
+        {
+            var clients = await context
+                .Clients
+                .AsNoTracking()
+                .Include(lots => lots.Lot)
+                .Select(client => new ClientResponse
+                (
+                    client.Id,
+                    client.Name,
+                    client.Cpf,
+                    client.Phone,
+                    client.MothersName,
+                    client.BirthdayDate,
+                    client.LotId
+                ))
+                .Skip(request.PageNumber * request.PageSize)
+                .Take(request.PageSize)
+                .ToListAsync();
 
-    
-    
-    
-    
+            if (clients.Count == 0)
+                return new Response<List<ClientResponse>?>(null, 404, "Nenhum cliente cadastrado!");
+
+            return new Response<List<ClientResponse>?>(clients);
+        }
+        catch
+        {
+            return new Response<List<ClientResponse>?>(null, 500, "[AHCGA12] Não foi possível encontrar o cliente!");
+        }
+    }
 }

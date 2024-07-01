@@ -15,7 +15,8 @@ public class RegionController(IRegionHandler handler) : ControllerBase
     public IActionResult GetAll(GetAllRegionsRequest request)
     {
         var result = handler.GetAllAsync(request).Result;
-        return result.Success ? Ok(result.Value) : BadRequest(result.Message);
+        //return result.Success ? Ok(result.Value) : BadRequest(result.Message);
+        return Ok();// apagar
     }
     
     [Authorize(Roles = "admin")]
@@ -50,7 +51,8 @@ public class RegionController(IRegionHandler handler) : ControllerBase
     public IActionResult GetById(GetRegionByIdRequest request)
     {
         var result = handler.GetByIdAsync(request).Result;
-        return result.Success ? Ok(result.Value) : BadRequest(result.Message);
+        //return result.Success ? Ok(result.Value) : BadRequest(result.Message);
+        return Ok();// apagar
     }
 
 }

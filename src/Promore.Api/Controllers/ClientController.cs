@@ -23,15 +23,17 @@ public class ClientController(IClientHandler handler) : ControllerBase
     public IActionResult GetAllByLotId(GetAllClientsByLotIdRequest request)
     {
         var result = handler.GetAllByLotIdAsync(request).Result;
-        return result.Success ? Ok(result.Value) : BadRequest(result.Message);
+        //return result.Success ? Ok(result.Value) : BadRequest(result.Message);
+        return Ok(); // Apagar
     }
     
     
     [HttpGet("id")]
     public IActionResult GetById(GetClientByIdRequest request)
     {
-        var result = handler.GetClientByIdAsync(request).Result;
-        return result.Success ? Ok(result.Value) : BadRequest(result.Message);
+        var result = handler.GetByIdAsync(request).Result;
+        //return result.Success ? Ok(result.Value) : BadRequest(result.Message);
+        return Ok(); // Apagar
     }
     
     [HttpPost]

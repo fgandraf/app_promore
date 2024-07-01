@@ -10,12 +10,7 @@ public interface IClientHandler
     Task<Response<Client?>> CreateAsync(CreateClientRequest request);
     Task<Response<Client?>> UpdateAsync(UpdateClientRequest request);
     Task<Response<Client?>> DeleteAsync(DeleteClientRequest request);
-    
-    
-    
-    
-    
-    Task<Response<List<GetClientsResponse>>> GetAllAsync(GetAllClientsRequest request);
-    Task<OperationResult<List<GetClientsByLotIdResponse>>> GetAllByLotIdAsync(GetAllClientsByLotIdRequest request);
-    Task<OperationResult<GetClientByIdResponse>> GetClientByIdAsync(GetClientByIdRequest request);
+    Task<Response<Client?>> GetByIdAsync(GetClientByIdRequest request);
+    Task<Response<List<ClientResponse>?>> GetAllByLotIdAsync(GetAllClientsByLotIdRequest request);
+    Task<Response<List<ClientResponse>?>> GetAllAsync(GetAllClientsRequest request);
 }

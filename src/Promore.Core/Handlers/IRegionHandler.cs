@@ -10,10 +10,6 @@ public interface IRegionHandler
     Task<Response<Region?>> CreateAsync(CreateRegionRequest request);
     Task<Response<Region?>> UpdateAsync(UpdateRegionRequest request);
     Task<Response<Region?>> DeleteAsync(DeleteRegionRequest request);
-    
-    
-    
-    
-    Task<OperationResult<List<GetRegionsResponse>>> GetAllAsync(GetAllRegionsRequest request);
-    Task<OperationResult<GetRegionsByIdResponse>> GetByIdAsync(GetRegionByIdRequest request);
+    Task<Response<Region?>> GetByIdAsync(GetRegionByIdRequest request);
+    Task<Response<List<GetRegionsResponse>?>> GetAllAsync(GetAllRegionsRequest request);
 }

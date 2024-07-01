@@ -7,19 +7,12 @@ namespace Promore.Core.Handlers;
 
 public interface IUserHandler
 {
-    Task<Response<GetUserByIdResponse?>> CreateAsync(CreateUserRequest request);
+    Task<Response<GetUserResponse?>> CreateAsync(CreateUserRequest request);
     Task<Response<UpdateUserSettingsResponse?>> UpdateSettingsAsync(UpdateUserSettingsRequest request);
     Task<Response<UpdateUserInfoResponse?>> UpdateInfoAsync(UpdateUserInfoRequest request);
     Task<Response<RemoveLotFromUserResponse?>> RemoveLotFromUserAsync(RemoveLotFromUserRequest request);
-    
-    
-    
-    
-    
-    
-    Task<OperationResult<User>> GetUserByLoginAsync(GetUserByLoginRequest request);
-    Task<OperationResult<List<GetUsersResponse>>> GetAllAsync(GetAllUsersRequest request);
-    Task<OperationResult<GetUserByIdResponse>> GetByIdAsync(GetUserByIdRequest request);
-    Task<OperationResult<GetUserByEmailResponse>> GetByEmailAsync(GetUserByEmailRequest request);
-    
+    Task<Response<GetUserResponse?>> GetByIdAsync(GetUserByIdRequest request);
+    Task<Response<GetUserResponse?>> GetByEmailAsync(GetUserByEmailRequest request);
+    Task<Response<User?>> GetUserByLoginAsync(GetUserByLoginRequest request);
+    Task<Response<List<GetUsersResponse>?>> GetAllAsync(GetAllUsersRequest request);
 }

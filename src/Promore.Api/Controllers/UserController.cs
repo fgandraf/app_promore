@@ -16,7 +16,8 @@ public class UserController(IUserHandler handler, TokenService tokenService) : C
     public IActionResult Login(GetUserByLoginRequest request)
     {
         var result = handler.GetUserByLoginAsync(request).Result;
-        return result.Success ? Ok(tokenService.GenerateToken(result.Value)) : BadRequest(result.Message);
+        //return result.Success ? Ok(tokenService.GenerateToken(result.Value)) : BadRequest(result.Message);
+        return Ok();// apagar
     }
     
     [Authorize(Roles = "admin")]
@@ -24,7 +25,8 @@ public class UserController(IUserHandler handler, TokenService tokenService) : C
     public IActionResult GetAll(GetAllUsersRequest request)
     {
         var result = handler.GetAllAsync(request).Result;
-        return result.Success ? Ok(result.Value) : BadRequest(result.Message);
+        //return result.Success ? Ok(result.Value) : BadRequest(result.Message);
+        return Ok();// apagar
     }
     
     [Authorize(Roles = "admin")]
@@ -49,14 +51,16 @@ public class UserController(IUserHandler handler, TokenService tokenService) : C
     public IActionResult GetById(GetUserByIdRequest request)
     {
         var result = handler.GetByIdAsync(request).Result;
-        return result.Success ? Ok(result.Value) : BadRequest(result.Message);
+        //return result.Success ? Ok(result.Value) : BadRequest(result.Message);
+        return Ok();// apagar
     }
     
     [HttpGet("email")]
     public IActionResult GetByEmail(GetUserByEmailRequest request)
     {
         var result = handler.GetByEmailAsync(request).Result;
-        return result.Success ? Ok(result.Value) : BadRequest(result.Message);
+        //return result.Success ? Ok(result.Value) : BadRequest(result.Message);
+        return Ok();// apagar
     }
     
     [HttpPut]

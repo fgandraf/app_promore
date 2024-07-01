@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Promore.Api.Data;
-using Promore.Core;
 using Promore.Core.Handlers;
 using Promore.Core.Models;
 using Promore.Core.Requests.Lots;
@@ -11,7 +10,6 @@ namespace Promore.Api.Handlers;
 
 public class LotHandler(PromoreDataContext context) : ILotHandler
 {
-    
     public async Task<Response<Lot?>> CreateAsync(CreateLotRequest request)
     {
         try
@@ -133,70 +131,51 @@ public class LotHandler(PromoreDataContext context) : ILotHandler
         
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    public async Task<OperationResult<GetLotByIdResponse>> GetByIdAsync(GetLotByIdRequest request)
+    public async Task<Response<Lot?>> GetByIdAsync(GetLotByIdRequest request)
     {
-        var lot = await context
-            .Lots
-            .AsNoTracking()
-            .Where(x => x.Id == request.Id)
-            .Include(clients => clients.Clients)
-            .Select(lot => new GetLotByIdResponse
-            (
-                lot.Id,
-                lot.Block,
-                lot.Number,
-                lot.SurveyDate,
-                lot.LastModifiedDate,
-                lot.Status,
-                lot.Comments,
-                lot.UserId,
-                lot.RegionId,
-                lot.Clients.Select(x=> x.Id).ToList()
-            ))
-            .FirstOrDefaultAsync();
-        
-        return OperationResult<GetLotByIdResponse>.SuccessResult(lot);
+        try
+        {
+            var lot = await context
+                .Lots
+                .AsNoTracking()
+                .Where(x => x.Id == request.Id)
+                .Include(clients => clients.Clients)
+                .FirstOrDefaultAsync();
+            if (lot is null)
+                return new Response<Lot?>(null, 404, $"Lote '{request.Id}' não encontrado!");
+            
+            return new Response<Lot?>(lot);
+        }
+        catch
+        {
+            return new Response<Lot?>(null, 500, "[AHLGT12] Não foi possível encontrar o lote!");
+        }
     }
     
-    public async Task<OperationResult<List<GetStatusByRegionResponse>>> GetStatusByRegionAsync(GetLotsStatusByRegionIdRequest request)
+    public async Task<Response<List<LotsStatusResponse>?>> GetAllStatusByRegionIdAsync(GetLotsStatusByRegionIdRequest request)
     {
-        var regions = await context
-            .Lots
-            .Include(x => x.Region)
-            .Where(x => x.Region.Id == request.RegionId)
-            .AsNoTracking()
-            .Select(lot => new GetStatusByRegionResponse
-            (
-                lot.Id,
-                lot.Status,
-                lot.UserId
-            ))
-            .ToListAsync();
-        
-        return OperationResult<List<GetStatusByRegionResponse>>.SuccessResult(regions);
+        try
+        {
+            var lots = await context
+                .Lots
+                .Include(x => x.Region)
+                .Where(x => x.Region.Id == request.RegionId)
+                .AsNoTracking()
+                .Select(lot => new LotsStatusResponse
+                (
+                    lot.Id,
+                    lot.Status,
+                    lot.UserId
+                ))
+                .Skip(request.PageNumber * request.PageSize)
+                .Take(request.PageSize)
+                .ToListAsync();
+            
+            return new Response<List<LotsStatusResponse>?>(lots);
+        }
+        catch
+        {
+            return new Response<List<LotsStatusResponse>?>(null, 500, "[AHLGA12] Não foi possível encontrar o lote!");
+        }
     }
-
-    
-
-    
 }

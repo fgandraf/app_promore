@@ -10,11 +10,6 @@ public interface ILotHandler
     Task<Response<Lot?>> CreateAsync(CreateLotRequest request);
     Task<Response<Lot?>> UpdateAsync(UpdateLotRequest request);
     Task<Response<Lot?>> DeleteAsync(DeleteLotRequest request);
-    
-    
-    
-    
-    
-    Task<OperationResult<GetLotByIdResponse>> GetByIdAsync(GetLotByIdRequest request);
-    Task<OperationResult<List<GetStatusByRegionResponse>>> GetStatusByRegionAsync(GetLotsStatusByRegionIdRequest request);
+    Task<Response<Lot?>> GetByIdAsync(GetLotByIdRequest request);
+    Task<Response<List<LotsStatusResponse>?>> GetAllStatusByRegionIdAsync(GetLotsStatusByRegionIdRequest request);
 }

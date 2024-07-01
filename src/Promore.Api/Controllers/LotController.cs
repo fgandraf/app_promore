@@ -13,15 +13,17 @@ public class LotController(ILotHandler handler) : ControllerBase
     [HttpGet("status")]
     public IActionResult GetStatusByRegion(GetLotsStatusByRegionIdRequest request)
     {
-        var result = handler.GetStatusByRegionAsync(request).Result;
-        return result.Success ? Ok(result.Value) : BadRequest(result.Message);
+        var result = handler.GetAllStatusByRegionIdAsync(request).Result;
+        //return result.Success ? Ok(result.Value) : BadRequest(result.Message);
+        return Ok(); // Apagar
     }
     
     [HttpGet("id")]
     public IActionResult GetById(GetLotByIdRequest request)
     {
         var result = handler.GetByIdAsync(request).Result;
-        return result.Success ? Ok(result.Value) : BadRequest(result.Message);
+        //return result.Success ? Ok(result.Value) : BadRequest(result.Message);
+        return Ok(); // Apagar
     }
     
     [HttpPost]

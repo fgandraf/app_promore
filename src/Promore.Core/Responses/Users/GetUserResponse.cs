@@ -1,7 +1,7 @@
 
 namespace Promore.Core.Responses.Users;
 
-public record GetUserByLoginResponse(
+public record GetUserResponse(
     int Id,
     bool Active,
     string Email,
@@ -10,5 +10,5 @@ public record GetUserByLoginResponse(
     string Profession,
     List<int> Roles,
     List<int> Regions,
-    List<string> Lots
+    List<int> Lots
 );
