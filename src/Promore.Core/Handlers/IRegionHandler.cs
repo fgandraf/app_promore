@@ -11,5 +11,5 @@ public interface IRegionHandler
     Task<Response<Region?>> UpdateAsync(UpdateRegionRequest request);
     Task<Response<Region?>> DeleteAsync(DeleteRegionRequest request);
     Task<Response<Region?>> GetByIdAsync(GetRegionByIdRequest request);
-    Task<Response<List<GetRegionsResponse>?>> GetAllAsync(GetAllRegionsRequest request);
+    Task<PagedResponse<List<GetRegionsResponse>>> GetAllAsync(GetAllRegionsRequest request);
 }

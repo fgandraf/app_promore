@@ -151,35 +151,31 @@ public class ClientHandler(PromoreDataContext context) : IClientHandler
             : new Response<List<ClientResponse>?>(clients);
     }
     
-    public async Task<Response<List<ClientResponse>?>> GetAllAsync(GetAllClientsRequest request)
+    public async Task<PagedResponse<List<Client>>> GetAllAsync(GetAllClientsRequest request)
     {
         try
         {
-            var clients = await context
+            var query = context
                 .Clients
                 .AsNoTracking()
-                .Include(lots => lots.Lot)
-                .Select(client => new ClientResponse
-                (
-                    client.Id,
-                    client.Name,
-                    client.Cpf,
-                    client.Phone,
-                    client.MothersName,
-                    client.BirthdayDate,
-                    client.LotId
-                ))
-                .Skip(request.PageNumber * request.PageSize)
+                .Include(lots => lots.Lot);
+            
+            var clients = await query
+                .Skip((request.PageNumber - 1) * request.PageSize)
                 .Take(request.PageSize)
                 .ToListAsync();
 
-            return clients.Count == 0 
-                ? new Response<List<ClientResponse>?>(null, 404, "Nenhum cliente cadastrado!") 
-                : new Response<List<ClientResponse>?>(clients);
+            var count = await query.CountAsync();
+
+            return new PagedResponse<List<Client>>(
+                data: clients, 
+                totalCount: count, 
+                currentPage: request.PageNumber, 
+                pageSize: request.PageSize);
         }
         catch
         {
-            return new Response<List<ClientResponse>?>(null, 500, "[AHCGA12] Não foi possível encontrar o cliente!");
+            return new PagedResponse<List<Client>>(null, 500, "[AHCGA12] Não foi possível encontrar o cliente!");
         }
     }
 }

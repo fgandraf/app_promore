@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Promore.Core;
 using Promore.Core.Handlers;
 using Promore.Core.Requests.Lots;
 
@@ -11,62 +12,57 @@ namespace Promore.Api.Controllers;
 public class LotController(ILotHandler handler) : ControllerBase
 {
     [HttpGet("status-by-region/{regionId}")]
-    public IActionResult GetStatusByRegion(int regionId)
+    public IResult GetStatusByRegion(int regionId, [FromQuery]int pageNumber = Configuration.DefaultPageNumber, [FromQuery]int pageSize = Configuration.DefaultPageSize)
     {
-        var request = new GetLotsStatusByRegionIdRequest{PageNumber = 0, PageSize = 25, RegionId = regionId };
+        var request = new GetLotsStatusByRegionIdRequest{RegionId = regionId, PageNumber = pageNumber, PageSize = pageSize};
         var result = handler.GetAllStatusByRegionIdAsync(request).Result;
         
-        if (!result.IsSuccess)
-            return BadRequest(result.Message);
-        
-        return Ok(result);
+        return result.IsSuccess
+            ? TypedResults.Ok(result)
+            : TypedResults.BadRequest(result);
     }
     
     [HttpGet("id/{id}")]
-    public IActionResult GetById(int id)
+    public IResult GetById(int id)
     {
         var request = new GetLotByIdRequest{ Id = id };
         var result = handler.GetByIdAsync(request).Result;
         
-        if (!result.IsSuccess)
-            return BadRequest(result.Message);
-        
-        return Ok(result);
+        return result.IsSuccess
+            ? TypedResults.Ok(result)
+            : TypedResults.BadRequest(result);
     }
     
     [HttpPost]
-    public IActionResult Post(CreateLotRequest request)
+    public IResult Post(CreateLotRequest request)
     {
         var result = handler.CreateAsync(request).Result;
         
-        if (!result.IsSuccess)
-            return BadRequest(result.Message);
-        
-        return Ok(result);
+        return result.IsSuccess
+            ? TypedResults.Created($"/id/{result.Data?.Id}", result)
+            : TypedResults.BadRequest(result);
     }   
    
     [HttpPut]
-    public IActionResult Update(UpdateLotRequest request)
+    public IResult Update(UpdateLotRequest request)
     {
         var result = handler.UpdateAsync(request).Result;
         
-        if (!result.IsSuccess)
-            return BadRequest(result.Message);
-        
-        return Ok(result);
+        return result.IsSuccess
+            ? TypedResults.Ok(result)
+            : TypedResults.BadRequest(result);
     }
     
     [Authorize(Roles = "admin")]
     [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
+    public IResult Delete(int id)
     {
         var request = new DeleteLotRequest{ Id = id };
         var result = handler.DeleteAsync(request).Result;
         
-        if (!result.IsSuccess)
-            return BadRequest(result.Message);
-        
-        return Ok(result);
+        return result.IsSuccess
+            ? TypedResults.Ok(result)
+            : TypedResults.BadRequest(result);
     }
     
 }

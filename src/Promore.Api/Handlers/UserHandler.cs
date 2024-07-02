@@ -278,16 +278,19 @@ public class UserHandler(PromoreDataContext context) : IUserHandler
         }
     }
     
-    public async Task<Response<List<GetUsersResponse>?>> GetAllAsync(GetAllUsersRequest request)
+    public async Task<PagedResponse<List<GetUsersResponse>>> GetAllAsync(GetAllUsersRequest request)
     {
         try
         {
-            var users = await context
+            var query = context
                 .Users
                 .AsNoTracking()
                 .Include(roles => roles.Roles)
                 .Include(regions => regions.Regions)
-                .Include(lots => lots.Lots)
+                .Include(lots => lots.Lots);
+            
+            
+            var users = await query
                 .Select(user => new GetUsersResponse
                 (
                     user.Id,
@@ -300,17 +303,21 @@ public class UserHandler(PromoreDataContext context) : IUserHandler
                     user.Regions.Select(x => x.Id).ToList(),
                     user.Lots.Select(x => x.Id).ToList()
                 ))
-                .Skip(request.PageNumber * request.PageSize)
+                .Skip((request.PageNumber - 1) * request.PageSize)
                 .Take(request.PageSize)
                 .ToListAsync();
 
-            return users.Count == 0 
-                ? new Response<List<GetUsersResponse>?>(null, 404, "Nenhum usuário cadastrado!") 
-                : new Response<List<GetUsersResponse>?>(users);
+            var count = await query.CountAsync();
+            
+            return new PagedResponse<List<GetUsersResponse>>(
+                data: users, 
+                totalCount: count, 
+                currentPage: request.PageNumber, 
+                pageSize: request.PageSize);
         }
         catch( Exception e)
         {
-            return new Response<List<GetUsersResponse>?>(null, 500, "[AHUGA12] Não foi possível encontrar usuários!" + e);
+            return new PagedResponse<List<GetUsersResponse>>(null, 500, "[AHUGA12] Não foi possível encontrar usuários!" + e);
         }
     }
 }

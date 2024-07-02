@@ -110,13 +110,15 @@ public class RegionHandler(PromoreDataContext context) : IRegionHandler
         }
     }    
    
-    public async Task<Response<List<GetRegionsResponse>?>> GetAllAsync(GetAllRegionsRequest request)
+    public async Task<PagedResponse<List<GetRegionsResponse>>> GetAllAsync(GetAllRegionsRequest request)
     {
         try
         {
-            var regions = await context
+            var query = context
                 .Regions
-                .AsNoTracking()
+                .AsNoTracking();
+            
+            var regions = await query
                 .Select(region => new GetRegionsResponse
                 (
                     region.Id,
@@ -125,17 +127,21 @@ public class RegionHandler(PromoreDataContext context) : IRegionHandler
                     region.StartDate,
                     region.EndDate
                 ))
-                .Skip(request.PageNumber * request.PageSize)
+                .Skip((request.PageNumber - 1) * request.PageSize)
                 .Take(request.PageSize)
                 .ToListAsync();
 
-            return regions.Count == 0 
-                ? new Response<List<GetRegionsResponse>?>(null, 404, "Nenhuma região cadastrada!") 
-                : new Response<List<GetRegionsResponse>?>(regions);
+            var count = await query.CountAsync();
+
+            return new PagedResponse<List<GetRegionsResponse>>(
+                data: regions, 
+                totalCount: count, 
+                currentPage: request.PageNumber, 
+                pageSize: request.PageSize);
         }
         catch
         {
-            return new Response<List<GetRegionsResponse>?>(null, 500, "[AHLGA12] Não foi possível encontrar a região!");
+            return new PagedResponse<List<GetRegionsResponse>>(null, 500, "[AHLGA12] Não foi possível encontrar a região!");
         }
     }
 }

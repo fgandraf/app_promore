@@ -153,30 +153,37 @@ public class LotHandler(PromoreDataContext context) : ILotHandler
         }
     }
     
-    public async Task<Response<List<LotsStatusResponse>?>> GetAllStatusByRegionIdAsync(GetLotsStatusByRegionIdRequest request)
+    public async Task<PagedResponse<List<LotsStatusResponse>>> GetAllStatusByRegionIdAsync(GetLotsStatusByRegionIdRequest request)
     {
         try
         {
-            var lots = await context
+            var query = context
                 .Lots
-                .Include(x => x.Region)
-                .Where(x => x.Region.Id == request.RegionId)
-                .AsNoTracking()
+                .Where(x => x.RegionId == request.RegionId)
+                .AsNoTracking();
+            
+            var lots = await query
                 .Select(lot => new LotsStatusResponse
                 (
                     lot.Id,
                     lot.Status,
                     lot.UserId
                 ))
-                .Skip(request.PageNumber * request.PageSize)
+                .Skip((request.PageNumber - 1) * request.PageSize)
                 .Take(request.PageSize)
                 .ToListAsync();
             
-            return new Response<List<LotsStatusResponse>?>(lots);
+            var count = await query.CountAsync();
+            
+            return new PagedResponse<List<LotsStatusResponse>>(
+                data: lots, 
+                totalCount: count, 
+                currentPage: request.PageNumber, 
+                pageSize: request.PageSize);
         }
         catch
         {
-            return new Response<List<LotsStatusResponse>?>(null, 500, "[AHLGA12] Não foi possível encontrar o lote!");
+            return new PagedResponse<List<LotsStatusResponse>>(null, 500, "[AHLGA12] Não foi possível encontrar o lote!");
         }
     }
 }

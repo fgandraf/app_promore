@@ -14,5 +14,5 @@ public interface IUserHandler
     Task<Response<GetUserResponse?>> GetByIdAsync(GetUserByIdRequest request);
     Task<Response<GetUserResponse?>> GetByEmailAsync(GetUserByEmailRequest request);
     Task<Response<User?>> GetUserByLoginAsync(GetUserByLoginRequest request);
-    Task<Response<List<GetUsersResponse>?>> GetAllAsync(GetAllUsersRequest request);
+    Task<PagedResponse<List<GetUsersResponse>>> GetAllAsync(GetAllUsersRequest request);
 }

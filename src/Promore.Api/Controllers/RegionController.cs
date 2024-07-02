@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Promore.Core;
 using Promore.Core.Handlers;
 using Promore.Core.Requests.Regions;
 
@@ -12,64 +13,59 @@ public class RegionController(IRegionHandler handler) : ControllerBase
 {
     [Authorize(Roles = "admin")]
     [HttpGet]
-    public IActionResult GetAll()
+    public IResult GetAll([FromQuery]int pageNumber = Configuration.DefaultPageNumber, [FromQuery]int pageSize = Configuration.DefaultPageSize)
     {
-        var request = new GetAllRegionsRequest{PageNumber = 0, PageSize = 25};
+        var request = new GetAllRegionsRequest{PageNumber = pageNumber, PageSize = pageSize};
         var result = handler.GetAllAsync(request).Result;
         
-        if (!result.IsSuccess)
-            return BadRequest(result.Message);
-        
-        return Ok(result);
+        return result.IsSuccess
+            ? TypedResults.Ok(result)
+            : TypedResults.BadRequest(result);
     }
     
     [HttpGet("id/{id}")]
-    public IActionResult GetById(int id)
+    public IResult GetById(int id)
     {
         var request = new GetRegionByIdRequest { Id = id };
         var result = handler.GetByIdAsync(request).Result;
         
-        if (!result.IsSuccess)
-            return BadRequest(result.Message);
-        
-        return Ok(result);
+        return result.IsSuccess
+            ? TypedResults.Ok(result)
+            : TypedResults.BadRequest(result);
     }
     
     [Authorize(Roles = "admin")]
     [HttpPost]
-    public IActionResult Post(CreateRegionRequest request)
+    public IResult Post(CreateRegionRequest request)
     {
         var result = handler.CreateAsync(request).Result;
         
-        if (!result.IsSuccess)
-            return BadRequest(result.Message);
-        
-        return Ok(result);
+        return result.IsSuccess
+            ? TypedResults.Created($"/id/{result.Data?.Id}", result.Data)
+            : TypedResults.BadRequest(result);
     }  
     
     [Authorize(Roles = "admin")]
     [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
+    public IResult Delete(int id)
     {
         var request = new DeleteRegionRequest { Id = id };
         var result = handler.DeleteAsync(request).Result;
         
-        if (!result.IsSuccess)
-            return BadRequest(result.Message);
-        
-        return Ok(result);
+        return result.IsSuccess
+            ? TypedResults.Ok(result)
+            : TypedResults.BadRequest(result);
     }
     
     [Authorize(Roles = "admin, manager")]
     [HttpPut]
-    public IActionResult Update(UpdateRegionRequest request)
+    public IResult Update(UpdateRegionRequest request)
     {
         var result = handler.UpdateAsync(request).Result;
         
-        if (!result.IsSuccess)
-            return BadRequest(result.Message);
-        
-        return Ok(result);
+        return result.IsSuccess
+            ? TypedResults.Ok(result)
+            : TypedResults.BadRequest(result);
     }
     
     
