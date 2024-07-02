@@ -173,39 +173,62 @@ public class MockDataContext
 
             new Lot
             {
-                Id = 2, Block = "A", Number = 18, SurveyDate = new DateTime(2023, 09, 12),
-                LastModifiedDate = DateTime.Now, Status = 2, Comments = "Mock",
-                User = _users.FirstOrDefault(x => x.Id == 3)!,
-                Region = _regions.FirstOrDefault(x => x.Id == 1)!,
-                RegionId = 1, UserId = 3
-            },
-
-            new Lot
-            {
-                Id = 3, Block = "F", Number = 25, SurveyDate = new DateTime(2023, 05, 4),
-                LastModifiedDate = DateTime.Now, Status = 1,
+                Id = 2, 
+                Block = "A", 
+                Number = 18, 
+                SurveyDate = new DateTime(2023, 09, 12),
+                LastModifiedDate = DateTime.Now, 
+                Status = 2, 
                 Comments = "Mock",
-                User = _users.FirstOrDefault(x => x.Id == 4)!,
-                Region = _regions.FirstOrDefault(x => x.Id == 1)!,
-                RegionId = 1, UserId = 4
-            },
-
-            new Lot
-            {
-                Id = 4, Block = "K", Number = 5, SurveyDate = new DateTime(2023, 12, 22),
-                LastModifiedDate = DateTime.Now, Status = 3, Comments = "Mock",
+                UserId = 3,
+                RegionId = 1, 
                 User = _users.FirstOrDefault(x => x.Id == 3)!,
-                Region = _regions.FirstOrDefault(x => x.Id == 1)!,
-                RegionId = 1, UserId = 3
+                Region = _regions.FirstOrDefault(x => x.Id == 1)!
             },
 
             new Lot
             {
-                Id = 5, Block = "J", Number = 32, SurveyDate = new DateTime(2023, 11, 17),
-                LastModifiedDate = DateTime.Now, Status = 1, Comments = "Mock",
+                Id = 3, 
+                Block = "F", 
+                Number = 25, 
+                SurveyDate = new DateTime(2023, 05, 4),
+                LastModifiedDate = DateTime.Now, 
+                Status = 1,
+                Comments = "Mock",
+                UserId = 4,
+                RegionId = 1, 
                 User = _users.FirstOrDefault(x => x.Id == 4)!,
-                Region = _regions.FirstOrDefault(x => x.Id == 2)!,
-                RegionId = 2, UserId = 4
+                Region = _regions.FirstOrDefault(x => x.Id == 2)!
+            },
+
+            new Lot
+            {
+                Id = 4, 
+                Block = "K", 
+                Number = 5, 
+                SurveyDate = new DateTime(2023, 12, 22),
+                LastModifiedDate = DateTime.Now, 
+                Status = 3, 
+                Comments = "Mock",
+                UserId = 3,
+                RegionId = 1,
+                User = _users.FirstOrDefault(x => x.Id == 3)!,
+                Region = _regions.FirstOrDefault(x => x.Id == 1)!
+            },
+
+            new Lot
+            {
+                Id = 5,
+                Block = "J",
+                Number = 32,
+                SurveyDate = new DateTime(2023, 11, 17),
+                LastModifiedDate = DateTime.Now, 
+                Status = 1, 
+                Comments = "Mock",
+                UserId = 3,
+                RegionId = 2, 
+                User = _users.FirstOrDefault(x => x.Id == 3)!,
+                Region = _regions.FirstOrDefault(x => x.Id == 2)!
             }
         ];
 
