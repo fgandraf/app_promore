@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Promore.Api.Data;
+using Promore.Api.Data.Contexts;
 using Promore.Core.Handlers;
 using Promore.Core.Models;
 using Promore.Core.Requests.Users;
@@ -308,9 +308,9 @@ public class UserHandler(PromoreDataContext context) : IUserHandler
                 ? new Response<List<GetUsersResponse>?>(null, 404, "Nenhum usuário cadastrado!") 
                 : new Response<List<GetUsersResponse>?>(users);
         }
-        catch
+        catch( Exception e)
         {
-            return new Response<List<GetUsersResponse>?>(null, 500, "[AHUGA12] Não foi possível encontrar usuários!");
+            return new Response<List<GetUsersResponse>?>(null, 500, "[AHUGA12] Não foi possível encontrar usuários!" + e);
         }
     }
 }

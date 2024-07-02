@@ -1,4 +1,5 @@
 using Promore.Api.Data;
+using Promore.Api.Data.Contexts;
 using Promore.Core.Models;
 using SecureIdentity3.Password;
 

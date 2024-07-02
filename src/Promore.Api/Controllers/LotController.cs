@@ -13,7 +13,7 @@ public class LotController(ILotHandler handler) : ControllerBase
     [HttpGet("status-by-region/{regionId}")]
     public IActionResult GetStatusByRegion(int regionId)
     {
-        var request = new GetLotsStatusByRegionIdRequest { RegionId = regionId };
+        var request = new GetLotsStatusByRegionIdRequest{PageNumber = 0, PageSize = 25, RegionId = regionId };
         var result = handler.GetAllStatusByRegionIdAsync(request).Result;
         
         if (!result.IsSuccess)

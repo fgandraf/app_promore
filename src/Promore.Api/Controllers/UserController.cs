@@ -27,7 +27,7 @@ public class UserController(IUserHandler handler, TokenService tokenService) : C
     [HttpGet]
     public IActionResult GetAll()
     {
-        var request = new GetAllUsersRequest();
+        var request = new GetAllUsersRequest{PageNumber = 0, PageSize = 25};
         var result = handler.GetAllAsync(request).Result;
         
         if (!result.IsSuccess)

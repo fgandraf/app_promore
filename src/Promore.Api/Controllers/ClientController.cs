@@ -14,7 +14,7 @@ public class ClientController(IClientHandler handler) : ControllerBase
     [HttpGet]
     public IActionResult GetAll()
     {
-        var request = new GetAllClientsRequest();
+        var request = new GetAllClientsRequest{PageNumber = 0, PageSize = 25};
         var result = handler.GetAllAsync(request).Result;
         
         if (!result.IsSuccess)

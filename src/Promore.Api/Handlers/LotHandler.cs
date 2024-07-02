@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Promore.Api.Data;
+using Promore.Api.Data.Contexts;
 using Promore.Core.Handlers;
 using Promore.Core.Models;
 using Promore.Core.Requests.Lots;

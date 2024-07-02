@@ -5,9 +5,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Promore.Api.Data;
+using Promore.Api.Data.Contexts;
 using Promore.Api.Handlers;
 using Promore.Api.Services;
 using Promore.Core;
+using Promore.Core.Data.Contexts;
 using Promore.Core.Handlers;
 
 namespace Promore.Api.Extensions;
@@ -59,26 +61,17 @@ public static class BuilderExtensions
         
     public static void AddDependencies(this WebApplicationBuilder builder)
     {
-        // if (Configuration.IsMockDataBase)
-        // {
-        //     builder.Services.AddScoped<IUserHandler, UserHandlerMock>();
-        //     builder.Services.AddScoped<IRegionHandler, RegionHandlerMock>();
-        //     builder.Services.AddScoped<IClientHandler, ClientHandlerMock>();
-        //     builder.Services.AddScoped<ILotHandler, LotHandlerMock>();
-        //     builder.Services.AddScoped<IRoleHandler, RoleHandlerMock>();
-        //     builder.Services.AddSingleton<MockContext>();
-        // }
-        // else
-        // {
-            builder.Services.AddScoped<IUserHandler, UserHandler>();
-            builder.Services.AddScoped<IRegionHandler, RegionHandler>();
-            builder.Services.AddScoped<IClientHandler, ClientHandler>();
-            builder.Services.AddScoped<ILotHandler, LotHandler>();
-            builder.Services.AddScoped<IRoleHandler, RoleHandler>();
-            
+        if (Configuration.IsMockDataBase)
+            builder.Services.AddScoped<PromoreDataContext>(provider => new MockDataContext().Context.Object);
+        else
             builder.Services.AddScoped<PromoreDataContext>();
-        //}
         
+        
+        builder.Services.AddScoped<IUserHandler, UserHandler>();
+        builder.Services.AddScoped<IRegionHandler, RegionHandler>();
+        builder.Services.AddScoped<IClientHandler, ClientHandler>();
+        builder.Services.AddScoped<ILotHandler, LotHandler>();
+        builder.Services.AddScoped<IRoleHandler, RoleHandler>();
         builder.Services.AddScoped<TokenService>();
     }
     

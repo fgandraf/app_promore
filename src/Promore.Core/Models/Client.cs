@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace Promore.Core.Models;
 
 public class Client
@@ -10,5 +12,6 @@ public class Client
     public DateTime BirthdayDate { get; set; }
     public int LotId { get; set; }
 
+    [JsonIgnore]
     public Lot Lot { get; set; } = null!;
 }

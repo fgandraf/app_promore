@@ -14,7 +14,7 @@ public class RegionController(IRegionHandler handler) : ControllerBase
     [HttpGet]
     public IActionResult GetAll()
     {
-        var request = new GetAllRegionsRequest();
+        var request = new GetAllRegionsRequest{PageNumber = 0, PageSize = 25};
         var result = handler.GetAllAsync(request).Result;
         
         if (!result.IsSuccess)
