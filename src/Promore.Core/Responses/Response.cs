@@ -10,7 +10,7 @@ public class Response<TData>
     public TData? Data { get; set; }
     public string? Message { get; set; }
     
-    public Response(TData data, int code = Configuration.DefaultStatusCode, string? message = null)
+    public Response(TData? data, int code = Configuration.DefaultStatusCode, string? message = null)
     {
         Data = data;
         Message = message;

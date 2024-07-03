@@ -23,6 +23,8 @@
     <PackageReference Include="SecureIdentity3.0" Version="1.0.5" />
     
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.6.2" />
   </ItemGroup>
 
   <ItemGroup>

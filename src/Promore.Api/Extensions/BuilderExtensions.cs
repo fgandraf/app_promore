@@ -81,6 +81,8 @@ public static class BuilderExtensions
         
         builder.Services.AddSwaggerGen(setup =>
         {
+            setup.SwaggerDoc("v1", new OpenApiInfo { Title = "Promore API", Version = "v1" });
+            
             var jwtSecurityScheme = new OpenApiSecurityScheme
             {
                 BearerFormat = "JWT",
@@ -105,6 +107,7 @@ public static class BuilderExtensions
             });
             
             setup.CustomSchemaIds(n => n.FullName);
+            setup.EnableAnnotations();
 
         });
     }
