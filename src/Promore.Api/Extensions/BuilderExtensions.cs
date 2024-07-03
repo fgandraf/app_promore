@@ -4,12 +4,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Promore.Api.Data;
 using Promore.Api.Data.Contexts;
 using Promore.Api.Handlers;
 using Promore.Api.Services;
 using Promore.Core;
-using Promore.Core.Data.Contexts;
 using Promore.Core.Handlers;
 
 namespace Promore.Api.Extensions;
@@ -81,6 +79,8 @@ public static class BuilderExtensions
         
         builder.Services.AddSwaggerGen(setup =>
         {
+            setup.SwaggerDoc("v1", new OpenApiInfo { Title = "Promore API", Version = "v1" });
+            
             var jwtSecurityScheme = new OpenApiSecurityScheme
             {
                 BearerFormat = "JWT",
@@ -105,6 +105,7 @@ public static class BuilderExtensions
             });
             
             setup.CustomSchemaIds(n => n.FullName);
+            setup.EnableAnnotations();
 
         });
     }
